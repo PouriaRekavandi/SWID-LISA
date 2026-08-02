@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Thesis Student Registry | RKV Materials</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap');
+    * { box-sizing: border-box; }
+    :root {
+      --bg:#050505; --panel:#111; --panel2:#171717; --text:#e0e0e0;
+      --muted:#909090; --green:#00ff41; --blue:#00b8ff; --red:#ff4d5a; --line:#333;
+    }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:'Roboto Mono',monospace; }
+    header { padding:34px 20px 28px; text-align:center; background:linear-gradient(135deg,rgba(0,184,255,.09),transparent 45%),#080808; border-top:1px solid var(--green); border-bottom:1px solid var(--line); }
+    header h1 { margin:0 0 8px; color:#fff; font-family:'Orbitron',sans-serif; font-size:clamp(1.35rem,4vw,2.25rem); letter-spacing:.06em; }
+    header p { margin:0; color:var(--muted); font-size:.9rem; }
+    nav { position:sticky; top:0; z-index:20; display:flex; justify-content:center; flex-wrap:wrap; gap:12px 28px; padding:15px; background:rgba(0,0,0,.94); border-bottom:1px solid var(--line); backdrop-filter:blur(8px); }
+    nav a { color:#fff; font-size:13px; font-weight:700; text-decoration:none; text-transform:uppercase; }
+    nav a:hover,nav a[aria-current="page"] { color:var(--green); text-shadow:0 0 8px rgba(0,255,65,.7); }
+    main { max-width:1180px; margin:38px auto; padding:0 18px 50px; }
+    .notice { margin-bottom:20px; padding:12px 15px; color:#bdefff; background:rgba(0,184,255,.07); border:1px solid rgba(0,184,255,.35); border-left:3px solid var(--blue); border-radius:6px; font-size:.82rem; line-height:1.6; }
+    .grid { display:grid; grid-template-columns:minmax(290px,390px) 1fr; gap:24px; align-items:start; }
+    .panel { padding:24px; background:rgba(20,20,20,.76); border:1px solid var(--line); border-radius:10px; box-shadow:0 10px 34px rgba(0,0,0,.25); }
+    h2 { margin:0 0 20px; padding-bottom:9px; color:#fff; border-bottom:2px solid var(--blue); font:700 1.08rem 'Orbitron',sans-serif; letter-spacing:.04em; }
+    .field { margin-bottom:14px; }
+    label { display:block; margin-bottom:6px; color:#cfcfcf; font-size:.78rem; font-weight:700; }
+    input,select,textarea { width:100%; padding:10px 11px; color:#fff; background:#090909; border:1px solid #3b3b3b; border-radius:5px; font:inherit; font-size:.85rem; outline:none; }
+    textarea { min-height:82px; resize:vertical; }
+    input:focus,select:focus,textarea:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(0,184,255,.1); }
+    .two { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:18px; }
+    button,.file-label { padding:9px 13px; border:1px solid transparent; border-radius:4px; cursor:pointer; font:700 .76rem 'Roboto Mono',monospace; text-transform:uppercase; transition:.2s; }
+    .primary { color:#001407; background:var(--green); }
+    .primary:hover { box-shadow:0 0 13px rgba(0,255,65,.6); }
+    .secondary,.file-label { color:#e8e8e8; background:#202020; border-color:#444; }
+    .secondary:hover,.file-label:hover { border-color:var(--blue); color:var(--blue); }
+    .danger { color:#fff; background:transparent; border-color:#8d3038; }
+    .danger:hover { color:var(--red); border-color:var(--red); }
+    .toolbar { display:flex; flex-wrap:wrap; gap:9px; margin-bottom:14px; }
+    .toolbar input { flex:1 1 210px; }
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:15px; }
+    .stat { padding:12px; text-align:center; background:#0c0c0c; border:1px solid #292929; border-radius:6px; }
+    .stat strong { display:block; color:var(--green); font-size:1.25rem; }
+    .stat span { color:var(--muted); font-size:.7rem; }
+    .table-wrap { overflow:auto; border:1px solid #2f2f2f; border-radius:6px; }
+    table { width:100%; min-width:760px; border-collapse:collapse; }
+    th,td { padding:11px 10px; border-bottom:1px solid #292929; text-align:left; vertical-align:top; font-size:.78rem; }
+    th { position:sticky; top:0; color:var(--blue); background:#0a0a0a; text-transform:uppercase; }
+    tbody tr:hover { background:rgba(0,184,255,.045); }
+    .student-name { color:#fff; font-weight:700; }
+    .muted { color:var(--muted); font-size:.72rem; }
+    .badge { display:inline-block; padding:3px 7px; border-radius:99px; color:#001407; background:var(--green); font-size:.68rem; font-weight:700; }
+    .badge.submitted { color:#06121a; background:var(--blue); }
+    .badge.on-hold { color:#1a1200; background:#ffc857; }
+    .row-actions { display:flex; gap:6px; }
+    .row-actions button { padding:5px 7px; font-size:.67rem; }
+    .empty { padding:34px 15px; color:var(--muted); text-align:center; }
+    footer { padding:25px; color:#555; background:#000; border-top:1px solid #222; font-size:11px; text-align:center; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    @media(max-width:850px){ .grid{grid-template-columns:1fr} .two{grid-template-columns:1fr} .stats{grid-template-columns:repeat(3,1fr)} }
+    @media(max-width:480px){ .panel{padding:17px} .stats{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+<header>
+  <h1>THESIS STUDENT REGISTRY</h1>
+  <p>&gt; Supervision records / research progress / completion tracking</p>
+</header>
+<nav aria-label="Main navigation">
+  <a href="index.html">Home</a>
+  <a href="equipment.html">Lab Gear</a>
+  <a href="students.html" aria-current="page">Thesis Students</a>
+  <a href="research.html">Research Data</a>
+  <a href="contact.html">Connect</a>
+</nav>
+<main>
+  <div class="notice"><strong>Local registry:</strong> records are stored only in this browser using localStorage. Use <b>Export JSON</b> regularly. For multi-user access or sensitive institutional records, connect this interface to an authenticated server/database.</div>
+  <div class="grid">
+    <section class="panel" aria-labelledby="form-title">
+      <h2 id="form-title">Register Student</h2>
+      <form id="studentForm">
+        <input type="hidden" id="recordId">
+        <div class="field"><label for="name">Student name *</label><input id="name" required maxlength="100" autocomplete="name"></div>
+        <div class="two">
+          <div class="field"><label for="degree">Degree *</label><select id="degree" required><option value="">Select</option><option>BSc</option><option>MSc</option><option>PhD</option><option>Postdoctoral</option><option>Other</option></select></div>
+          <div class="field"><label for="studentId">Student ID</label><input id="studentId" maxlength="40"></div>
+        </div>
+        <div class="field"><label for="title">Thesis / dissertation title *</label><textarea id="title" required maxlength="300"></textarea></div>
+        <div class="two">
+          <div class="field"><label for="startDate">Start date</label><input id="startDate" type="date"></div>
+          <div class="field"><label for="expectedDate">Expected completion</label><input id="expectedDate" type="date"></div>
+        </div>
+        <div class="field"><label for="status">Status *</label><select id="status" required><option>In Progress</option><option>Submitted</option><option>Completed</option><option>On Hold</option></select></div>
+        <div class="field"><label for="email">Institutional email</label><input id="email" type="email" maxlength="120" autocomplete="email"></div>
+        <div class="field"><label for="notes">Progress notes</label><textarea id="notes" maxlength="800" placeholder="Milestones, meetings, next steps..."></textarea></div>
+        <div class="actions"><button class="primary" type="submit" id="saveBtn">Save Student</button><button class="secondary" type="button" id="clearBtn">Clear</button></div>
+      </form>
+    </section>
+
+    <section class="panel" aria-labelledby="records-title">
+      <h2 id="records-title">Student Records</h2>
+      <div class="stats" aria-label="Registry statistics">
+        <div class="stat"><strong id="totalCount">0</strong><span>Total</span></div>
+        <div class="stat"><strong id="activeCount">0</strong><span>In Progress</span></div>
+        <div class="stat"><strong id="completeCount">0</strong><span>Completed</span></div>
+      </div>
+      <div class="toolbar">
+        <label class="sr-only" for="search">Search records</label><input id="search" type="search" placeholder="Search name, title, ID...">
+        <button class="secondary" type="button" id="csvBtn">Export CSV</button>
+        <button class="secondary" type="button" id="jsonBtn">Export JSON</button>
+        <label class="file-label" for="importFile">Import JSON</label><input class="sr-only" id="importFile" type="file" accept="application/json,.json">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Student</th><th>Thesis</th><th>Timeline</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="recordsBody"></tbody>
+        </table>
+        <div id="emptyState" class="empty">No student records yet.</div>
+      </div>
+    </section>
+  </div>
+</main>
+<footer>SYSTEM SECURE. © 2026 RKV MATERIALS. LOCAL REGISTRY.</footer>
+<script>
+(() => {
+  'use strict';
+  const KEY = 'rkvThesisStudentsV1';
+  const $ = id => document.getElementById(id);
+  const form = $('studentForm');
+  let records = load();
+
+  function load(){ try { const x=JSON.parse(localStorage.getItem(KEY)||'[]'); return Array.isArray(x)?x:[]; } catch { return []; } }
+  function persist(){ localStorage.setItem(KEY,JSON.stringify(records)); }
+  function esc(v=''){ return String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+  function displayDate(v){ if(!v) return '—'; const d=new Date(v+'T00:00:00'); return Number.isNaN(d.getTime())?'—':d.toLocaleDateString(); }
+  function badgeClass(s){ return s==='Submitted'?'submitted':s==='On Hold'?'on-hold':''; }
+
+  function render(){
+    const q=$('search').value.trim().toLowerCase();
+    const filtered=records.filter(r=>[r.name,r.title,r.studentId,r.degree,r.status].some(v=>String(v||'').toLowerCase().includes(q)));
+    $('recordsBody').innerHTML=filtered.map(r=>`<tr>
+      <td><div class="student-name">${esc(r.name)}</div><div class="muted">${esc(r.degree)}${r.studentId?' · '+esc(r.studentId):''}${r.email?'<br>'+esc(r.email):''}</div></td>
+      <td>${esc(r.title)}${r.notes?'<div class="muted">'+esc(r.notes)+'</div>':''}</td>
+      <td><span class="muted">Start:</span> ${displayDate(r.startDate)}<br><span class="muted">Expected:</span> ${displayDate(r.expectedDate)}</td>
+      <td><span class="badge ${badgeClass(r.status)}">${esc(r.status)}</span></td>
+      <td><div class="row-actions"><button class="secondary" data-edit="${r.id}">Edit</button><button class="danger" data-delete="${r.id}">Delete</button></div></td></tr>`).join('');
+    $('emptyState').hidden=filtered.length>0;
+    $('totalCount').textContent=records.length;
+    $('activeCount').textContent=records.filter(r=>r.status==='In Progress').length;
+    $('completeCount').textContent=records.filter(r=>r.status==='Completed').length;
+  }
+
+  function clearForm(){ form.reset(); $('recordId').value=''; $('status').value='In Progress'; $('saveBtn').textContent='Save Student'; $('name').focus(); }
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const id=$('recordId').value || (crypto.randomUUID?crypto.randomUUID():Date.now().toString(36));
+    const record={id,name:$('name').value.trim(),degree:$('degree').value,studentId:$('studentId').value.trim(),title:$('title').value.trim(),startDate:$('startDate').value,expectedDate:$('expectedDate').value,status:$('status').value,email:$('email').value.trim(),notes:$('notes').value.trim(),updatedAt:new Date().toISOString()};
+    if(record.startDate && record.expectedDate && record.expectedDate < record.startDate){ alert('Expected completion cannot be earlier than the start date.'); return; }
+    const i=records.findIndex(r=>r.id===id); if(i>=0) records[i]=record; else records.unshift(record);
+    persist(); clearForm(); render();
+  });
+  $('clearBtn').addEventListener('click',clearForm);
+  $('search').addEventListener('input',render);
+  $('recordsBody').addEventListener('click',e=>{
+    const edit=e.target.dataset.edit, del=e.target.dataset.delete;
+    if(edit){ const r=records.find(x=>x.id===edit); if(!r)return; Object.keys(r).forEach(k=>{if($(k))$(k).value=r[k]||''}); $('recordId').value=r.id; $('saveBtn').textContent='Update Student'; window.scrollTo({top:0,behavior:'smooth'}); }
+    if(del && confirm('Delete this student record?')){ records=records.filter(x=>x.id!==del); persist(); render(); }
+  });
+  function download(name,text,type){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),500); }
+  $('jsonBtn').addEventListener('click',()=>download('thesis-students.json',JSON.stringify(records,null,2),'application/json'));
+  $('csvBtn').addEventListener('click',()=>{ const cols=['name','degree','studentId','title','startDate','expectedDate','status','email','notes']; const quote=v=>'"'+String(v||'').replace(/"/g,'""')+'"'; download('thesis-students.csv',[cols.join(','),...records.map(r=>cols.map(c=>quote(r[c])).join(','))].join('\n'),'text/csv;charset=utf-8'); });
+  $('importFile').addEventListener('change',async e=>{ try{ const data=JSON.parse(await e.target.files[0].text()); if(!Array.isArray(data))throw Error(); if(confirm('Importing will replace the current local registry. Continue?')){records=data;persist();render();} }catch{alert('The selected file is not a valid registry JSON file.');} e.target.value=''; });
+  render();
+})();
+</script>
+</body>
+</html>

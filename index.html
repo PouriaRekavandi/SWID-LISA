@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOMETHING WEIRD...</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Allura&family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap');
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background: #050505;
+            color: #e0e0e0;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        /* نوار اطلاع‌رسانی پروژه */
+        .project-banner {
+            position: relative;
+            z-index: 105;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 10px 20px;
+            background: rgba(0, 255, 65, 0.05);
+            border-bottom: 1px solid #00ff41;
+            box-shadow: 0 2px 15px rgba(0, 255, 65, 0.2);
+        }
+
+        .banner-img {
+            display: block;
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border: 1px solid #00b8ff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 184, 255, 0.5);
+        }
+
+        .banner-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.95rem;
+        }
+
+        .banner-badge {
+            padding: 3px 8px;
+            border-radius: 3px;
+            background: #00ff41;
+            color: #000;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            animation: pulse-badge 2s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(0, 255, 65, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0); }
+        }
+
+        .banner-btn {
+            padding: 5px 12px;
+            border-radius: 3px;
+            background: #00b8ff;
+            color: #050505;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .banner-btn:hover {
+            background: #00ff41;
+            box-shadow: 0 0 10px #00ff41;
+        }
+
+        /* هدر با GIF سیاه‌وسفید */
+        header {
+            position: relative;
+            isolation: isolate;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 380px;
+            padding: 3.25rem 1rem 2.5rem;
+            overflow: hidden;
+            background: #000;
+            border-bottom: 2px solid #00ff41;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            background: #000 url('./header-bg.gif') center / cover no-repeat;
+            filter: grayscale(100%) contrast(1.35) brightness(0.72);
+            animation: cosmic-move 40s infinite alternate linear;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background: radial-gradient(circle at center,
+                rgba(0,0,0,0.03) 0%,
+                rgba(0,0,0,0.18) 60%,
+                rgba(0,0,0,0.55) 100%);
+        }
+
+        @keyframes cosmic-move {
+            from { transform: scale(1.04); }
+            to { transform: scale(1.22); }
+        }
+
+        .logo-container {
+            position: relative;
+            z-index: 2;
+            width: 300px;
+            max-width: 78vw;
+            margin: 0 0 12px;
+            padding: 0;
+            background: transparent;
+            border: 0;
+            outline: 0;
+            box-shadow: none;
+        }
+
+        .logo-container::before,
+        .logo-container::after {
+            content: none;
+            display: none;
+        }
+
+        .group-logo,
+        .logo-glow {
+            display: block;
+            width: 100%;
+            height: auto;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            border: 0;
+            outline: 0;
+            box-shadow: none;
+            mix-blend-mode: screen;
+        }
+
+        .group-logo {
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            filter: invert(1) grayscale(1) contrast(2.6) brightness(1.12);
+            will-change: transform, opacity, filter;
+            animation: logo-reveal 2.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        .logo-glow {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0;
+            filter: invert(1) grayscale(1) contrast(3.2) brightness(1.55) blur(3px);
+            animation: glow-reveal 2.4s ease forwards, glow-pulse 3.4s ease-in-out 2.4s infinite;
+        }
+
+        @keyframes logo-reveal {
+            0% {
+                opacity: 0;
+                transform: translateX(100px) scale(1.16) skewX(-12deg);
+                filter: invert(1) grayscale(1) contrast(2.8) brightness(1.7) blur(16px);
+            }
+            55% {
+                opacity: 0.56;
+                transform: translateX(-8px) scale(1.03) skewX(2deg);
+                filter: invert(1) grayscale(1) contrast(2.7) brightness(1.35) blur(3px);
+            }
+            100% {
+                opacity: 0.74;
+                transform: translateX(0) scale(1) skewX(0);
+                filter: invert(1) grayscale(1) contrast(2.6) brightness(1.12);
+            }
+        }
+
+        @keyframes glow-reveal {
+            0% { opacity: 0; transform: translateX(100px) scale(1.16); }
+            55% { opacity: 0.22; transform: translateX(-8px) scale(1.03); }
+            100% { opacity: 0.16; transform: translateX(0) scale(1); }
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% {
+                opacity: 0.12;
+                filter: invert(1) grayscale(1) contrast(3.1) brightness(1.45) blur(2px);
+            }
+            50% {
+                opacity: 0.23;
+                filter: invert(1) grayscale(1) contrast(3.3) brightness(1.7) blur(4px);
+            }
+        }
+
+        /* ستاره‌های چشمک‌زن */
+        .sparkle {
+            position: absolute;
+            z-index: 4;
+            width: 3px;
+            height: 3px;
+            pointer-events: none;
+            opacity: 0;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow:
+                0 0 4px 2px #fff,
+                0 0 10px 4px rgba(190,240,255,0.9),
+                0 0 18px 7px rgba(0,184,255,0.65);
+        }
+
+        .s1 { top: 16%; left: 49%; animation: twinkle 2s infinite ease-in-out 2.5s; }
+        .s2 { top: 45%; left: 16%; animation: twinkle 3.5s infinite ease-in-out 3.2s; }
+        .s3 { top: 38%; left: 83%; animation: twinkle 2.8s infinite ease-in-out 2.8s; }
+        .s4 { top: 72%; left: 22%; animation: twinkle 4s infinite ease-in-out 3.7s; }
+        .s5 { top: 82%; left: 52%; animation: twinkle 2.5s infinite ease-in-out 4.1s; }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* عنوان خوش‌نویسی و نشان MIGA */
+        .header-title-block {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: min(94vw, 950px);
+            text-align: center;
+        }
+
+        .header-title-block h1 {
+            display: inline-block;
+            max-width: 100%;
+            margin: 0;
+            padding: 0 0.14em 0.08em;
+            color: #fff;
+            font-family: 'Allura', cursive;
+            font-size: clamp(1.65rem, 3.1vw, 2.85rem);
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: 0.15px;
+            white-space: nowrap;
+            text-shadow:
+                0 0 2px rgba(255,255,255,0.92),
+                0 0 7px rgba(190,240,255,0.48),
+                0 3px 9px rgba(0,0,0,1);
+            opacity: 0;
+            transform: translateY(8px);
+            animation: title-reveal 1.6s ease 1.7s forwards;
+        }
+
+        @keyframes title-reveal {
+            from { opacity: 0; transform: translateY(8px); filter: blur(4px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        .miga-mark {
+            display: inline-flex;
+            align-items: baseline;
+            justify-content: center;
+            margin-top: 2px;
+            padding: 1px 12px 3px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(0.68rem, 1.05vw, 0.88rem);
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(5px);
+            animation: miga-reveal 1.2s ease 2.25s forwards;
+        }
+
+        .miga-m { color: #ff3131; text-shadow: 0 0 5px rgba(255,49,49,0.7); }
+        .miga-ig { color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.65); }
+        .miga-a { color: #00e676; text-shadow: 0 0 5px rgba(0,230,118,0.7); }
+
+        @keyframes miga-reveal {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* منوی اصلی */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 15px;
+            background: rgba(0,0,0,0.9);
+            border-bottom: 1px solid #333;
+            backdrop-filter: blur(5px);
+        }
+
+        nav a {
+            position: relative;
+            margin: 8px 15px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        nav a:hover { color: #00ff41; text-shadow: 0 0 8px #00ff41; }
+
+        nav a::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #00ff41;
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after { width: 100%; }
+
+        /* محتوای اصلی */
+        .container {
+            max-width: 1100px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .profile-section {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            padding: 40px;
+            overflow: hidden;
+            background: rgba(20,20,20,0.6);
+            border: 1px solid #333;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,255,65,0.05);
+            transition: 0.3s;
+        }
+
+        .profile-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            opacity: 0.3;
+            background: #00ff41;
+            box-shadow: 0 0 10px #00ff41;
+            animation: scanline 3s infinite linear;
+        }
+
+        @keyframes scanline {
+            from { top: -10%; }
+            to { top: 110%; }
+        }
+
+        .profile-section:hover {
+            transform: scale(1.01);
+            border-color: #00b8ff;
+            box-shadow: 0 0 30px rgba(0,184,255,0.2);
+        }
+
+        .profile-pic {
+            flex-shrink: 0;
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border: 4px solid #00b8ff;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0,184,255,0.5);
+            filter: grayscale(100%) contrast(1.1);
+            transition: 0.5s;
+        }
+
+        .profile-pic:hover {
+            filter: grayscale(0%);
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .about-text p {
+            color: #ccc;
+            font-size: 1.03rem;
+            line-height: 1.8;
+        }
+
+        strong { color: #00ff41; }
+
+        .personal-verse {
+            margin: 24px 0;
+            padding: 18px 22px;
+            background: rgba(0,184,255,0.035);
+            border-left: 2px solid #00b8ff;
+        }
+
+        .personal-verse p {
+            margin: 7px 0;
+            color: #d8f6ff;
+            font-size: 0.96rem;
+            line-height: 1.65;
+        }
+
+        .signature { margin-bottom: 0; color: #ccc; }
+        .signature strong { color: #00ff41; font-size: 1.08rem; }
+
+        /* Research Interests */
+        .research-interests-section {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px dashed #333;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .section-title {
+            display: inline-block;
+            margin: 0 0 30px;
+            padding-bottom: 5px;
+            color: #fff;
+            border-bottom: 2px solid #00b8ff;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.55rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .interest-card {
+            position: relative;
+            display: grid;
+            grid-template-columns: 42px 1fr auto;
+            align-items: center;
+            gap: 16px;
+            min-height: 92px;
+            padding: 20px 22px;
+            overflow: hidden;
+            color: #e0e0e0;
+            background:
+                linear-gradient(135deg, rgba(0,184,255,0.07), transparent 48%),
+                rgba(20,20,20,0.68);
+            border: 1px solid #333;
+            border-left: 3px solid #00b8ff;
+            border-radius: 7px;
+            font-family: 'Times New Roman', Times, serif;
+            text-decoration: none;
+            transition: transform 0.3s ease, border-color 0.3s ease,
+                background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .interest-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0;
+            background: linear-gradient(90deg, transparent, rgba(0,255,65,0.08), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.55s ease, opacity 0.3s ease;
+        }
+
+        .interest-card:hover,
+        .interest-card:focus-visible {
+            transform: translateY(-4px);
+            color: #fff;
+            background:
+                linear-gradient(135deg, rgba(0,184,255,0.13), transparent 52%),
+                rgba(27,27,27,0.92);
+            border-color: #00b8ff;
+            border-left-color: #00ff41;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.35), 0 0 18px rgba(0,184,255,0.14);
+            outline: none;
+        }
+
+        .interest-card:hover::before,
+        .interest-card:focus-visible::before {
+            opacity: 1;
+            transform: translateX(100%);
+        }
+
+        .interest-number {
+            position: relative;
+            z-index: 1;
+            min-width: 34px;
+            color: #00b8ff;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            font-style: italic;
+            letter-spacing: 0.04em;
+            text-align: center;
+        }
+
+        .interest-name {
+            position: relative;
+            z-index: 1;
+            color: inherit;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .interest-arrow {
+            position: relative;
+            z-index: 1;
+            color: #00ff41;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.35rem;
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .interest-card:hover .interest-arrow,
+        .interest-card:focus-visible .interest-arrow {
+            transform: translateX(5px);
+            text-shadow: 0 0 8px #00ff41;
+        }
+
+        .interest-card-featured {
+            grid-column: 1 / -1;
+            background:
+                linear-gradient(135deg, rgba(0,255,65,0.07), transparent 50%),
+                rgba(20,20,20,0.68);
+            border-left-color: #00ff41;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 30px;
+            color: #555;
+            background: #000;
+            border-top: 1px solid #222;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            header { min-height: 320px; padding: 2.75rem 1rem 2.25rem; }
+            header::before { filter: grayscale(100%) contrast(1.3) brightness(0.8); }
+            .logo-container { width: min(280px, 78vw); }
+            .header-title-block { width: 94vw; }
+            .header-title-block h1 {
+                font-size: clamp(1.45rem, 8vw, 2rem);
+                line-height: 1.25;
+                white-space: normal;
+            }
+            .miga-mark { margin-top: 4px; font-size: 0.68rem; }
+            .profile-section { flex-direction: column; padding: 30px 20px; text-align: center; }
+            .profile-pic { width: 180px; height: 180px; }
+            .personal-verse { padding: 16px; text-align: left; }
+            .personal-verse p { font-size: 0.88rem; }
+            .banner-text { flex-direction: column; gap: 8px; text-align: center; }
+            .research-interests-section { margin-top: 45px; padding-top: 30px; }
+            .section-title { font-size: 1.3rem; }
+            .interests-grid { grid-template-columns: 1fr; }
+            .interest-card-featured { grid-column: auto; }
+            .interest-card {
+                grid-template-columns: 38px 1fr auto;
+                min-height: 78px;
+                padding: 17px 18px;
+            }
+            .interest-number { min-width: 30px; font-size: 0.82rem; }
+            .interest-name { font-size: 1rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            header::before,
+            .group-logo,
+            .logo-glow,
+            .sparkle,
+            .banner-badge,
+            .profile-section::before,
+            .header-title-block h1,
+            .miga-mark {
+                animation: none !important;
+            }
+            .group-logo { opacity: 0.74; transform: none; }
+            .logo-glow { opacity: 0.16; transform: none; }
+            .header-title-block h1,
+            .miga-mark { opacity: 1; transform: none; }
+            .interest-card,
+            .interest-card::before,
+            .interest-arrow { transition: none !important; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="project-banner">
+        project-image.jpg
+
+        <div class="banner-text">
+            <span class="banner-badge">Active Project</span>
+            <span>&gt; IN DEVELOPMENT: Advanced LCE Polymers via Neural Network Algorithms</span>
+            <a href="project-link.html" class="banner-btn">Details</a>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo-container">
+            <img src="my-logo.jpg" alt="" class="logo-glow" aria-hidden="true">
+            <img src="my-logo.jpg" alt="Research Group Logo" class="group-logo">
+            <span class="sparkle s1" aria-hidden="true"></span>
+            <span class="sparkle s2" aria-hidden="true"></span>
+            <span class="sparkle s3" aria-hidden="true"></span>
+            <span class="sparkle s4" aria-hidden="true"></span>
+            <span class="sparkle s5" aria-hidden="true"></span>
+        </div>
+
+        <div class="header-title-block">
+            <h1>Something Weird is Discovering...!</h1>
+            <div class="miga-mark" aria-label="MIGA">
+                <span class="miga-m">M</span><span class="miga-ig">IG</span><span class="miga-a">A</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Research_Data حذف و People در همان جایگاه اضافه شده است. -->
+    <nav aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="equipment.html">Lab Gear</a>
+        <a href="abaqus.html">Abaqus_Sims</a>
+        <a href="people.html">People</a>
+        <a href="studied.html">Literature_Review</a>
+        <a href="publications.html">Publications</a>
+        <a href="future.html">Future_Plans</a>
+        <a href="contact.html">Connect</a>
+    </nav>
+
+    <main class="container">
+        <section class="profile-section">
+            <img src="profile.jpg" alt="Pouria Hejazi Rekavandi" class="profile-pic">
+            <div class="about-text">
+                <p>
+                    I am an interdisciplinary engineering researcher specializing in
+                    <strong>Mechanical and Aerospace Engineering</strong>, embodying the
+                    continuous evolution of a childhood curiosity that has shaped my
+                    entire 40-year journey.
+                </p>
+
+                <div class="personal-verse">
+                    <p>*** Listen to the whispers of your dreaming soul,</p>
+                    <p>*** Speak only truth to keep your spirit whole.</p>
+                    <p>*** Fix your steady gaze upon a single star,</p>
+                    <p>*** Work with burning fire to reach for what you are.</p>
+                    <p>*** And let no passing shadow dim your inner light,</p>
+                    <p>*** For nothing can eclipse a purpose shining bright.</p>
+                </div>
+
+                <p class="signature">
+                    With sincere dedication
+                    <br><br>
+                    <strong>Pouria 🌻</strong>
+                </p>
+            </div>
+        </section>
+
+        <section class="research-interests-section" id="research-interests">
+            <h2 class="section-title">// RESEARCH INTERESTS</h2>
+
+            <div class="interests-grid">
+                <a href="ai.html" class="interest-card">
+                    <span class="interest-number">I</span>
+                    <span class="interest-name">AI</span>
+                    <span class="interest-arrow" aria-hidden="true">&#8594;</span>
+                </a>
+
+                <a href="additive-manufacturing.html" class="interest-card">
+                    <span class="interest-number">II</span>
+                    <span class="interest-name">Additive Manufacturing</span>
+                    <span class="interest-arrow" aria-hidden="true">&#8594;</span>
+                </a>
+
+                <a href="quantum-mechanics.html" class="interest-card">
+                    <span class="interest-number">III</span>
+                    <span class="interest-name">Quantum Mechanics</span>
+                    <span class="interest-arrow" aria-hidden="true">&#8594;</span>
+                </a>
+
+                <a href="neuro-biomechanics.html" class="interest-card">
+                    <span class="interest-number">IV</span>
+                    <span class="interest-name">Neuro Biomechanics</span>
+                    <span class="interest-arrow" aria-hidden="true">&#8594;</span>
+                </a>
+
+                <a href="materials-characterization.html" class="interest-card">
+                    <span class="interest-number">V</span>
+                    <span class="interest-name">Materials Characterization</span>
+                    <span class="interest-arrow" aria-hidden="true">&#8594;</span>
+                </a>
+
+                <a href="fem-simulation.html" class="interest-card">
+                    <span class="interest-number">VI</span>
+                    <span class="interest-name">FEM Simulation</span>
+                    <span class="interest-arrow" aria-hidden="true">&#8594;</span>
+                </a>
+
+                <a href="brain.html" class="interest-card interest-card-featured">
+                    <span class="interest-number">VII</span>
+                    <span class="interest-name">Brain</span>
+                    <span class="interest-arrow" aria-hidden="true">&#8594;</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>SYSTEM SECURE. © 2026 RKV MATERIALS. ENCRYPTED CONNECTION.</p>
+    </footer>
+</body>
+</html>
