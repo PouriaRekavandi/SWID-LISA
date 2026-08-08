@@ -20,7 +20,6 @@
             font-family: 'Roboto Mono', monospace;
         }
 
-        /* نوار اطلاع‌رسانی پروژه */
         .project-banner {
             position: relative;
             z-index: 105;
@@ -78,7 +77,6 @@
             box-shadow: 0 0 10px #00ff41;
         }
 
-        /* هدر با GIF سیاه و سفید */
         header {
             position: relative;
             isolation: isolate;
@@ -292,7 +290,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* منوی اصلی */
         nav {
             position: sticky;
             top: 0;
@@ -330,7 +327,6 @@
 
         nav a:hover::after { width: 100%; }
 
-        /* محتوای اصلی */
         .container {
             max-width: 1100px;
             margin: 50px auto;
@@ -417,7 +413,6 @@
         .signature { margin-bottom: 0; color: #ccc; }
         .signature strong { color: #00ff41; font-size: 1.08rem; }
 
-        /* Research Interests Section */
         .research-interests-section {
             margin-top: 60px;
             padding-top: 40px;
@@ -437,7 +432,6 @@
             text-transform: uppercase;
         }
 
-        /* Accordion (بخش کرکره‌ای) */
         .accordion-container {
             display: flex;
             flex-direction: column;
@@ -505,7 +499,6 @@
             padding: 20px 22px;
         }
 
-        /* Research Environment & Playlist Styles */
         .research-subcard {
             background: rgba(15, 25, 35, 0.7);
             border: 1px solid rgba(0, 184, 255, 0.3);
@@ -696,7 +689,6 @@
             </div>
         </section>
 
-        <!-- بخش کرکره‌ای عناوین پژوهشی -->
         <section class="research-interests-section" id="research-interests">
             <h2 class="section-title">// RESEARCH MODULES</h2>
 
@@ -733,35 +725,34 @@
                     <div class="accordion-content">
                         <p>Investigation into mechanical energy dissipation, metamaterials, and impact dynamics.</p>
 
-                        <!-- محیط تحقیقاتی AntiPrism structures -->
                         <div class="research-subcard">
                             <h3>// Research Environment: AntiPrism Structures</h3>
                             <p>Select a tutorial part from the playlist below:</p>
-                            
+
                             <div class="video-playlist-container">
-                                <!-- پخش‌کننده اصلی -->
+                                <!-- Main player -->
                                 <div class="main-video-box">
                                     <div class="current-video-title" id="current-title">AntiPrism Tutorial - Part 1</div>
+                                    <!-- FIX 1: Correct URL for Part 1 + closing quote restored -->
                                     <video class="main-video-player" controls poster="videos/thumbnail.jpg">
-                                        <source src="https://umbc-my.sharepoint.com/:v:/g/personal/shejazi1_umbc_edu/IQAl-iWT7XdxRrfOVz4a_nDDAZZq7__bu10xACzqX20G6w0?download=1" type="video/mp4">
+                                        <source src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
                                 </div>
 
-                                <!-- لیست پخش -->
+                                <!-- Playlist -->
                                 <div class="playlist-box">
                                     <h4>// Video Playlist</h4>
-                                    
-                                    <!-- ویدیو پارت ۱ -->
-                                    <div class="playlist-item active" 
-                                         data-src="sha256:c904f1d9bf49d80d78f57c007806f248b8472c2c9651f28db781400be4874979" 
+
+                                    <!-- FIX 2: data-src now holds real GitHub video URLs -->
+                                    <div class="playlist-item active"
+                                         data-src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4"
                                          data-title="AntiPrism Tutorial - Part 1">
                                         <div class="playlist-item-title">01. AntiPrism Tutorial - Part 1</div>
                                     </div>
 
-                                    <!-- ویدیو پارت ۲ -->
-                                    <div class="playlist-item" 
-                                         data-src="sha256:d40cf831dfcac8213c3dad30f191f4548a21e8cb9dd692542cbbec1a8ddea6b4" 
+                                    <div class="playlist-item"
+                                         data-src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part2.mp4"
                                          data-title="AntiPrism Tutorial - Part 2">
                                         <div class="playlist-item-title">02. AntiPrism Tutorial - Part 2</div>
                                     </div>
@@ -791,9 +782,8 @@
         <p>SYSTEM SECURE. © 2026 RKV MATERIALS. ENCRYPTED CONNECTION.</p>
     </footer>
 
-    <!-- اسکریپت کنترل اکوردیون و لیست پخش ویدیو -->
     <script>
-        // کنترل منوی کرکره‌ای (Accordion)
+        // Accordion control
         document.querySelectorAll('.accordion-header').forEach(header => {
             header.addEventListener('click', () => {
                 const item = header.parentElement;
@@ -801,25 +791,30 @@
             });
         });
 
-        // کنترل لیست پخش ویدیوها
+        // FIX 3: Remove <source> child before switching src to avoid conflicts
         document.querySelectorAll('.playlist-item').forEach(item => {
             item.addEventListener('click', function() {
                 const playlistBox = this.closest('.playlist-box');
                 playlistBox.querySelectorAll('.playlist-item').forEach(el => el.classList.remove('active'));
-                
+
                 this.classList.add('active');
-                
+
                 const videoSrc = this.getAttribute('data-src');
                 const videoTitle = this.getAttribute('data-title');
-                
+
                 const container = this.closest('.video-playlist-container');
                 const player = container.querySelector('.main-video-player');
                 const titleDisplay = container.querySelector('.current-video-title');
-                
+
                 titleDisplay.textContent = videoTitle;
+
+                // Remove any existing <source> child so player.src takes full control
+                const sourceEl = player.querySelector('source');
+                if (sourceEl) sourceEl.remove();
+
                 player.src = videoSrc;
                 player.load();
-                player.play();
+                player.play().catch(e => console.warn('Autoplay blocked:', e));
             });
         });
     </script>
