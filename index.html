@@ -632,8 +632,8 @@
 
     <header>
         <div class="logo-container">
-            <img src="my-logo.jpg" alt="" class="logo-glow" aria-hidden="true">
-            <img src="my-logo.jpg" alt="Research Group Logo" class="group-logo">
+            <img src="Logo.jpg" alt="" class="logo-glow" aria-hidden="true">
+            <img src="Logo.jpg" alt="SWID-LISA Logo" class="group-logo">
             <span class="sparkle s1" aria-hidden="true"></span>
             <span class="sparkle s2" aria-hidden="true"></span>
             <span class="sparkle s3" aria-hidden="true"></span>
@@ -733,7 +733,6 @@
                                 <!-- Main player -->
                                 <div class="main-video-box">
                                     <div class="current-video-title" id="current-title">AntiPrism Tutorial - Part 1</div>
-                                    <!-- FIX 1: Correct URL for Part 1 + closing quote restored -->
                                     <video class="main-video-player" controls poster="videos/thumbnail.jpg">
                                         <source src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4" type="video/mp4">
                                         Your browser does not support the video tag.
@@ -744,7 +743,6 @@
                                 <div class="playlist-box">
                                     <h4>// Video Playlist</h4>
 
-                                    <!-- FIX 2: data-src now holds real GitHub video URLs -->
                                     <div class="playlist-item active"
                                          data-src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4"
                                          data-title="AntiPrism Tutorial - Part 1">
@@ -791,7 +789,6 @@
             });
         });
 
-        // FIX 3: Remove <source> child before switching src to avoid conflicts
         document.querySelectorAll('.playlist-item').forEach(item => {
             item.addEventListener('click', function() {
                 const playlistBox = this.closest('.playlist-box');
@@ -808,7 +805,6 @@
 
                 titleDisplay.textContent = videoTitle;
 
-                // Remove any existing <source> child so player.src takes full control
                 const sourceEl = player.querySelector('source');
                 if (sourceEl) sourceEl.remove();
 
