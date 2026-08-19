@@ -47,7 +47,7 @@
             padding: 3px 8px;
             border-radius: 3px;
             background: #00ff41;
-            color: #000;
+            color: #00;
             font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -85,8 +85,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 640px;
-            padding: 3.5rem 1rem 2.5rem;
+            min-height: 560px;
+            padding: 3rem 1rem 2.5rem;
             overflow: hidden;
             background: #000;
             border-bottom: 2px solid #00ff41;
@@ -120,15 +120,15 @@
             to { transform: scale(1.22); }
         }
 
-        /* --- استیج لوگو با ابعاد بزرگ‌تر --- */
+        /* --- ساختار لوگوی انیمیشنی چندلایه --- */
         .animated-logo-stage {
             position: relative;
             z-index: 2;
-            width: 580px;
-            height: 580px;
-            max-width: 92vw;
+            width: 480px;
+            height: 480px;
+            max-width: 90vw;
             margin: 0 auto 10px;
-            perspective: 1400px;
+            perspective: 1200px;
         }
 
         .logo-layer {
@@ -138,6 +138,7 @@
             height: 100%;
             object-fit: contain;
             mix-blend-mode: screen;
+            filter: invert(1) hue-rotate(180deg) brightness(1.25) contrast(2.4);
             pointer-events: none;
             will-change: transform, opacity, filter;
         }
@@ -150,24 +151,15 @@
         }
 
         @keyframes frame-reveal {
-            from {
-                opacity: 0;
-                transform: scale(0.88);
-                filter: invert(1) brightness(1.6) blur(10px);
-            }
-            to {
-                opacity: 0.88;
-                transform: scale(1);
-                filter: invert(1) brightness(1.35) contrast(2.4) drop-shadow(0 0 10px rgba(0, 184, 255, 0.4)) blur(0);
-            }
+            from { opacity: 0; transform: scale(0.88); filter: invert(1) hue-rotate(180deg) brightness(1.6) blur(10px); }
+            to { opacity: 0.85; transform: scale(1); filter: invert(1) hue-rotate(180deg) brightness(1.25) contrast(2.4) blur(0); }
         }
 
-        /* ۲. انیمیشن امضا */
+        /* ۲. انیمیشن دست‌نویس شدن امضا */
         .layer-signature {
             opacity: 0;
             clip-path: inset(0 100% 0 0);
             animation: signature-write 1.4s ease 1.4s forwards;
-            filter: invert(1) brightness(1.5) contrast(2.2);
         }
 
         @keyframes signature-write {
@@ -181,56 +173,49 @@
             }
         }
 
-        /* ۳. انیمیشن چرخش سکه‌ای و درخشش سفید-آبی حروف LS */
+        /* ۳. انیمیشن اختصاصی LS: چرخش پیوسته سه‌بعدی و درخشش نئونی آبی-سفید */
         .layer-ls {
             opacity: 0;
             transform-style: preserve-3d;
             animation:
-                coin-spin 1.8s cubic-bezier(0.25, 1, 0.5, 1) 2.8s forwards,
-                ls-glow-pulse 3.2s ease-in-out 4.6s infinite alternate;
+                ls-reveal 1.2s cubic-bezier(0.25, 1, 0.5, 1) 2.2s forwards,
+                ls-spin-continuous 5s linear 3.4s infinite,
+                ls-glow-pulse 2s ease-in-out infinite alternate;
         }
 
-        @keyframes coin-spin {
+        @keyframes ls-reveal {
             0% {
                 opacity: 0;
-                transform: rotateY(0deg) scale(0.4);
-                filter: invert(1) brightness(2) drop-shadow(0 0 15px #00b8ff);
-            }
-            30% {
-                opacity: 0.95;
+                transform: rotateY(0deg) scale(0.5);
             }
             100% {
-                opacity: 0.95;
-                transform: rotateY(1080deg) scale(1);
-                filter: invert(1) brightness(1.8) contrast(2.3)
-                        drop-shadow(0 0 6px #ffffff)
-                        drop-shadow(0 0 18px #00b8ff)
-                        drop-shadow(0 0 35px rgba(0, 184, 255, 0.85));
+                opacity: 1;
+                transform: rotateY(360deg) scale(1);
             }
         }
 
-        /* پالس پیوسته نور سفید-آبی بعد از اتمام چرخش */
+        @keyframes ls-spin-continuous {
+            from {
+                transform: rotateY(0deg);
+            }
+            to {
+                transform: rotateY(360deg);
+            }
+        }
+
         @keyframes ls-glow-pulse {
             0% {
-                filter: invert(1) brightness(1.7) contrast(2.2)
+                filter: invert(1) hue-rotate(180deg) brightness(1.4) contrast(2.4)
                         drop-shadow(0 0 5px #ffffff)
-                        drop-shadow(0 0 16px #00b8ff)
-                        drop-shadow(0 0 30px rgba(0, 184, 255, 0.75));
-                transform: rotateY(1080deg) scale(1);
-            }
-            50% {
-                filter: invert(1) brightness(2.1) contrast(2.5)
-                        drop-shadow(0 0 12px #ffffff)
-                        drop-shadow(0 0 28px #00e5ff)
-                        drop-shadow(0 0 50px rgba(0, 229, 255, 0.95));
-                transform: rotateY(1080deg) scale(1.025);
+                        drop-shadow(0 0 12px #70d6ff)
+                        drop-shadow(0 0 25px rgba(0, 184, 255, 0.75));
             }
             100% {
-                filter: invert(1) brightness(1.7) contrast(2.2)
-                        drop-shadow(0 0 5px #ffffff)
-                        drop-shadow(0 0 16px #00b8ff)
-                        drop-shadow(0 0 30px rgba(0, 184, 255, 0.75));
-                transform: rotateY(1080deg) scale(1);
+                filter: invert(1) hue-rotate(180deg) brightness(1.6) contrast(2.4)
+                        drop-shadow(0 0 8px #ffffff)
+                        drop-shadow(0 0 18px #bbf2f6)
+                        drop-shadow(0 0 35px #00d2ff)
+                        drop-shadow(0 0 55px rgba(0, 119, 182, 0.85));
             }
         }
 
@@ -238,22 +223,12 @@
         .layer-text {
             opacity: 0;
             transform: translateY(12px);
-            animation: text-reveal 1.2s ease 4.6s forwards;
+            animation: text-reveal 1.2s ease 4.2s forwards;
         }
 
         @keyframes text-reveal {
-            from {
-                opacity: 0;
-                transform: translateY(12px);
-                filter: invert(1) brightness(1.8) blur(5px);
-            }
-            to {
-                opacity: 0.95;
-                transform: translateY(0);
-                filter: invert(1) brightness(1.45) contrast(2.4)
-                        drop-shadow(0 0 6px rgba(255, 255, 255, 0.7))
-                        drop-shadow(0 0 15px rgba(0, 184, 255, 0.5)) blur(0);
-            }
+            from { opacity: 0; transform: translateY(12px); filter: invert(1) hue-rotate(180deg) brightness(1.8) blur(5px); }
+            to { opacity: 0.9; transform: translateY(0); filter: invert(1) hue-rotate(180deg) brightness(1.25) contrast(2.4) blur(0); }
         }
 
         .sparkle {
@@ -666,8 +641,8 @@
         }
 
         @media (max-width: 768px) {
-            header { min-height: 520px; padding: 2.5rem 1rem 2rem; }
-            .animated-logo-stage { width: min(390px, 92vw); height: min(390px, 92vw); }
+            header { min-height: 480px; padding: 2.5rem 1rem 2rem; }
+            .animated-logo-stage { width: min(340px, 86vw); height: min(340px, 86vw); }
             .header-title-block { width: 94vw; }
             .header-title-block h1 { font-size: clamp(1.4rem, 7.5vw, 1.9rem); }
             .profile-section { flex-direction: column; padding: 30px 20px; text-align: center; }
@@ -689,16 +664,16 @@
     <header>
         <!-- استیج چندلایه لوگو -->
         <div class="animated-logo-stage">
-            <!-- ۱. لایه قاب دور -->
+            <!-- ۱. لایه قاب دور (ثابت پس از نمایش) -->
             <img src="frame.png" alt="Frame" class="logo-layer layer-frame">
 
-            <!-- ۲. لایه امضا -->
+            <!-- ۲. لایه امضا (ثابت پس از رسم) -->
             <img src="signature.png" alt="Signature" class="logo-layer layer-signature">
 
-            <!-- ۳. لایه حروف LS با چرخش سکه‌ای و درخشش سفید-آبی -->
+            <!-- ۳. لایه حروف LS (چرخش سه‌بعدی پیوسته با درخشش نوری آبی-سفید) -->
             <img src="ls.jpg" alt="LS Monogram" class="logo-layer layer-ls">
 
-            <!-- ۴. لایه متن SWID-LISA -->
+            <!-- ۴. لایه نوشته‌های پایین لوگو (ثابت پس از نمایش) -->
             <img src="text.png" alt="SWID-LISA" class="logo-layer layer-text">
 
             <!-- ستاره‌های چشمک‌زن -->
