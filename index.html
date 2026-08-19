@@ -86,7 +86,7 @@
             align-items: center;
             justify-content: center;
             min-height: 380px;
-            padding: 3.25rem 1rem 2.5rem;
+            padding: 2.5rem 1rem 2rem;
             overflow: hidden;
             background: #000;
             border-bottom: 2px solid #00ff41;
@@ -120,11 +120,12 @@
             to { transform: scale(1.22); }
         }
 
+        /* --- ابعاد بهینه‌شده لوگو --- */
         .Logo-container {
             position: relative;
             z-index: 2;
-            width: 300px;
-            max-width: 78vw;
+            width: 170px;
+            max-width: 60vw;
             margin: 0 0 12px;
             padding: 0;
             background: transparent;
@@ -133,8 +134,8 @@
             box-shadow: none;
         }
 
-        .group-logo,
-        .logo-glow {
+        .group-Logo,
+        .Logo-glow {
             display: block;
             width: 100%;
             height: auto;
@@ -147,16 +148,16 @@
             mix-blend-mode: screen;
         }
 
-        .group-logo {
+        .group-Logo {
             position: relative;
             z-index: 2;
             opacity: 0;
             filter: invert(1) grayscale(1) contrast(2.6) brightness(1.12);
             will-change: transform, opacity, filter;
-            animation: logo-reveal 2.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation: Logo-reveal 2.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
-        .logo-glow {
+        .Logo-glow {
             position: absolute;
             inset: 0;
             z-index: 1;
@@ -166,7 +167,7 @@
             animation: glow-reveal 2.4s ease forwards, glow-pulse 3.4s ease-in-out 2.4s infinite;
         }
 
-        @keyframes logo-reveal {
+        @keyframes Logo-reveal {
             0% {
                 opacity: 0;
                 transform: translateX(100px) scale(1.16) skewX(-12deg);
@@ -610,10 +611,10 @@
         }
 
         @media (max-width: 768px) {
-            header { min-height: 320px; padding: 2.75rem 1rem 2.25rem; }
-            .logo-container { width: min(280px, 78vw); }
+            header { min-height: 300px; padding: 2rem 1rem 1.75rem; }
+            .Logo-container { width: min(130px, 50vw); }
             .header-title-block { width: 94vw; }
-            .header-title-block h1 { font-size: clamp(1.45rem, 8vw, 2rem); }
+            .header-title-block h1 { font-size: clamp(1.3rem, 7vw, 1.8rem); }
             .profile-section { flex-direction: column; padding: 30px 20px; text-align: center; }
             .profile-pic { width: 180px; height: 180px; }
             .accordion-header { font-size: 0.98rem; padding: 14px 16px; }
@@ -631,9 +632,9 @@
     </div>
 
     <header>
-        <div class="logo-container">
-            <img src="Logo.jpg" alt="" class="logo-glow" aria-hidden="true">
-            <img src="Logo.jpg" alt="SWID-LISA Logo" class="group-logo">
+        <div class="Logo-container">
+            <img src="Logo.jpg" alt="" class="Logo-glow" aria-hidden="true">
+            <img src="Logo.jpg" alt="SWID-LISA Logo" class="group-Logo">
             <span class="sparkle s1" aria-hidden="true"></span>
             <span class="sparkle s2" aria-hidden="true"></span>
             <span class="sparkle s3" aria-hidden="true"></span>
@@ -781,7 +782,6 @@
     </footer>
 
     <script>
-        // Accordion control
         document.querySelectorAll('.accordion-header').forEach(header => {
             header.addEventListener('click', () => {
                 const item = header.parentElement;
