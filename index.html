@@ -140,6 +140,15 @@ header::after{
   border-radius:50%;
   background:radial-gradient(circle at center, rgba(0,184,255,.10), transparent 70%);
 }
+/* FIX: the source PNGs sit on a cream/parchment card, not pure white,
+   so mix-blend-mode (screen OR multiply) never fully drops it — it
+   just darkens/lightens the texture, leaving a visible box.
+   Real fix: an SVG filter (defined in <body>, id="logo-recolor")
+   that (1) turns anything light fully transparent no matter its
+   exact shade, using luminance rather than an exact color key, and
+   (2) recolors whatever ink/line-art remains into the same blue/
+   white glow used by the sparkles, so the logo matches the site
+   palette instead of showing its original gold/black art. */
 .logo-layer{
   position:absolute;
   inset:0;
@@ -147,23 +156,7 @@ header::after{
   height:100%;
   object-fit:contain;
   pointer-events:none;
-}
-
-/* FIX: most exported logo PNGs (frame/signature/text) sit on a WHITE
-   canvas, not black. mix-blend-mode:screen only removes BLACK, so it
-   left a white box on this dark background. multiply removes WHITE
-   and keeps the dark artwork, which is what we actually need here. */
-.layer-frame,
-.layer-signature,
-.layer-text{
-  mix-blend-mode:multiply;
-}
-/* The LS monogram is meant to glow, so keep it normal (assumed to be
-   a transparent PNG) with a drop-shadow instead of a blend mode. */
-.layer-ls{
-  mix-blend-mode:normal;
-  filter:drop-shadow(0 0 4px rgba(255,255,255,.8))
-         drop-shadow(0 0 14px rgba(0,184,255,.45));
+  filter:url(#logo-recolor);
 }
 
 /* If a layer 404s or fails to decode, hide it instead of leaving a
@@ -445,6 +438,42 @@ footer{margin-top:48px;padding:28px 18px;color:#555;background:#000;border-top:1
 </head>
 
 <body>
+
+<!-- Hidden SVG defs: powers the logo cutout + recolor filter used by
+     .logo-layer above. Keeping it as inline defs (not a separate
+     file) means it can't 404 and always renders. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="logo-recolor" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <!-- 1) Convert the source art to an alpha mask based on
+              luminance: bright/parchment pixels -> alpha 0,
+              dark ink/line-art pixels -> alpha 1. This removes the
+              white/cream box regardless of its exact tone. -->
+      <feColorMatrix type="luminanceToAlpha" result="lum"/>
+      <feComponentTransfer in="lum" result="mask">
+        <feFuncA type="table" tableValues="1 0"/>
+      </feComponentTransfer>
+
+      <!-- 2) Recolor the masked line-art solid white -->
+      <feFlood flood-color="#f2fbff" result="whiteColor"/>
+      <feComposite in="whiteColor" in2="mask" operator="in" result="whiteArt"/>
+
+      <!-- 3) Build a soft blue glow behind it, same family as the
+              site's sparkle/accent color -->
+      <feGaussianBlur in="mask" stdDeviation="4" result="blurredMask"/>
+      <feFlood flood-color="#00b8ff" result="blueColor"/>
+      <feComposite in="blueColor" in2="blurredMask" operator="in" result="blueGlow"/>
+      <feGaussianBlur in="blueGlow" stdDeviation="2" result="blueGlowSoft"/>
+
+      <!-- 4) Stack: glow underneath, crisp white art on top -->
+      <feMerge>
+        <feMergeNode in="blueGlowSoft"/>
+        <feMergeNode in="whiteArt"/>
+      </feMerge>
+    </filter>
+  </defs>
+</svg>
+
 <div class="project-banner">
   <div class="banner-text">
     <span class="banner-badge">Active Project</span>
