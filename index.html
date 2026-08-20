@@ -101,7 +101,6 @@ header{
   background:#000;
   border-bottom:2px solid var(--green);
 }
-/* پس‌زمینه: gif + گرادیان جایگزین در صورت نبودن فایل */
 header::before{
   content:'';
   position:absolute;
@@ -136,6 +135,10 @@ header::after{
   width:var(--stage);
   height:var(--stage);
   margin:0 auto;
+  /* soft glow placeholder so there is never a hard white/blank box
+     while images load or if one fails */
+  border-radius:50%;
+  background:radial-gradient(circle at center, rgba(0,184,255,.10), transparent 70%);
 }
 .logo-layer{
   position:absolute;
@@ -144,19 +147,31 @@ header::after{
   height:100%;
   object-fit:contain;
   pointer-events:none;
-  /* بدون blend: با PNG شفاف امن است و کادر سفید نمی‌سازد */
-  mix-blend-mode:normal;
 }
-/* اگر PNG‌های لوگو پس‌زمینه مشکی دارند، به استیج کلاس blend-screen بدهید */
-.animated-logo-stage.blend-screen .logo-layer{mix-blend-mode:screen}
-.logo-layer.is-missing{display:none}
 
+/* FIX: most exported logo PNGs (frame/signature/text) sit on a WHITE
+   canvas, not black. mix-blend-mode:screen only removes BLACK, so it
+   left a white box on this dark background. multiply removes WHITE
+   and keeps the dark artwork, which is what we actually need here. */
+.layer-frame,
+.layer-signature,
+.layer-text{
+  mix-blend-mode:multiply;
+}
+/* The LS monogram is meant to glow, so keep it normal (assumed to be
+   a transparent PNG) with a drop-shadow instead of a blend mode. */
 .layer-ls{
+  mix-blend-mode:normal;
   filter:drop-shadow(0 0 4px rgba(255,255,255,.8))
          drop-shadow(0 0 14px rgba(0,184,255,.45));
 }
 
-/* انیمیشن‌ها فقط وقتی JS فعال است => محتوا هرگز نامرئی گیر نمی‌کند */
+/* If a layer 404s or fails to decode, hide it instead of leaving a
+   broken-image icon / white box. */
+.logo-layer.is-missing{display:none}
+
+/* Animations only run once JS confirms it's active, so content is
+   never invisible if JS fails to load. */
 html.js .layer-frame{opacity:0;transform:scale(.94);animation:frame-reveal 1.2s cubic-bezier(.25,1,.5,1) .2s forwards}
 html.js .layer-signature{opacity:0;clip-path:inset(0 100% 0 0);animation:signature-write 1.3s ease 1.3s forwards}
 html.js .layer-text{opacity:0;transform:translateY(8px);animation:text-reveal 1s ease 2.4s forwards}
@@ -593,14 +608,15 @@ footer{margin-top:48px;padding:28px 18px;color:#555;background:#000;border-top:1
   'use strict';
   document.documentElement.classList.add('js');
 
-  /* 1) لایه‌های لوگو: مخفی‌کردن تصاویر لود نشده تا کادر خالی/سفید نسازند */
+  /* 1) Logo layers: hide any image that fails to load (404 / decode
+        error) instead of leaving a broken-image icon or blank box. */
   document.querySelectorAll('.logo-layer').forEach(function (img) {
     var fail = function () { img.classList.add('is-missing'); };
     if (img.complete && img.naturalWidth === 0) fail();
     img.addEventListener('error', fail);
   });
 
-  /* 2) آکاردئون با ارتفاع محاسبه‌شده */
+  /* 2) Accordion with measured height */
   var openPanels = [];
 
   function setHeight(panel, open) {
@@ -624,7 +640,8 @@ footer{margin-top:48px;padding:28px 18px;color:#555;background:#000;border-top:1
       }
     });
 
-    /* بعد از پایان انیمیشن، ارتفاع را آزاد کن تا محتوای داخلی (ویدیو) بریده نشود */
+    /* Once the expand transition ends, release the fixed height so
+       inner content (like the video) is never clipped. */
     panel.addEventListener('transitionend', function (e) {
       if (e.propertyName === 'max-height' && item.classList.contains('active')) {
         panel.style.maxHeight = 'none';
@@ -640,7 +657,7 @@ footer{margin-top:48px;padding:28px 18px;color:#555;background:#000;border-top:1
     }, 150);
   });
 
-  /* 3) پلی‌لیست ویدیو */
+  /* 3) Video playlist */
   document.querySelectorAll('.playlist-box').forEach(function (box) {
     var wrapper = box.closest('.video-playlist-container');
     var player = wrapper.querySelector('.main-video-player');
