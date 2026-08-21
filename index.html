@@ -3,35 +3,105 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="SWID-LISA research lab — mechanical and aerospace engineering research modules.">
   <meta name="color-scheme" content="dark">
-  <title>SOMETHING WEIRD...</title>
+  <meta name="theme-color" content="#050505">
 
+  <title>SWID-LISA — Mechanical &amp; Aerospace Research Lab</title>
+  <meta name="description" content="SWID-LISA research lab: fatigue and fracture, neural biomechanics, energy-absorbing metamaterials, and fracture in cementitious materials. Abaqus simulations, tutorials, and publications.">
+  <meta name="author" content="Pouria Hejazi Rekavandi">
+  <link rel="canonical" href="https://example.com/">
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SWID-LISA">
+  <meta property="og:title" content="SWID-LISA — Mechanical &amp; Aerospace Research Lab">
+  <meta property="og:description" content="Fatigue and fracture, neural biomechanics, energy absorption, and fracture in cements.">
+  <meta property="og:image" content="https://example.com/og-cover.png">
+  <meta property="og:url" content="https://example.com/">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Fonts: preconnect + async-safe load -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Allura&family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap"
-  >
+  <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Allura&family=Orbitron:wght@700&family=Roboto+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Allura&family=Orbitron:wght@700&family=Roboto+Mono:wght@400;700&display=swap"
+        media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Allura&family=Orbitron:wght@700&family=Roboto+Mono:wght@400;700&display=swap">
+  </noscript>
+
+  <!-- Above-the-fold logo layers -->
+  <link rel="preload" as="image" href="frame.png">
+  <link rel="preload" as="image" href="text.png">
 
   <style>
+    /* ============================================================
+       DESIGN TOKENS
+       ============================================================ */
     :root {
+      /* Brand */
       --green: #00ff41;
       --blue: #00b8ff;
+      --red: #ff3131;
+      --mint: #00e676;
+
+      /* Surfaces */
       --bg: #050505;
-      --panel: rgba(20, 20, 20, 0.65);
+      --bg-elev-1: rgba(20, 20, 20, 0.65);
+      --bg-elev-2: rgba(15, 25, 35, 0.7);
+      --bg-inset: rgba(10, 10, 10, 0.6);
       --line: #333;
-      --stage: clamp(240px, min(80vw, 56vh), 480px);
+      --line-soft: rgba(255, 255, 255, 0.08);
+
+      /* Text */
+      --text: #e0e0e0;
+      --text-muted: #a8b0b4;
+      --text-dim: #6b7275;
+
+      /* Type scale */
+      --fs-xs: 0.78rem;
+      --fs-sm: 0.86rem;
+      --fs-base: 1rem;
+      --fs-lg: clamp(1.05rem, 2.8vw, 1.25rem);
+      --fs-xl: clamp(1.2rem, 3.4vw, 1.6rem);
+      --fs-display: clamp(1.7rem, 6.4vw, 3rem);
+
+      /* Rhythm */
+      --sp-1: 4px;
+      --sp-2: 8px;
+      --sp-3: 12px;
+      --sp-4: 16px;
+      --sp-5: 24px;
+      --sp-6: 36px;
+      --sp-7: 56px;
+
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+
+      --ring: 0 0 0 2px rgba(0, 255, 65, 0.55);
+      --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.55);
+
+      --stage: clamp(240px, min(80vw, 56vh), 460px);
+      --content: 1120px;
+      --nav-h: 56px;
+
+      --ease: cubic-bezier(0.25, 1, 0.5, 1);
     }
 
+    /* ============================================================
+       RESET / BASE
+       ============================================================ */
     *,
     *::before,
-    *::after {
-      box-sizing: border-box;
-    }
+    *::after { box-sizing: border-box; }
 
     html {
       scroll-behavior: smooth;
+      scroll-padding-top: calc(var(--nav-h) + 12px);
       -webkit-text-size-adjust: 100%;
     }
 
@@ -39,30 +109,61 @@
       margin: 0;
       overflow-x: hidden;
       background: var(--bg);
-      color: #e0e0e0;
-      font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-      line-height: 1.6;
+      color: var(--text);
+      font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: var(--fs-base);
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
     }
 
-    img,
-    video {
-      max-width: 100%;
-      height: auto;
-    }
+    img, video, svg { max-width: 100%; }
+    img, video { height: auto; }
+
+    a { color: var(--blue); }
 
     :focus-visible {
       outline: 2px solid var(--green);
       outline-offset: 3px;
+      border-radius: 2px;
     }
 
-    /* ---------- Project banner ---------- */
+    /* Screen-reader-only utility */
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute;
+      left: 50%;
+      top: -100px;
+      z-index: 200;
+      transform: translateX(-50%);
+      padding: 10px 18px;
+      background: var(--green);
+      color: #000;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      transition: top 0.2s var(--ease);
+    }
+    .skip-link:focus-visible { top: 0; }
+
+    /* ============================================================
+       PROJECT BANNER
+       ============================================================ */
     .project-banner {
       position: relative;
       z-index: 105;
-      padding: 10px 16px;
-      background: rgba(0, 255, 65, 0.05);
-      border-bottom: 1px solid var(--green);
-      box-shadow: 0 2px 15px rgba(0, 255, 65, 0.2);
+      padding: 10px var(--sp-4);
+      background: linear-gradient(180deg, rgba(0, 255, 65, 0.08), rgba(0, 255, 65, 0.02));
+      border-bottom: 1px solid rgba(0, 255, 65, 0.55);
     }
 
     .banner-text {
@@ -70,8 +171,8 @@
       align-items: center;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 10px 12px;
-      max-width: 1100px;
+      gap: 10px var(--sp-3);
+      max-width: var(--content);
       margin: 0 auto;
       font-size: clamp(0.8rem, 2.6vw, 0.95rem);
       text-align: center;
@@ -79,69 +180,69 @@
 
     .banner-badge {
       flex: 0 0 auto;
-      padding: 3px 8px;
-      border-radius: 3px;
+      padding: 3px var(--sp-2);
+      border-radius: 999px;
       background: var(--green);
       color: #000;
-      font-size: 0.78rem;
+      font-size: var(--fs-xs);
       font-weight: 700;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      animation: pulse-badge 2s infinite;
+      animation: pulse-badge 2.4s infinite;
     }
 
     .banner-msg {
       flex: 1 1 260px;
       min-width: 0;
+      color: var(--text);
+    }
+    .banner-msg::before {
+      content: "> ";
+      color: var(--green);
     }
 
     @keyframes pulse-badge {
-      0% {
-        box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7);
-      }
-      70% {
-        box-shadow: 0 0 0 6px rgba(0, 255, 65, 0);
-      }
-      100% {
-        box-shadow: 0 0 0 0 rgba(0, 255, 65, 0);
-      }
+      0%   { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7); }
+      70%  { box-shadow: 0 0 0 7px rgba(0, 255, 65, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0); }
     }
 
     .banner-btn {
       flex: 0 0 auto;
-      padding: 5px 12px;
-      border-radius: 3px;
+      padding: 6px var(--sp-3);
+      border-radius: var(--radius-sm);
       background: var(--blue);
       color: #050505;
-      font-size: 0.85rem;
+      font-size: var(--fs-sm);
       font-weight: 700;
       text-decoration: none;
       text-transform: uppercase;
-      transition: background 0.3s, box-shadow 0.3s;
+      transition: background 0.25s, box-shadow 0.25s, transform 0.25s;
     }
-
     .banner-btn:hover,
     .banner-btn:focus-visible {
       background: var(--green);
-      box-shadow: 0 0 10px var(--green);
+      box-shadow: 0 0 14px rgba(0, 255, 65, 0.55);
+      transform: translateY(-1px);
     }
 
-    /* ---------- Header ---------- */
-    header {
+    /* ============================================================
+       HERO HEADER
+       ============================================================ */
+    .site-header {
       position: relative;
       isolation: isolate;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      min-height: min(680px, 92svh);
-      padding: 2.5rem 1rem 2rem;
+      display: grid;
+      place-items: center;
+      gap: var(--sp-3);
+      min-height: min(660px, 88svh);
+      padding: var(--sp-6) var(--sp-4) var(--sp-5);
       overflow: hidden;
       background: #000;
       border-bottom: 2px solid var(--green);
     }
 
-    header::before {
+    .site-header::before {
       content: "";
       position: absolute;
       inset: -4%;
@@ -155,31 +256,34 @@
       background-position: center;
       background-size: cover;
       background-repeat: no-repeat;
-      filter: grayscale(100%) contrast(1.2) brightness(0.65);
+      filter: grayscale(100%) contrast(1.2) brightness(0.6);
       animation: cosmic-move 40s infinite alternate linear;
     }
 
-    header::after {
+    /* Vignette + subtle scan texture */
+    .site-header::after {
       content: "";
       position: absolute;
       inset: 0;
       z-index: -1;
       pointer-events: none;
-      background: radial-gradient(
-        circle at center,
-        rgba(0, 0, 0, 0.05) 0%,
-        rgba(0, 0, 0, 0.35) 60%,
-        rgba(0, 0, 0, 0.75) 100%
-      );
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.022) 0 1px,
+          transparent 1px 3px
+        ),
+        radial-gradient(
+          circle at center,
+          rgba(0, 0, 0, 0.05) 0%,
+          rgba(0, 0, 0, 0.38) 60%,
+          rgba(0, 0, 0, 0.78) 100%
+        );
     }
 
     @keyframes cosmic-move {
-      from {
-        transform: scale(1.02);
-      }
-      to {
-        transform: scale(1.16);
-      }
+      from { transform: scale(1.02); }
+      to   { transform: scale(1.16); }
     }
 
     /* ---------- Multi-layer logo ---------- */
@@ -190,7 +294,6 @@
       width: var(--stage);
       height: var(--stage);
       margin: 0 auto;
-      background: transparent;
     }
 
     .animated-logo-stage::before {
@@ -202,7 +305,7 @@
       border-radius: 50%;
       background: radial-gradient(
         circle at center,
-        rgba(0, 184, 255, 0.12) 0%,
+        rgba(0, 184, 255, 0.14) 0%,
         rgba(0, 184, 255, 0.04) 45%,
         transparent 72%
       );
@@ -221,31 +324,26 @@
       pointer-events: none;
       background: transparent;
       border: 0;
-      filter: url("#logo-recolor");
+      filter: url(#logo-recolor);
     }
 
-    .logo-layer.is-missing {
-      display: none;
-    }
+    .logo-layer.is-missing { display: none; }
 
     html.js .layer-frame {
       opacity: 0;
       transform: scale(0.94);
-      animation: frame-reveal 1.2s cubic-bezier(0.25, 1, 0.5, 1) 0.2s forwards;
+      animation: frame-reveal 1.2s var(--ease) 0.2s forwards;
     }
-
     html.js .layer-signature {
       opacity: 0;
       clip-path: inset(0 100% 0 0);
       animation: signature-write 1.3s ease 1.3s forwards;
     }
-
     html.js .layer-text {
       opacity: 0;
       transform: translateY(8px);
       animation: text-reveal 1s ease 2.4s forwards;
     }
-
     html.js .layer-ls {
       opacity: 0;
       transform: scale(0.96);
@@ -253,47 +351,20 @@
     }
 
     @keyframes frame-reveal {
-      from {
-        opacity: 0;
-        transform: scale(0.94);
-      }
-      to {
-        opacity: 0.95;
-        transform: scale(1);
-      }
+      from { opacity: 0; transform: scale(0.94); }
+      to   { opacity: 0.95; transform: scale(1); }
     }
-
     @keyframes signature-write {
-      from {
-        opacity: 1;
-        clip-path: inset(0 100% 0 0);
-      }
-      to {
-        opacity: 1;
-        clip-path: inset(0 0 0 0);
-      }
+      from { opacity: 1; clip-path: inset(0 100% 0 0); }
+      to   { opacity: 1; clip-path: inset(0 0 0 0); }
     }
-
     @keyframes text-reveal {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 0.95;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 0.95; transform: translateY(0); }
     }
-
     @keyframes ls-reveal {
-      from {
-        opacity: 0;
-        transform: scale(0.96);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+      from { opacity: 0; transform: scale(0.96); }
+      to   { opacity: 1; transform: scale(1); }
     }
 
     /* ---------- Sparkles ---------- */
@@ -312,31 +383,25 @@
         0 0 14px 5px rgba(0, 184, 255, 0.4);
     }
 
-    .s1 { top: 16%; left: 49%; animation: twinkle 2s infinite ease-in-out 4.2s; }
+    .s1 { top: 16%; left: 49%; animation: twinkle 2s   infinite ease-in-out 4.2s; }
     .s2 { top: 45%; left: 16%; animation: twinkle 3.5s infinite ease-in-out 4.4s; }
     .s3 { top: 38%; left: 83%; animation: twinkle 2.8s infinite ease-in-out 4.3s; }
-    .s4 { top: 72%; left: 22%; animation: twinkle 4s infinite ease-in-out 4.6s; }
+    .s4 { top: 72%; left: 22%; animation: twinkle 4s   infinite ease-in-out 4.6s; }
     .s5 { top: 82%; left: 52%; animation: twinkle 2.5s infinite ease-in-out 4.5s; }
 
     @keyframes twinkle {
-      0%,
-      100% {
-        opacity: 0;
-        transform: scale(0.5);
-      }
-      50% {
-        opacity: 0.9;
-        transform: scale(1.3);
-      }
+      0%, 100% { opacity: 0; transform: scale(0.5); }
+      50%      { opacity: 0.9; transform: scale(1.3); }
     }
 
-    /* ---------- Header title ---------- */
+    /* ---------- Hero title ---------- */
     .header-title-block {
       position: relative;
       z-index: 2;
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: var(--sp-2);
       width: min(94vw, 950px);
       text-align: center;
     }
@@ -346,8 +411,8 @@
       margin: 0;
       padding: 0 0.2em 0.1em;
       color: #fff;
-      font-family: "Allura", cursive;
-      font-size: clamp(1.6rem, 6.4vw, 2.85rem);
+      font-family: "Allura", "Segoe Script", cursive;
+      font-size: var(--fs-display);
       font-weight: 400;
       line-height: 1.25;
       overflow-wrap: break-word;
@@ -357,18 +422,31 @@
         0 3px 9px rgba(0, 0, 0, 1);
     }
 
+    .header-tagline {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: clamp(0.72rem, 2.4vw, 0.9rem);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
     html.js .header-title-block h1 {
       opacity: 0;
       transform: translateY(8px);
       animation: fade-up 1.4s ease 4.2s forwards;
     }
+    html.js .header-tagline {
+      opacity: 0;
+      animation: fade-up 1.2s ease 4.5s forwards;
+    }
 
     .miga-mark {
       display: inline-flex;
       align-items: baseline;
-      margin-top: 4px;
-      padding: 1px 12px 3px;
-      font-family: "Orbitron", sans-serif;
+      padding: 2px var(--sp-3) 3px;
+      border: 1px solid var(--line-soft);
+      border-radius: 999px;
+      font-family: "Orbitron", system-ui, sans-serif;
       font-size: clamp(0.68rem, 2.2vw, 0.88rem);
       font-weight: 700;
       line-height: 1;
@@ -379,102 +457,115 @@
     html.js .miga-mark {
       opacity: 0;
       transform: translateY(5px);
-      animation: fade-up 1.2s ease 4.6s forwards;
+      animation: fade-up 1.2s ease 4.8s forwards;
     }
 
     @keyframes fade-up {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    .miga-m {
-      color: #ff3131;
-      text-shadow: 0 0 5px rgba(255, 49, 49, 0.7);
-    }
+    .miga-m  { color: var(--red);  text-shadow: 0 0 5px rgba(255, 49, 49, 0.7); }
+    .miga-ig { color: #fff;        text-shadow: 0 0 5px rgba(255, 255, 255, 0.65); }
+    .miga-a  { color: var(--mint); text-shadow: 0 0 5px rgba(0, 230, 118, 0.7); }
 
-    .miga-ig {
-      color: #fff;
-      text-shadow: 0 0 5px rgba(255, 255, 255, 0.65);
-    }
-
-    .miga-a {
-      color: #00e676;
-      text-shadow: 0 0 5px rgba(0, 230, 118, 0.7);
-    }
-
-    /* ---------- Navigation ---------- */
-    nav {
+    /* ============================================================
+       NAVIGATION
+       ============================================================ */
+    .site-nav {
       position: sticky;
       top: 0;
       z-index: 100;
+      background: rgba(0, 0, 0, 0.9);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .nav-inner {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 4px 8px;
-      padding: 12px 14px;
-      background: rgba(0, 0, 0, 0.92);
-      border-bottom: 1px solid var(--line);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      gap: var(--sp-1) var(--sp-2);
+      max-width: var(--content);
+      min-height: var(--nav-h);
+      margin: 0 auto;
+      padding: 10px var(--sp-4);
     }
 
-    nav a {
+    .site-nav a {
+      position: relative;
       padding: 6px 10px;
       color: #fff;
       font-size: 13px;
       font-weight: 700;
+      letter-spacing: 0.04em;
       text-decoration: none;
       text-transform: uppercase;
       white-space: nowrap;
-      transition: color 0.3s, text-shadow 0.3s;
+      transition: color 0.25s, text-shadow 0.25s;
     }
 
-    nav a:hover,
-    nav a:focus-visible {
+    .site-nav a:hover,
+    .site-nav a:focus-visible {
       color: var(--green);
-      text-shadow: 0 0 8px var(--green);
+      text-shadow: 0 0 8px rgba(0, 255, 65, 0.75);
     }
 
-    nav a::after {
+    .site-nav a::after {
       content: "";
       display: block;
       width: 0;
       height: 2px;
       margin-top: 3px;
       background: var(--green);
-      transition: width 0.3s;
+      transition: width 0.25s var(--ease);
     }
 
-    nav a:hover::after,
-    nav a:focus-visible::after {
-      width: 100%;
-    }
+    /* FIXED: these selectors were escaped/broken before */
+    .site-nav a:hover::after,
+    .site-nav a:focus-visible::after { width: 100%; }
 
-    /* ---------- Layout ---------- */
+    .site-nav a[aria-current="page"] {
+      color: var(--green);
+    }
+    .site-nav a[aria-current="page"]::after { width: 100%; }
+
+    /* ============================================================
+       LAYOUT
+       ============================================================ */
     .container {
-      max-width: 1100px;
-      margin: 48px auto;
+      max-width: var(--content);
+      margin: var(--sp-7) auto;
       padding: 0 18px;
     }
 
+    .section-title {
+      display: inline-block;
+      margin: 0 0 var(--sp-5);
+      padding-bottom: var(--sp-1);
+      color: #fff;
+      border-bottom: 2px solid var(--blue);
+      font-family: "Orbitron", system-ui, sans-serif;
+      font-size: var(--fs-xl);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ---------- Profile ---------- */
     .profile-section {
       position: relative;
-      display: flex;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
       align-items: center;
-      gap: 36px;
-      padding: 36px;
+      gap: var(--sp-6);
+      padding: var(--sp-6);
       overflow: hidden;
-      background: var(--panel);
+      background: var(--bg-elev-1);
       border: 1px solid var(--line);
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0, 255, 65, 0.05);
-      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
     }
 
     .profile-section::before {
@@ -483,97 +574,101 @@
       left: 0;
       top: 0;
       width: 100%;
-      height: 5px;
+      height: 4px;
       opacity: 0.3;
       background: var(--green);
       box-shadow: 0 0 10px var(--green);
-      animation: scanline 3s infinite linear;
+      animation: scanline 4s infinite linear;
     }
 
     @keyframes scanline {
       from { top: -10%; }
-      to { top: 110%; }
+      to   { top: 110%; }
     }
 
     .profile-section:hover {
-      transform: scale(1.008);
+      transform: translateY(-2px);
       border-color: var(--blue);
-      box-shadow: 0 0 30px rgba(0, 184, 255, 0.2);
+      box-shadow: 0 0 30px rgba(0, 184, 255, 0.18);
     }
 
     .profile-pic {
-      flex: 0 0 auto;
-      width: min(250px, 60vw);
+      width: min(240px, 58vw);
       aspect-ratio: 1 / 1;
       object-fit: cover;
       border: 4px solid var(--blue);
       border-radius: 50%;
-      box-shadow: 0 0 20px rgba(0, 184, 255, 0.5);
+      box-shadow: 0 0 24px rgba(0, 184, 255, 0.45);
       filter: grayscale(100%) contrast(1.1);
-      transition: filter 0.5s, transform 0.5s;
+      transition: filter 0.5s, transform 0.5s var(--ease);
     }
 
     .profile-pic:hover {
       filter: none;
-      transform: rotate(4deg) scale(1.04);
+      transform: rotate(3deg) scale(1.03);
     }
 
-    .about-text p {
-      color: #ccc;
+    .about-text > p {
+      color: #cfd4d6;
       font-size: 1.02rem;
       line-height: 1.8;
     }
 
-    strong {
-      color: var(--green);
+    .about-text strong { color: var(--green); }
+
+    /* Role chips */
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-2);
+      margin: 0 0 var(--sp-4);
+      padding: 0;
+      list-style: none;
+    }
+
+    .tag-row li {
+      padding: 3px 10px;
+      border: 1px solid rgba(0, 184, 255, 0.35);
+      border-radius: 999px;
+      color: var(--blue);
+      font-size: var(--fs-xs);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
 
     .personal-verse {
-      margin: 22px 0;
-      padding: 16px 20px;
-      background: rgba(0, 184, 255, 0.035);
+      margin: var(--sp-5) 0;
+      padding: var(--sp-4) var(--sp-5);
+      background: rgba(0, 184, 255, 0.04);
       border-left: 2px solid var(--blue);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
 
     .personal-verse p {
       margin: 6px 0;
       color: #d8f6ff;
       font-size: 0.95rem;
-      line-height: 1.65;
+      font-style: italic;
+      line-height: 1.7;
     }
 
     .signature {
       margin-bottom: 0;
-      color: #ccc;
+      color: var(--text-muted);
     }
-
-    .signature strong {
-      font-size: 1.06rem;
-    }
+    .signature strong { font-size: 1.06rem; }
 
     .research-interests-section {
-      margin-top: 56px;
-      padding-top: 36px;
+      margin-top: var(--sp-7);
+      padding-top: var(--sp-6);
       border-top: 1px dashed var(--line);
-    }
-
-    .section-title {
-      display: inline-block;
-      margin: 0 0 26px;
-      padding-bottom: 5px;
-      color: #fff;
-      border-bottom: 2px solid var(--blue);
-      font-family: "Times New Roman", Times, serif;
-      font-size: clamp(1.2rem, 3.4vw, 1.55rem);
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
     }
 
     /* ---------- Accordion ---------- */
     .accordion-container {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: var(--sp-3);
     }
 
     .accordion-item {
@@ -581,29 +676,33 @@
       background: rgba(20, 20, 20, 0.7);
       border: 1px solid var(--line);
       border-left: 3px solid var(--blue);
-      border-radius: 8px;
-      transition: border-color 0.3s, box-shadow 0.3s;
+      border-radius: var(--radius-md);
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
     }
 
     .accordion-item:hover {
       border-color: var(--blue);
-      box-shadow: 0 0 15px rgba(0, 184, 255, 0.15);
+      box-shadow: 0 0 18px rgba(0, 184, 255, 0.14);
+    }
+
+    .accordion-item.active {
+      border-left-color: var(--green);
     }
 
     .accordion-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: var(--sp-3);
       width: 100%;
-      padding: 16px 20px;
+      padding: var(--sp-4) var(--sp-5);
       background: transparent;
       color: #fff;
       border: 0;
       text-align: left;
       font: 700 clamp(0.95rem, 2.6vw, 1.1rem) / 1.4 "Roboto Mono", monospace;
       cursor: pointer;
-      transition: background 0.3s, color 0.3s;
+      transition: background 0.25s, color 0.25s;
     }
 
     .accordion-header:hover {
@@ -611,10 +710,25 @@
       color: var(--green);
     }
 
+    .accordion-header .label {
+      display: flex;
+      align-items: baseline;
+      gap: var(--sp-3);
+      min-width: 0;
+    }
+
+    .accordion-header .num {
+      flex: 0 0 auto;
+      color: var(--blue);
+      font-family: "Orbitron", sans-serif;
+      font-size: var(--fs-sm);
+    }
+
     .accordion-header .icon {
+      flex: 0 0 auto;
       color: var(--green);
       font-size: 1.1rem;
-      transition: transform 0.3s;
+      transition: transform 0.3s var(--ease);
     }
 
     .accordion-item.active .accordion-header .icon {
@@ -624,44 +738,43 @@
     .accordion-content {
       max-height: 0;
       overflow: hidden;
-      background: rgba(10, 10, 10, 0.6);
-      transition: max-height 0.38s ease;
+      background: var(--bg-inset);
+      transition: max-height 0.38s var(--ease);
     }
 
-    .accordion-inner {
-      padding: 18px 20px;
-    }
+    .accordion-inner { padding: 18px var(--sp-5); }
+    .accordion-inner > p:first-child { margin-top: 0; }
 
     .research-subcard {
-      margin-top: 14px;
-      padding: 20px;
-      background: rgba(15, 25, 35, 0.7);
+      margin-top: var(--sp-4);
+      padding: var(--sp-5);
+      background: var(--bg-elev-2);
       border: 1px solid rgba(0, 184, 255, 0.3);
-      border-radius: 8px;
+      border-radius: var(--radius-md);
     }
 
-    .research-subcard h3 {
-      margin: 0 0 12px;
+    .research-subcard h4 {
+      margin: 0 0 var(--sp-3);
       padding-bottom: 10px;
       color: var(--blue);
-      font-size: clamp(1.05rem, 2.8vw, 1.25rem);
+      font-size: var(--fs-lg);
       border-bottom: 1px solid rgba(0, 184, 255, 0.2);
     }
 
-    /* ---------- Video and playlist ---------- */
+    /* ---------- Video + playlist ---------- */
     .video-playlist-container {
       display: grid;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
       gap: 18px;
       margin-top: 18px;
     }
 
     .main-video-box {
       min-width: 0;
-      padding: 14px;
+      padding: var(--sp-3);
       background: #000;
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: var(--radius-md);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
     }
 
@@ -679,41 +792,49 @@
       width: 100%;
       aspect-ratio: 16 / 9;
       background: #000;
-      border-radius: 5px;
+      border-radius: var(--radius-sm);
     }
 
     .playlist-box {
+      display: flex;
+      flex-direction: column;
       min-width: 0;
-      max-height: 420px;
+      max-height: 430px;
       overflow-y: auto;
-      padding: 14px;
+      padding: var(--sp-3);
       background: rgba(15, 15, 15, 0.8);
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: var(--radius-md);
+      scrollbar-width: thin;
     }
 
-    .playlist-box h4 {
-      margin: 0 0 12px;
-      padding-bottom: 8px;
+    .playlist-box h5 {
+      position: sticky;
+      top: calc(var(--sp-3) * -1);
+      margin: 0 0 var(--sp-3);
+      padding: 4px 0 var(--sp-2);
+      background: rgba(15, 15, 15, 0.95);
       color: var(--green);
       font-size: 0.92rem;
       border-bottom: 1px solid var(--line);
     }
 
     .playlist-item {
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       width: 100%;
-      margin-bottom: 8px;
-      padding: 10px 12px;
+      margin-bottom: var(--sp-2);
+      padding: 10px var(--sp-3);
       background: rgba(30, 30, 30, 0.6);
-      color: #e0e0e0;
+      color: var(--text);
       border: 0;
       border-left: 3px solid #555;
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       text-align: left;
       font: 700 0.86rem / 1.4 "Roboto Mono", monospace;
       cursor: pointer;
-      transition: background 0.3s, border-color 0.3s, color 0.3s;
+      transition: background 0.25s, border-color 0.25s, color 0.25s;
     }
 
     .playlist-item:hover {
@@ -721,167 +842,137 @@
       border-left-color: var(--blue);
     }
 
+    /* FIXED: attribute selector was escaped before */
     .playlist-item[aria-current="true"] {
       background: rgba(0, 255, 65, 0.12);
       border-left-color: var(--green);
       color: var(--green);
     }
 
-    footer {
-      margin-top: 48px;
+    .playlist-item .idx {
+      flex: 0 0 auto;
+      color: var(--text-dim);
+      font-family: "Orbitron", sans-serif;
+      font-size: var(--fs-xs);
+    }
+    .playlist-item[aria-current="true"] .idx { color: var(--green); }
+
+    /* ---------- Footer ---------- */
+    .site-footer {
+      margin-top: var(--sp-7);
       padding: 28px 18px;
-      color: #555;
+      color: var(--text-dim);
       background: #000;
       border-top: 1px solid #222;
       font-size: 12px;
       text-align: center;
     }
+    .site-footer p { margin: 4px 0; }
 
-    /* ---------- Responsive ---------- */
-    @media (max-width: 850px) {
-      .video-playlist-container {
-        grid-template-columns: 1fr;
-      }
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 900px) {
+      .video-playlist-container { grid-template-columns: 1fr; }
+      .playlist-box { max-height: 300px; }
     }
 
     @media (max-width: 768px) {
-      header {
+      .site-header {
         min-height: auto;
-        padding: 2rem 1rem 1.75rem;
+        padding: var(--sp-5) var(--sp-4);
       }
-
-      .container {
-        margin: 32px auto;
-      }
+      .container { margin: var(--sp-6) auto; }
 
       .profile-section {
-        flex-direction: column;
-        padding: 26px 18px;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        padding: var(--sp-5) 18px;
         text-align: center;
       }
-
-      .personal-verse {
-        text-align: left;
-      }
+      .tag-row { justify-content: center; }
+      .personal-verse { text-align: left; }
     }
 
     @media (max-width: 560px) {
-      .banner-text {
-        flex-direction: column;
-        gap: 8px;
-      }
+      .banner-text { flex-direction: column; gap: var(--sp-2); }
 
-      nav {
+      .nav-inner {
         flex-wrap: nowrap;
         justify-content: flex-start;
         overflow-x: auto;
+        scroll-snap-type: x proximity;
         scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        mask-image: linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
       }
-
-      nav::-webkit-scrollbar {
-        display: none;
-      }
+      .nav-inner::-webkit-scrollbar { display: none; }
+      .site-nav a { scroll-snap-align: center; }
     }
 
-    /* ---------- Reduced motion ---------- */
+    /* ============================================================
+       REDUCED MOTION  (FIXED: selector list was malformed)
+       ============================================================ */
     @media (prefers-reduced-motion: reduce) {
       *,
       *::before,
       *::after {
-        animation: none !important;
-        transition: none !important;
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
       }
 
       html.js .logo-layer,
       html.js .header-title-block h1,
+      html.js .header-tagline,
       html.js .miga-mark {
         opacity: 1 !important;
         transform: none !important;
         clip-path: none !important;
       }
 
-      .sparkle {
-        opacity: 0.6;
-      }
+      .sparkle { opacity: 0.6; }
+    }
+
+    @media print {
+      .project-banner,
+      .site-nav,
+      .sparkle,
+      .main-video-box,
+      .playlist-box { display: none !important; }
+      body { background: #fff; color: #000; }
     }
   </style>
 </head>
 
 <body>
-  <!--
-    The critical logo fix is the intersection with SourceAlpha.
-    Transparent PNG pixels therefore stay transparent after luminance inversion.
-  -->
-  <svg
-    width="0"
-    height="0"
-    aria-hidden="true"
-    focusable="false"
-    style="position: absolute; overflow: hidden"
-  >
-    <defs>
-      <filter
-        id="logo-recolor"
-        x="-20%"
-        y="-20%"
-        width="140%"
-        height="140%"
-        color-interpolation-filters="sRGB"
-      >
-        <feColorMatrix
-          in="SourceGraphic"
-          type="luminanceToAlpha"
-          result="luminanceMask"
-        />
+  <a class="skip-link" href="#main">Skip to main content</a>
 
-        <feComponentTransfer
-          in="luminanceMask"
-          result="invertedMask"
-        >
-          <feFuncA
-            type="table"
-            tableValues="1 1 1 0.85 0.35 0 0"
-          />
+  <!--
+    Logo recolor filter.
+    The critical step is compositing the inverted luminance mask with SourceAlpha,
+    so transparent PNG pixels stay transparent after inversion.
+  -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false"
+       style="position: absolute; overflow: hidden">
+    <defs>
+      <filter id="logo-recolor" x="-20%" y="-20%" width="140%" height="140%"
+              color-interpolation-filters="sRGB">
+        <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" result="luminanceMask" />
+
+        <feComponentTransfer in="luminanceMask" result="invertedMask">
+          <feFuncA type="table" tableValues="1 1 1 0.85 0.35 0 0" />
         </feComponentTransfer>
 
-        <feComposite
-          in="invertedMask"
-          in2="SourceAlpha"
-          operator="in"
-          result="logoMask"
-        />
+        <feComposite in="invertedMask" in2="SourceAlpha" operator="in" result="logoMask" />
 
-        <feFlood
-          flood-color="#f2fbff"
-          flood-opacity="0.96"
-          result="whiteColor"
-        />
+        <feFlood flood-color="#f2fbff" flood-opacity="0.96" result="whiteColor" />
+        <feComposite in="whiteColor" in2="logoMask" operator="in" result="whiteArtwork" />
 
-        <feComposite
-          in="whiteColor"
-          in2="logoMask"
-          operator="in"
-          result="whiteArtwork"
-        />
-
-        <feGaussianBlur
-          in="logoMask"
-          stdDeviation="3.5"
-          result="blurredMask"
-        />
-
-        <feFlood
-          flood-color="#00b8ff"
-          flood-opacity="0.8"
-          result="blueColor"
-        />
-
-        <feComposite
-          in="blueColor"
-          in2="blurredMask"
-          operator="in"
-          result="blueGlow"
-        />
+        <feGaussianBlur in="logoMask" stdDeviation="3.5" result="blurredMask" />
+        <feFlood flood-color="#00b8ff" flood-opacity="0.8" result="blueColor" />
+        <feComposite in="blueColor" in2="blurredMask" operator="in" result="blueGlow" />
 
         <feMerge>
           <feMergeNode in="blueGlow" />
@@ -891,48 +982,26 @@
     </defs>
   </svg>
 
+  <!-- ========================= BANNER ========================= -->
   <div class="project-banner">
     <div class="banner-text">
       <span class="banner-badge">Active Project</span>
-      <span class="banner-msg">&gt; IN DEVELOPMENT: Advanced LCE Polymers via Neural Network Algorithms</span>
+      <span class="banner-msg">In development: advanced LCE polymers via neural-network algorithms</span>
       <a href="project-link.html" class="banner-btn">Details</a>
     </div>
   </div>
 
-  <header>
+  <!-- ========================= HERO ========================= -->
+  <header class="site-header">
     <div class="animated-logo-stage">
-      <img
-        src="frame.png"
-        alt=""
-        class="logo-layer layer-frame"
-        width="480"
-        height="480"
-        decoding="async"
-      >
-      <img
-        src="signature.png"
-        alt=""
-        class="logo-layer layer-signature"
-        width="480"
-        height="480"
-        decoding="async"
-      >
-      <img
-        src="text.png"
-        alt="SWID-LISA"
-        class="logo-layer layer-text"
-        width="480"
-        height="480"
-        decoding="async"
-      >
-      <img
-        src="ls.png"
-        alt="LS monogram"
-        class="logo-layer layer-ls"
-        width="480"
-        height="480"
-        decoding="async"
-      >
+      <img src="frame.png" alt="" class="logo-layer layer-frame"
+           width="480" height="480" fetchpriority="high" decoding="async">
+      <img src="signature.png" alt="" class="logo-layer layer-signature"
+           width="480" height="480" decoding="async">
+      <img src="text.png" alt="SWID-LISA" class="logo-layer layer-text"
+           width="480" height="480" fetchpriority="high" decoding="async">
+      <img src="ls.png" alt="" class="logo-layer layer-ls"
+           width="480" height="480" decoding="async">
 
       <span class="sparkle s1" aria-hidden="true"></span>
       <span class="sparkle s2" aria-hidden="true"></span>
@@ -942,128 +1011,162 @@
     </div>
 
     <div class="header-title-block">
-      <h1>Something Weird is Discovering...!</h1>
-      <div class="miga-mark" aria-label="MIGA">
+      <h1>Something Weird is Discovering&hellip;!</h1>
+      <p class="header-tagline">Mechanical &amp; aerospace engineering research</p>
+      <p class="miga-mark">
         <span class="miga-m">M</span><span class="miga-ig">IG</span><span class="miga-a">A</span>
-      </div>
+      </p>
     </div>
   </header>
 
-  <nav aria-label="Main navigation">
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="equipment.html">Lab Gear</a>
-    <a href="abaqus.html">Abaqus_Sims</a>
-    <a href="people.html">People</a>
-    <a href="studied.html">Literature_Review</a>
-    <a href="publications.html">Publications</a>
-    <a href="future.html">Future_Plans</a>
-    <a href="contact.html">Connect</a>
+  <!-- ========================= NAV ========================= -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="about.html">About</a>
+      <a href="equipment.html">Lab Gear</a>
+      <a href="abaqus.html">Abaqus_Sims</a>
+      <a href="people.html">People</a>
+      <a href="studied.html">Literature_Review</a>
+      <a href="publications.html">Publications</a>
+      <a href="future.html">Future_Plans</a>
+      <a href="contact.html">Connect</a>
+    </div>
   </nav>
 
-  <main class="container">
-    <section class="profile-section">
-      <img
-        src="profile.jpg"
-        alt="Pouria Hejazi Rekavandi"
-        class="profile-pic"
-        width="250"
-        height="250"
-        loading="lazy"
-        decoding="async"
-      >
+  <!-- ========================= MAIN ========================= -->
+  <main class="container" id="main">
+    <h2 class="sr-only">About the lab</h2>
+
+    <section class="profile-section" aria-labelledby="profile-heading">
+      <h3 class="sr-only" id="profile-heading">Principal researcher</h3>
+
+      <img src="profile.jpg" alt="Portrait of Pouria Hejazi Rekavandi"
+           class="profile-pic" width="250" height="250"
+           loading="lazy" decoding="async">
 
       <div class="about-text">
+        <ul class="tag-row">
+          <li>Fatigue &amp; Fracture</li>
+          <li>Biomechanics</li>
+          <li>Metamaterials</li>
+          <li>Abaqus / FEA</li>
+        </ul>
+
         <p>
           I am an interdisciplinary engineering researcher specializing in
-          <strong>Mechanical and Aerospace Engineering</strong>, embodying the continuous
+          <strong>mechanical and aerospace engineering</strong>, embodying the continuous
           evolution of a childhood curiosity that has shaped my entire 40-year journey.
         </p>
 
         <blockquote class="personal-verse">
-          <p>*** Listen to the whispers of your dreaming soul,</p>
-          <p>*** Speak only truth to keep your spirit whole.</p>
-          <p>*** Fix your steady gaze upon a single star,</p>
-          <p>*** Work with burning fire to reach for what you are.</p>
-          <p>*** And let no passing shadow dim your inner light,</p>
-          <p>*** For nothing can eclipse a purpose shining bright.</p>
+          <p>Listen to the whispers of your dreaming soul,</p>
+          <p>Speak only truth to keep your spirit whole.</p>
+          <p>Fix your steady gaze upon a single star,</p>
+          <p>Work with burning fire to reach for what you are.</p>
+          <p>And let no passing shadow dim your inner light,</p>
+          <p>For nothing can eclipse a purpose shining bright.</p>
         </blockquote>
 
         <p class="signature">
-          With sincere dedication<br><br><strong>Pouria 🌻</strong>
+          With sincere dedication<br>
+          <strong>Pouria &#127803;</strong>
         </p>
       </div>
     </section>
 
-    <section class="research-interests-section" id="research-interests">
-      <h2 class="section-title">// RESEARCH MODULES</h2>
+    <section class="research-interests-section" id="research-interests"
+             aria-labelledby="research-heading">
+      <h2 class="section-title" id="research-heading">// Research modules</h2>
 
       <div class="accordion-container">
+        <!-- I -->
         <div class="accordion-item">
-          <button class="accordion-header" type="button" aria-expanded="false">
-            <span>I. Fatigue and Fracture</span>
-            <span class="icon" aria-hidden="true">▼</span>
-          </button>
-          <div class="accordion-content">
+          <h3 style="margin:0">
+            <button class="accordion-header" type="button"
+                    id="acc-btn-1" aria-expanded="false" aria-controls="acc-panel-1">
+              <span class="label"><span class="num">I</span><span>Fatigue and Fracture</span></span>
+              <span class="icon" aria-hidden="true">&#9660;</span>
+            </button>
+          </h3>
+          <div class="accordion-content" id="acc-panel-1" role="region" aria-labelledby="acc-btn-1">
             <div class="accordion-inner">
-              <p>Overview and educational materials on fatigue failure, crack initiation, and stress intensity analysis.</p>
+              <p>Overview and educational materials on fatigue failure, crack initiation, and stress-intensity analysis.</p>
             </div>
           </div>
         </div>
 
+        <!-- II -->
         <div class="accordion-item">
-          <button class="accordion-header" type="button" aria-expanded="false">
-            <span>II. Neural Biomechanics</span>
-            <span class="icon" aria-hidden="true">▼</span>
-          </button>
-          <div class="accordion-content">
+          <h3 style="margin:0">
+            <button class="accordion-header" type="button"
+                    id="acc-btn-2" aria-expanded="false" aria-controls="acc-panel-2">
+              <span class="label"><span class="num">II</span><span>Neural Biomechanics</span></span>
+              <span class="icon" aria-hidden="true">&#9660;</span>
+            </button>
+          </h3>
+          <div class="accordion-content" id="acc-panel-2" role="region" aria-labelledby="acc-btn-2">
             <div class="accordion-inner">
-              <p>Research materials focusing on computational neuroscience, brain tissue modeling, and neural mechanics.</p>
+              <p>Research materials focusing on computational neuroscience, brain-tissue modeling, and neural mechanics.</p>
             </div>
           </div>
         </div>
 
+        <!-- III -->
         <div class="accordion-item">
-          <button class="accordion-header" type="button" aria-expanded="false">
-            <span>III. Energy Absorption</span>
-            <span class="icon" aria-hidden="true">▼</span>
-          </button>
-          <div class="accordion-content">
+          <h3 style="margin:0">
+            <button class="accordion-header" type="button"
+                    id="acc-btn-3" aria-expanded="false" aria-controls="acc-panel-3">
+              <span class="label"><span class="num">III</span><span>Energy Absorption</span></span>
+              <span class="icon" aria-hidden="true">&#9660;</span>
+            </button>
+          </h3>
+          <div class="accordion-content" id="acc-panel-3" role="region" aria-labelledby="acc-btn-3">
             <div class="accordion-inner">
               <p>Investigation into mechanical energy dissipation, metamaterials, and impact dynamics.</p>
 
               <div class="research-subcard">
-                <h3>// Research Environment: AntiPrism Structures</h3>
-                <p>Select a tutorial part from the playlist below:</p>
+                <h4>// Research environment: AntiPrism structures</h4>
+                <p>Select a tutorial part from the playlist below.</p>
 
                 <div class="video-playlist-container">
                   <div class="main-video-box">
-                    <div class="current-video-title">AntiPrism Tutorial - Part 1</div>
-                    https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4
+                    <p class="current-video-title" id="antiprism-now-playing" aria-live="polite">
+                      AntiPrism Tutorial &mdash; Part 1
+                    </p>
+
+                    <!-- FIXED: the <video> element was missing entirely -->
+                    <video class="main-video-player"
+                           controls
+                           playsinline
+                           preload="metadata"
+                           aria-describedby="antiprism-now-playing"
+                           src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4">
+                      <p>
+                        Your browser cannot play embedded video.
+                        <a href="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4">Download Part 1 (MP4)</a>.
+                      </p>
+                    </video>
                   </div>
 
                   <div class="playlist-box">
-                    <h4>// Video Playlist</h4>
+                    <h5 id="antiprism-playlist-label">// Video playlist</h5>
 
-                    <button
-                      type="button"
-                      class="playlist-item"
-                      aria-current="true"
-                      data-src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4"
-                      data-title="AntiPrism Tutorial - Part 1"
-                    >
-                      01. AntiPrism Tutorial - Part 1
-                    </button>
+                    <div role="list" aria-labelledby="antiprism-playlist-label">
+                      <button type="button" role="listitem" class="playlist-item" aria-current="true"
+                              data-src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4"
+                              data-title="AntiPrism Tutorial &mdash; Part 1">
+                        <span class="idx">01</span>
+                        <span>AntiPrism Tutorial &mdash; Part 1</span>
+                      </button>
 
-                    <button
-                      type="button"
-                      class="playlist-item"
-                      aria-current="false"
-                      data-src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part2.mp4"
-                      data-title="AntiPrism Tutorial - Part 2"
-                    >
-                      02. AntiPrism Tutorial - Part 2
-                    </button>
+                      <button type="button" role="listitem" class="playlist-item" aria-current="false"
+                              data-src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part2.mp4"
+                              data-title="AntiPrism Tutorial &mdash; Part 2">
+                        <span class="idx">02</span>
+                        <span>AntiPrism Tutorial &mdash; Part 2</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1071,14 +1174,18 @@
           </div>
         </div>
 
+        <!-- IV -->
         <div class="accordion-item">
-          <button class="accordion-header" type="button" aria-expanded="false">
-            <span>IV. Fracture in Cements</span>
-            <span class="icon" aria-hidden="true">▼</span>
-          </button>
-          <div class="accordion-content">
+          <h3 style="margin:0">
+            <button class="accordion-header" type="button"
+                    id="acc-btn-4" aria-expanded="false" aria-controls="acc-panel-4">
+              <span class="label"><span class="num">IV</span><span>Fracture in Cements</span></span>
+              <span class="icon" aria-hidden="true">&#9660;</span>
+            </button>
+          </h3>
+          <div class="accordion-content" id="acc-panel-4" role="region" aria-labelledby="acc-btn-4">
             <div class="accordion-inner">
-              <p>Studies on cementitious matrix toughness, quasi-brittle fracture, and microstructural analysis.</p>
+              <p>Studies on cementitious-matrix toughness, quasi-brittle fracture, and microstructural analysis.</p>
             </div>
           </div>
         </div>
@@ -1086,111 +1193,163 @@
     </section>
   </main>
 
-  <footer>
-    <p>SYSTEM SECURE. © 2026 RKV MATERIALS. ENCRYPTED CONNECTION.</p>
+  <footer class="site-footer">
+    <p>System secure. Encrypted connection.</p>
+    <p>&copy; <span id="year">2026</span> RKV Materials &middot; SWID-LISA</p>
   </footer>
 
+  <!-- Structured data for search engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ResearchOrganization",
+    "name": "SWID-LISA",
+    "description": "Mechanical and aerospace engineering research lab: fatigue and fracture, neural biomechanics, energy absorption, and fracture in cementitious materials.",
+    "url": "https://example.com/",
+    "founder": {
+      "@type": "Person",
+      "name": "Pouria Hejazi Rekavandi",
+      "jobTitle": "Researcher"
+    },
+    "knowsAbout": [
+      "Fatigue and fracture mechanics",
+      "Neural biomechanics",
+      "Energy-absorbing metamaterials",
+      "Fracture in cementitious materials",
+      "Abaqus finite element simulation"
+    ]
+  }
+  </script>
+
   <script>
-    (function () {
-      "use strict";
+  (function () {
+    "use strict";
 
-      document.documentElement.classList.add("js");
+    document.documentElement.classList.add("js");
 
-      /* Hide a logo layer if its file cannot be loaded or decoded. */
-      document.querySelectorAll(".logo-layer").forEach(function (img) {
-        function hideMissingImage() {
-          img.classList.add("is-missing");
+    /* ---------- Footer year ---------- */
+    var yearEl = document.getElementById("year");
+    if (yearEl) { yearEl.textContent = String(new Date().getFullYear()); }
+
+    /* ---------- Hide a logo layer whose file cannot load ---------- */
+    document.querySelectorAll(".logo-layer").forEach(function (img) {
+      function hideMissingImage() { img.classList.add("is-missing"); }
+      if (img.complete && img.naturalWidth === 0) { hideMissingImage(); }
+      img.addEventListener("error", hideMissingImage);
+    });
+
+    /* ---------- Accordion (measured height + a11y state) ---------- */
+    var openPanels = [];
+
+    function setPanelHeight(panel, open) {
+      panel.style.maxHeight = open ? panel.scrollHeight + "px" : "0px";
+    }
+
+    document.querySelectorAll(".accordion-header").forEach(function (header) {
+      var item = header.closest(".accordion-item");
+      var panel = item.querySelector(".accordion-content");
+      if (!panel) { return; }
+
+      header.addEventListener("click", function () {
+        var willOpen = !item.classList.contains("active");
+
+        item.classList.toggle("active", willOpen);
+        header.setAttribute("aria-expanded", String(willOpen));
+
+        /* Re-measure from a collapsed baseline so "none" never breaks the close animation. */
+        if (!willOpen) {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+          requestAnimationFrame(function () { setPanelHeight(panel, false); });
+        } else {
+          setPanelHeight(panel, true);
         }
 
-        if (img.complete && img.naturalWidth === 0) {
-          hideMissingImage();
+        if (willOpen) {
+          if (openPanels.indexOf(panel) === -1) { openPanels.push(panel); }
+        } else {
+          openPanels = openPanels.filter(function (p) { return p !== panel; });
         }
-
-        img.addEventListener("error", hideMissingImage);
       });
 
-      /* Accordion with measured opening height. */
-      var openPanels = [];
+      panel.addEventListener("transitionend", function (event) {
+        if (event.propertyName === "max-height" && item.classList.contains("active")) {
+          panel.style.maxHeight = "none";
+        }
+      });
+    });
 
-      function setPanelHeight(panel, open) {
-        panel.style.maxHeight = open ? panel.scrollHeight + "px" : "0px";
+    /* Keep open panels correct after reflow */
+    var resizeTimer;
+    window.addEventListener("resize", function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () {
+        openPanels.forEach(function (panel) { panel.style.maxHeight = "none"; });
+      }, 150);
+    });
+
+    /* ---------- Video playlist ---------- */
+    document.querySelectorAll(".playlist-box").forEach(function (box) {
+      var wrapper = box.closest(".video-playlist-container");
+      if (!wrapper) { return; }
+
+      var player = wrapper.querySelector(".main-video-player");
+      var titleElement = wrapper.querySelector(".current-video-title");
+      var items = Array.prototype.slice.call(box.querySelectorAll(".playlist-item"));
+
+      /* Guard: never throw if markup is incomplete. */
+      if (!player || !items.length) { return; }
+
+      function select(button, autoplay) {
+        items.forEach(function (item) { item.setAttribute("aria-current", "false"); });
+        button.setAttribute("aria-current", "true");
+
+        if (titleElement) {
+          titleElement.textContent = button.dataset.title || "";
+        }
+
+        player.pause();
+        player.removeAttribute("poster");
+        player.src = button.dataset.src || "";
+        player.load();
+
+        if (!autoplay) { return; }
+
+        var playRequest = player.play();
+        if (playRequest && typeof playRequest.catch === "function") {
+          playRequest.catch(function (error) {
+            console.warn("Playback could not start automatically:", error);
+          });
+        }
       }
 
-      document.querySelectorAll(".accordion-header").forEach(function (header) {
-        var item = header.closest(".accordion-item");
-        var panel = item.querySelector(".accordion-content");
+      items.forEach(function (button, index) {
+        button.addEventListener("click", function () { select(button, true); });
 
-        header.addEventListener("click", function () {
-          var willOpen = !item.classList.contains("active");
-
-          item.classList.toggle("active", willOpen);
-          header.setAttribute("aria-expanded", String(willOpen));
-          setPanelHeight(panel, willOpen);
-
-          if (willOpen) {
-            if (openPanels.indexOf(panel) === -1) {
-              openPanels.push(panel);
-            }
-          } else {
-            openPanels = openPanels.filter(function (openPanel) {
-              return openPanel !== panel;
-            });
+        /* Arrow-key navigation within the playlist */
+        button.addEventListener("keydown", function (event) {
+          var next = null;
+          if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+            next = items[(index + 1) % items.length];
+          } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+            next = items[(index - 1 + items.length) % items.length];
           }
-        });
-
-        panel.addEventListener("transitionend", function (event) {
-          if (
-            event.propertyName === "max-height" &&
-            item.classList.contains("active")
-          ) {
-            panel.style.maxHeight = "none";
+          if (next) {
+            event.preventDefault();
+            next.focus();
           }
         });
       });
 
-      var resizeTimer;
-
-      window.addEventListener("resize", function () {
-        clearTimeout(resizeTimer);
-
-        resizeTimer = setTimeout(function () {
-          openPanels.forEach(function (panel) {
-            panel.style.maxHeight = "none";
-          });
-        }, 150);
-      });
-
-      /* Video playlist. */
-      document.querySelectorAll(".playlist-box").forEach(function (box) {
-        var wrapper = box.closest(".video-playlist-container");
-        var player = wrapper.querySelector(".main-video-player");
-        var titleElement = wrapper.querySelector(".current-video-title");
-
-        box.querySelectorAll(".playlist-item").forEach(function (button) {
-          button.addEventListener("click", function () {
-            box.querySelectorAll(".playlist-item").forEach(function (item) {
-              item.setAttribute("aria-current", "false");
-            });
-
-            button.setAttribute("aria-current", "true");
-            titleElement.textContent = button.dataset.title || "";
-
-            player.pause();
-            player.removeAttribute("poster");
-            player.src = button.dataset.src;
-            player.load();
-
-            var playRequest = player.play();
-
-            if (playRequest && typeof playRequest.catch === "function") {
-              playRequest.catch(function (error) {
-                console.warn("Playback could not start automatically:", error);
-              });
-            }
-          });
+      /* Auto-advance to the next tutorial part */
+      player.addEventListener("ended", function () {
+        var current = items.findIndex(function (item) {
+          return item.getAttribute("aria-current") === "true";
         });
+        var next = items[current + 1];
+        if (next) { select(next, true); }
       });
-    })();
+    });
+  })();
   </script>
 </body>
 </html>
