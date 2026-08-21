@@ -1,718 +1,1196 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="SWID-LISA research lab — mechanical & aerospace engineering research modules.">
-<meta name="color-scheme" content="dark">
-<title>SOMETHING WEIRD...</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SWID-LISA research lab — mechanical and aerospace engineering research modules.">
+  <meta name="color-scheme" content="dark">
+  <title>SOMETHING WEIRD...</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Allura&family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Allura&family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap"
+  >
 
-<style>
-:root{
-  --green:#00ff41;
-  --blue:#00b8ff;
-  --bg:#050505;
-  --panel:rgba(20,20,20,.65);
-  --line:#333;
-  --stage:clamp(240px, min(80vw, 56vh), 480px);
-}
+  <style>
+    :root {
+      --green: #00ff41;
+      --blue: #00b8ff;
+      --bg: #050505;
+      --panel: rgba(20, 20, 20, 0.65);
+      --line: #333;
+      --stage: clamp(240px, min(80vw, 56vh), 480px);
+    }
 
-*,*::before,*::after{box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{
-  margin:0;
-  overflow-x:hidden;
-  background:var(--bg);
-  color:#e0e0e0;
-  font-family:'Roboto Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
-  line-height:1.6;
-}
-img,video{max-width:100%;height:auto}
-:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
-/* ---------- Project banner ---------- */
-.project-banner{
-  position:relative;
-  z-index:105;
-  padding:10px 16px;
-  background:rgba(0,255,65,.05);
-  border-bottom:1px solid var(--green);
-  box-shadow:0 2px 15px rgba(0,255,65,.2);
-}
-.banner-text{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:10px 12px;
-  max-width:1100px;
-  margin:0 auto;
-  font-size:clamp(.8rem,2.6vw,.95rem);
-  text-align:center;
-}
-.banner-badge{
-  flex:0 0 auto;
-  padding:3px 8px;
-  border-radius:3px;
-  background:var(--green);
-  color:#000;
-  font-size:.78rem;
-  font-weight:700;
-  text-transform:uppercase;
-  animation:pulse-badge 2s infinite;
-}
-.banner-msg{flex:1 1 260px;min-width:0}
-@keyframes pulse-badge{
-  0%{box-shadow:0 0 0 0 rgba(0,255,65,.7)}
-  70%{box-shadow:0 0 0 6px rgba(0,255,65,0)}
-  100%{box-shadow:0 0 0 0 rgba(0,255,65,0)}
-}
-.banner-btn{
-  flex:0 0 auto;
-  padding:5px 12px;
-  border-radius:3px;
-  background:var(--blue);
-  color:#050505;
-  font-size:.85rem;
-  font-weight:700;
-  text-decoration:none;
-  text-transform:uppercase;
-  transition:background .3s,box-shadow .3s;
-}
-.banner-btn:hover,.banner-btn:focus-visible{background:var(--green);box-shadow:0 0 10px var(--green)}
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
 
-/* ---------- Header ---------- */
-header{
-  position:relative;
-  isolation:isolate;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-  min-height:min(680px,92svh);
-  padding:2.5rem 1rem 2rem;
-  overflow:hidden;
-  background:#000;
-  border-bottom:2px solid var(--green);
-}
-header::before{
-  content:'';
-  position:absolute;
-  inset:-4%;
-  z-index:-2;
-  pointer-events:none;
-  background-color:#000;
-  background-image:url('./header-bg.gif'),
-    radial-gradient(circle at 30% 25%, rgba(255,255,255,.10), transparent 45%),
-    radial-gradient(circle at 72% 70%, rgba(0,184,255,.10), transparent 50%);
-  background-position:center;
-  background-size:cover;
-  background-repeat:no-repeat;
-  filter:grayscale(100%) contrast(1.2) brightness(.65);
-  animation:cosmic-move 40s infinite alternate linear;
-}
-header::after{
-  content:'';
-  position:absolute;
-  inset:0;
-  z-index:-1;
-  pointer-events:none;
-  background:radial-gradient(circle at center,
-    rgba(0,0,0,.05) 0%, rgba(0,0,0,.35) 60%, rgba(0,0,0,.75) 100%);
-}
-@keyframes cosmic-move{from{transform:scale(1.02)}to{transform:scale(1.16)}}
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: #e0e0e0;
+      font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      line-height: 1.6;
+    }
 
-/* ---------- Multi-layer logo ---------- */
-.animated-logo-stage{
-  position:relative;
-  z-index:2;
-  width:var(--stage);
-  height:var(--stage);
-  margin:0 auto;
-  /* soft glow placeholder so there is never a hard white/blank box
-     while images load or if one fails */
-  border-radius:50%;
-  background:radial-gradient(circle at center, rgba(0,184,255,.10), transparent 70%);
-}
-/* FIX: the source PNGs sit on a cream/parchment card, not pure white,
-   so mix-blend-mode (screen OR multiply) never fully drops it — it
-   just darkens/lightens the texture, leaving a visible box.
-   Real fix: an SVG filter (defined in <body>, id="logo-recolor")
-   that (1) turns anything light fully transparent no matter its
-   exact shade, using luminance rather than an exact color key, and
-   (2) recolors whatever ink/line-art remains into the same blue/
-   white glow used by the sparkles, so the logo matches the site
-   palette instead of showing its original gold/black art. */
-.logo-layer{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  pointer-events:none;
-  filter:url(#logo-recolor);
-}
+    img,
+    video {
+      max-width: 100%;
+      height: auto;
+    }
 
-/* If a layer 404s or fails to decode, hide it instead of leaving a
-   broken-image icon / white box. */
-.logo-layer.is-missing{display:none}
+    :focus-visible {
+      outline: 2px solid var(--green);
+      outline-offset: 3px;
+    }
 
-/* Animations only run once JS confirms it's active, so content is
-   never invisible if JS fails to load. */
-html.js .layer-frame{opacity:0;transform:scale(.94);animation:frame-reveal 1.2s cubic-bezier(.25,1,.5,1) .2s forwards}
-html.js .layer-signature{opacity:0;clip-path:inset(0 100% 0 0);animation:signature-write 1.3s ease 1.3s forwards}
-html.js .layer-text{opacity:0;transform:translateY(8px);animation:text-reveal 1s ease 2.4s forwards}
-html.js .layer-ls{opacity:0;transform:scale(.96);animation:ls-reveal 1.2s ease 3.3s forwards}
+    /* ---------- Project banner ---------- */
+    .project-banner {
+      position: relative;
+      z-index: 105;
+      padding: 10px 16px;
+      background: rgba(0, 255, 65, 0.05);
+      border-bottom: 1px solid var(--green);
+      box-shadow: 0 2px 15px rgba(0, 255, 65, 0.2);
+    }
 
-@keyframes frame-reveal{from{opacity:0;transform:scale(.94)}to{opacity:.95;transform:scale(1)}}
-@keyframes signature-write{from{opacity:1;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
-@keyframes text-reveal{from{opacity:0;transform:translateY(8px)}to{opacity:.95;transform:translateY(0)}}
-@keyframes ls-reveal{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+    .banner-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px 12px;
+      max-width: 1100px;
+      margin: 0 auto;
+      font-size: clamp(0.8rem, 2.6vw, 0.95rem);
+      text-align: center;
+    }
 
-/* ---------- Sparkles ---------- */
-.sparkle{
-  position:absolute;
-  z-index:4;
-  width:3px;height:3px;
-  pointer-events:none;
-  opacity:0;
-  background:#fff;
-  border-radius:50%;
-  box-shadow:0 0 4px 2px #fff,0 0 8px 3px rgba(190,240,255,.7),0 0 14px 5px rgba(0,184,255,.4);
-}
-.s1{top:16%;left:49%;animation:twinkle 2s infinite ease-in-out 4.2s}
-.s2{top:45%;left:16%;animation:twinkle 3.5s infinite ease-in-out 4.4s}
-.s3{top:38%;left:83%;animation:twinkle 2.8s infinite ease-in-out 4.3s}
-.s4{top:72%;left:22%;animation:twinkle 4s infinite ease-in-out 4.6s}
-.s5{top:82%;left:52%;animation:twinkle 2.5s infinite ease-in-out 4.5s}
-@keyframes twinkle{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:.9;transform:scale(1.3)}}
+    .banner-badge {
+      flex: 0 0 auto;
+      padding: 3px 8px;
+      border-radius: 3px;
+      background: var(--green);
+      color: #000;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      animation: pulse-badge 2s infinite;
+    }
 
-/* ---------- Header title ---------- */
-.header-title-block{
-  position:relative;
-  z-index:2;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  width:min(94vw,950px);
-  text-align:center;
-}
-.header-title-block h1{
-  max-width:100%;
-  margin:0;
-  padding:0 .2em .1em;
-  color:#fff;
-  font-family:'Allura',cursive;
-  font-size:clamp(1.6rem,6.4vw,2.85rem);
-  font-weight:400;
-  line-height:1.25;
-  overflow-wrap:break-word;
-  text-shadow:0 0 2px rgba(255,255,255,.92),0 0 7px rgba(190,240,255,.48),0 3px 9px rgba(0,0,0,1);
-}
-html.js .header-title-block h1{opacity:0;transform:translateY(8px);animation:fade-up 1.4s ease 4.2s forwards}
-.miga-mark{
-  display:inline-flex;
-  align-items:baseline;
-  margin-top:4px;
-  padding:1px 12px 3px;
-  font-family:'Orbitron',sans-serif;
-  font-size:clamp(.68rem,2.2vw,.88rem);
-  font-weight:700;
-  line-height:1;
-  letter-spacing:.2em;
-  text-transform:uppercase;
-}
-html.js .miga-mark{opacity:0;transform:translateY(5px);animation:fade-up 1.2s ease 4.6s forwards}
-@keyframes fade-up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.miga-m{color:#ff3131;text-shadow:0 0 5px rgba(255,49,49,.7)}
-.miga-ig{color:#fff;text-shadow:0 0 5px rgba(255,255,255,.65)}
-.miga-a{color:#00e676;text-shadow:0 0 5px rgba(0,230,118,.7)}
+    .banner-msg {
+      flex: 1 1 260px;
+      min-width: 0;
+    }
 
-/* ---------- Nav ---------- */
-nav{
-  position:sticky;
-  top:0;
-  z-index:100;
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:4px 8px;
-  padding:12px 14px;
-  background:rgba(0,0,0,.92);
-  border-bottom:1px solid var(--line);
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
-}
-nav a{
-  padding:6px 10px;
-  color:#fff;
-  font-size:13px;
-  font-weight:700;
-  text-decoration:none;
-  text-transform:uppercase;
-  white-space:nowrap;
-  transition:color .3s,text-shadow .3s;
-}
-nav a:hover,nav a:focus-visible{color:var(--green);text-shadow:0 0 8px var(--green)}
-nav a::after{content:'';display:block;width:0;height:2px;margin-top:3px;background:var(--green);transition:width .3s}
-nav a:hover::after,nav a:focus-visible::after{width:100%}
+    @keyframes pulse-badge {
+      0% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 6px rgba(0, 255, 65, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 65, 0);
+      }
+    }
 
-/* ---------- Layout ---------- */
-.container{max-width:1100px;margin:48px auto;padding:0 18px}
+    .banner-btn {
+      flex: 0 0 auto;
+      padding: 5px 12px;
+      border-radius: 3px;
+      background: var(--blue);
+      color: #050505;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
 
-.profile-section{
-  position:relative;
-  display:flex;
-  align-items:center;
-  gap:36px;
-  padding:36px;
-  overflow:hidden;
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:15px;
-  box-shadow:0 0 20px rgba(0,255,65,.05);
-  transition:transform .3s,border-color .3s,box-shadow .3s;
-}
-.profile-section::before{
-  content:'';
-  position:absolute;
-  left:0;top:0;
-  width:100%;height:5px;
-  opacity:.3;
-  background:var(--green);
-  box-shadow:0 0 10px var(--green);
-  animation:scanline 3s infinite linear;
-}
-@keyframes scanline{from{top:-10%}to{top:110%}}
-.profile-section:hover{transform:scale(1.008);border-color:var(--blue);box-shadow:0 0 30px rgba(0,184,255,.2)}
-.profile-pic{
-  flex:0 0 auto;
-  width:min(250px,60vw);
-  aspect-ratio:1/1;
-  object-fit:cover;
-  border:4px solid var(--blue);
-  border-radius:50%;
-  box-shadow:0 0 20px rgba(0,184,255,.5);
-  filter:grayscale(100%) contrast(1.1);
-  transition:filter .5s,transform .5s;
-}
-.profile-pic:hover{filter:none;transform:rotate(4deg) scale(1.04)}
-.about-text p{color:#ccc;font-size:1.02rem;line-height:1.8}
-strong{color:var(--green)}
-.personal-verse{margin:22px 0;padding:16px 20px;background:rgba(0,184,255,.035);border-left:2px solid var(--blue)}
-.personal-verse p{margin:6px 0;color:#d8f6ff;font-size:.95rem;line-height:1.65}
-.signature{margin-bottom:0;color:#ccc}
-.signature strong{font-size:1.06rem}
+    .banner-btn:hover,
+    .banner-btn:focus-visible {
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+    }
 
-.research-interests-section{margin-top:56px;padding-top:36px;border-top:1px dashed var(--line)}
-.section-title{
-  display:inline-block;
-  margin:0 0 26px;
-  padding-bottom:5px;
-  color:#fff;
-  border-bottom:2px solid var(--blue);
-  font-family:'Times New Roman',Times,serif;
-  font-size:clamp(1.2rem,3.4vw,1.55rem);
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-}
+    /* ---------- Header ---------- */
+    header {
+      position: relative;
+      isolation: isolate;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: min(680px, 92svh);
+      padding: 2.5rem 1rem 2rem;
+      overflow: hidden;
+      background: #000;
+      border-bottom: 2px solid var(--green);
+    }
 
-/* ---------- Accordion ---------- */
-.accordion-container{display:flex;flex-direction:column;gap:14px}
-.accordion-item{
-  background:rgba(20,20,20,.7);
-  border:1px solid var(--line);
-  border-left:3px solid var(--blue);
-  border-radius:8px;
-  overflow:hidden;
-  transition:border-color .3s,box-shadow .3s;
-}
-.accordion-item:hover{border-color:var(--blue);box-shadow:0 0 15px rgba(0,184,255,.15)}
-.accordion-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  width:100%;
-  padding:16px 20px;
-  background:transparent;
-  color:#fff;
-  border:0;
-  text-align:left;
-  font:700 clamp(.95rem,2.6vw,1.1rem)/1.4 'Roboto Mono',monospace;
-  cursor:pointer;
-  transition:background .3s,color .3s;
-}
-.accordion-header:hover{background:rgba(0,184,255,.1);color:var(--green)}
-.accordion-header .icon{color:var(--green);font-size:1.1rem;transition:transform .3s}
-.accordion-item.active .accordion-header .icon{transform:rotate(180deg)}
-.accordion-content{max-height:0;overflow:hidden;background:rgba(10,10,10,.6);transition:max-height .38s ease}
-.accordion-inner{padding:18px 20px}
+    header::before {
+      content: "";
+      position: absolute;
+      inset: -4%;
+      z-index: -2;
+      pointer-events: none;
+      background-color: #000;
+      background-image:
+        url("./header-bg.gif"),
+        radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.10), transparent 45%),
+        radial-gradient(circle at 72% 70%, rgba(0, 184, 255, 0.10), transparent 50%);
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      filter: grayscale(100%) contrast(1.2) brightness(0.65);
+      animation: cosmic-move 40s infinite alternate linear;
+    }
 
-.research-subcard{
-  margin-top:14px;
-  padding:20px;
-  background:rgba(15,25,35,.7);
-  border:1px solid rgba(0,184,255,.3);
-  border-radius:8px;
-}
-.research-subcard h3{
-  margin:0 0 12px;
-  padding-bottom:10px;
-  color:var(--blue);
-  font-size:clamp(1.05rem,2.8vw,1.25rem);
-  border-bottom:1px solid rgba(0,184,255,.2);
-}
+    header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: radial-gradient(
+        circle at center,
+        rgba(0, 0, 0, 0.05) 0%,
+        rgba(0, 0, 0, 0.35) 60%,
+        rgba(0, 0, 0, 0.75) 100%
+      );
+    }
 
-/* ---------- Video + playlist ---------- */
-.video-playlist-container{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-top:18px}
-@media (max-width:850px){.video-playlist-container{grid-template-columns:1fr}}
-.main-video-box{padding:14px;background:#000;border:1px solid var(--line);border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.8);min-width:0}
-.current-video-title{
-  margin-bottom:10px;
-  padding-bottom:6px;
-  color:var(--blue);
-  font-size:.92rem;
-  font-weight:700;
-  border-bottom:1px solid rgba(0,184,255,.2);
-}
-.main-video-player{width:100%;aspect-ratio:16/9;background:#000;border-radius:5px;display:block}
-.playlist-box{
-  padding:14px;
-  background:rgba(15,15,15,.8);
-  border:1px solid var(--line);
-  border-radius:8px;
-  max-height:420px;
-  overflow-y:auto;
-  min-width:0;
-}
-.playlist-box h4{margin:0 0 12px;padding-bottom:8px;color:var(--green);font-size:.92rem;border-bottom:1px solid var(--line)}
-.playlist-item{
-  display:block;
-  width:100%;
-  margin-bottom:8px;
-  padding:10px 12px;
-  background:rgba(30,30,30,.6);
-  color:#e0e0e0;
-  border:0;
-  border-left:3px solid #555;
-  border-radius:4px;
-  text-align:left;
-  font:700 .86rem/1.4 'Roboto Mono',monospace;
-  cursor:pointer;
-  transition:background .3s,border-color .3s,color .3s;
-}
-.playlist-item:hover{background:rgba(0,184,255,.15);border-left-color:var(--blue)}
-.playlist-item[aria-current="true"]{background:rgba(0,255,65,.12);border-left-color:var(--green);color:var(--green)}
+    @keyframes cosmic-move {
+      from {
+        transform: scale(1.02);
+      }
+      to {
+        transform: scale(1.16);
+      }
+    }
 
-footer{margin-top:48px;padding:28px 18px;color:#555;background:#000;border-top:1px solid #222;font-size:12px;text-align:center}
+    /* ---------- Multi-layer logo ---------- */
+    .animated-logo-stage {
+      position: relative;
+      z-index: 2;
+      isolation: isolate;
+      width: var(--stage);
+      height: var(--stage);
+      margin: 0 auto;
+      background: transparent;
+    }
 
-/* ---------- Responsive ---------- */
-@media (max-width:768px){
-  header{min-height:auto;padding:2rem 1rem 1.75rem}
-  .container{margin:32px auto}
-  .profile-section{flex-direction:column;padding:26px 18px;text-align:center}
-  .personal-verse{text-align:left}
-}
-@media (max-width:560px){
-  .banner-text{flex-direction:column;gap:8px}
-  nav{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;scrollbar-width:none}
-  nav::-webkit-scrollbar{display:none}
-}
+    .animated-logo-stage::before {
+      content: "";
+      position: absolute;
+      inset: 8%;
+      z-index: -1;
+      pointer-events: none;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle at center,
+        rgba(0, 184, 255, 0.12) 0%,
+        rgba(0, 184, 255, 0.04) 45%,
+        transparent 72%
+      );
+      filter: blur(12px);
+    }
 
-/* ---------- Reduced motion ---------- */
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none !important;transition:none !important}
-  html.js .logo-layer,
-  html.js .header-title-block h1,
-  html.js .miga-mark{opacity:1 !important;transform:none !important;clip-path:none !important}
-  .sparkle{opacity:.6}
-}
-</style>
+    .logo-layer {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      object-fit: contain;
+      pointer-events: none;
+      background: transparent;
+      border: 0;
+      filter: url("#logo-recolor");
+    }
+
+    .logo-layer.is-missing {
+      display: none;
+    }
+
+    html.js .layer-frame {
+      opacity: 0;
+      transform: scale(0.94);
+      animation: frame-reveal 1.2s cubic-bezier(0.25, 1, 0.5, 1) 0.2s forwards;
+    }
+
+    html.js .layer-signature {
+      opacity: 0;
+      clip-path: inset(0 100% 0 0);
+      animation: signature-write 1.3s ease 1.3s forwards;
+    }
+
+    html.js .layer-text {
+      opacity: 0;
+      transform: translateY(8px);
+      animation: text-reveal 1s ease 2.4s forwards;
+    }
+
+    html.js .layer-ls {
+      opacity: 0;
+      transform: scale(0.96);
+      animation: ls-reveal 1.2s ease 3.3s forwards;
+    }
+
+    @keyframes frame-reveal {
+      from {
+        opacity: 0;
+        transform: scale(0.94);
+      }
+      to {
+        opacity: 0.95;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes signature-write {
+      from {
+        opacity: 1;
+        clip-path: inset(0 100% 0 0);
+      }
+      to {
+        opacity: 1;
+        clip-path: inset(0 0 0 0);
+      }
+    }
+
+    @keyframes text-reveal {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 0.95;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes ls-reveal {
+      from {
+        opacity: 0;
+        transform: scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* ---------- Sparkles ---------- */
+    .sparkle {
+      position: absolute;
+      z-index: 4;
+      width: 3px;
+      height: 3px;
+      pointer-events: none;
+      opacity: 0;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow:
+        0 0 4px 2px #fff,
+        0 0 8px 3px rgba(190, 240, 255, 0.7),
+        0 0 14px 5px rgba(0, 184, 255, 0.4);
+    }
+
+    .s1 { top: 16%; left: 49%; animation: twinkle 2s infinite ease-in-out 4.2s; }
+    .s2 { top: 45%; left: 16%; animation: twinkle 3.5s infinite ease-in-out 4.4s; }
+    .s3 { top: 38%; left: 83%; animation: twinkle 2.8s infinite ease-in-out 4.3s; }
+    .s4 { top: 72%; left: 22%; animation: twinkle 4s infinite ease-in-out 4.6s; }
+    .s5 { top: 82%; left: 52%; animation: twinkle 2.5s infinite ease-in-out 4.5s; }
+
+    @keyframes twinkle {
+      0%,
+      100% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      50% {
+        opacity: 0.9;
+        transform: scale(1.3);
+      }
+    }
+
+    /* ---------- Header title ---------- */
+    .header-title-block {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: min(94vw, 950px);
+      text-align: center;
+    }
+
+    .header-title-block h1 {
+      max-width: 100%;
+      margin: 0;
+      padding: 0 0.2em 0.1em;
+      color: #fff;
+      font-family: "Allura", cursive;
+      font-size: clamp(1.6rem, 6.4vw, 2.85rem);
+      font-weight: 400;
+      line-height: 1.25;
+      overflow-wrap: break-word;
+      text-shadow:
+        0 0 2px rgba(255, 255, 255, 0.92),
+        0 0 7px rgba(190, 240, 255, 0.48),
+        0 3px 9px rgba(0, 0, 0, 1);
+    }
+
+    html.js .header-title-block h1 {
+      opacity: 0;
+      transform: translateY(8px);
+      animation: fade-up 1.4s ease 4.2s forwards;
+    }
+
+    .miga-mark {
+      display: inline-flex;
+      align-items: baseline;
+      margin-top: 4px;
+      padding: 1px 12px 3px;
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(0.68rem, 2.2vw, 0.88rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    html.js .miga-mark {
+      opacity: 0;
+      transform: translateY(5px);
+      animation: fade-up 1.2s ease 4.6s forwards;
+    }
+
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .miga-m {
+      color: #ff3131;
+      text-shadow: 0 0 5px rgba(255, 49, 49, 0.7);
+    }
+
+    .miga-ig {
+      color: #fff;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.65);
+    }
+
+    .miga-a {
+      color: #00e676;
+      text-shadow: 0 0 5px rgba(0, 230, 118, 0.7);
+    }
+
+    /* ---------- Navigation ---------- */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 4px 8px;
+      padding: 12px 14px;
+      background: rgba(0, 0, 0, 0.92);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    nav a {
+      padding: 6px 10px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    nav a:hover,
+    nav a:focus-visible {
+      color: var(--green);
+      text-shadow: 0 0 8px var(--green);
+    }
+
+    nav a::after {
+      content: "";
+      display: block;
+      width: 0;
+      height: 2px;
+      margin-top: 3px;
+      background: var(--green);
+      transition: width 0.3s;
+    }
+
+    nav a:hover::after,
+    nav a:focus-visible::after {
+      width: 100%;
+    }
+
+    /* ---------- Layout ---------- */
+    .container {
+      max-width: 1100px;
+      margin: 48px auto;
+      padding: 0 18px;
+    }
+
+    .profile-section {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      padding: 36px;
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.05);
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .profile-section::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 5px;
+      opacity: 0.3;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+      animation: scanline 3s infinite linear;
+    }
+
+    @keyframes scanline {
+      from { top: -10%; }
+      to { top: 110%; }
+    }
+
+    .profile-section:hover {
+      transform: scale(1.008);
+      border-color: var(--blue);
+      box-shadow: 0 0 30px rgba(0, 184, 255, 0.2);
+    }
+
+    .profile-pic {
+      flex: 0 0 auto;
+      width: min(250px, 60vw);
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border: 4px solid var(--blue);
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(0, 184, 255, 0.5);
+      filter: grayscale(100%) contrast(1.1);
+      transition: filter 0.5s, transform 0.5s;
+    }
+
+    .profile-pic:hover {
+      filter: none;
+      transform: rotate(4deg) scale(1.04);
+    }
+
+    .about-text p {
+      color: #ccc;
+      font-size: 1.02rem;
+      line-height: 1.8;
+    }
+
+    strong {
+      color: var(--green);
+    }
+
+    .personal-verse {
+      margin: 22px 0;
+      padding: 16px 20px;
+      background: rgba(0, 184, 255, 0.035);
+      border-left: 2px solid var(--blue);
+    }
+
+    .personal-verse p {
+      margin: 6px 0;
+      color: #d8f6ff;
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    .signature {
+      margin-bottom: 0;
+      color: #ccc;
+    }
+
+    .signature strong {
+      font-size: 1.06rem;
+    }
+
+    .research-interests-section {
+      margin-top: 56px;
+      padding-top: 36px;
+      border-top: 1px dashed var(--line);
+    }
+
+    .section-title {
+      display: inline-block;
+      margin: 0 0 26px;
+      padding-bottom: 5px;
+      color: #fff;
+      border-bottom: 2px solid var(--blue);
+      font-family: "Times New Roman", Times, serif;
+      font-size: clamp(1.2rem, 3.4vw, 1.55rem);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* ---------- Accordion ---------- */
+    .accordion-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .accordion-item {
+      overflow: hidden;
+      background: rgba(20, 20, 20, 0.7);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--blue);
+      border-radius: 8px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .accordion-item:hover {
+      border-color: var(--blue);
+      box-shadow: 0 0 15px rgba(0, 184, 255, 0.15);
+    }
+
+    .accordion-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      padding: 16px 20px;
+      background: transparent;
+      color: #fff;
+      border: 0;
+      text-align: left;
+      font: 700 clamp(0.95rem, 2.6vw, 1.1rem) / 1.4 "Roboto Mono", monospace;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .accordion-header:hover {
+      background: rgba(0, 184, 255, 0.1);
+      color: var(--green);
+    }
+
+    .accordion-header .icon {
+      color: var(--green);
+      font-size: 1.1rem;
+      transition: transform 0.3s;
+    }
+
+    .accordion-item.active .accordion-header .icon {
+      transform: rotate(180deg);
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      background: rgba(10, 10, 10, 0.6);
+      transition: max-height 0.38s ease;
+    }
+
+    .accordion-inner {
+      padding: 18px 20px;
+    }
+
+    .research-subcard {
+      margin-top: 14px;
+      padding: 20px;
+      background: rgba(15, 25, 35, 0.7);
+      border: 1px solid rgba(0, 184, 255, 0.3);
+      border-radius: 8px;
+    }
+
+    .research-subcard h3 {
+      margin: 0 0 12px;
+      padding-bottom: 10px;
+      color: var(--blue);
+      font-size: clamp(1.05rem, 2.8vw, 1.25rem);
+      border-bottom: 1px solid rgba(0, 184, 255, 0.2);
+    }
+
+    /* ---------- Video and playlist ---------- */
+    .video-playlist-container {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .main-video-box {
+      min-width: 0;
+      padding: 14px;
+      background: #000;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    }
+
+    .current-video-title {
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      color: var(--blue);
+      font-size: 0.92rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(0, 184, 255, 0.2);
+    }
+
+    .main-video-player {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: 5px;
+    }
+
+    .playlist-box {
+      min-width: 0;
+      max-height: 420px;
+      overflow-y: auto;
+      padding: 14px;
+      background: rgba(15, 15, 15, 0.8);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .playlist-box h4 {
+      margin: 0 0 12px;
+      padding-bottom: 8px;
+      color: var(--green);
+      font-size: 0.92rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .playlist-item {
+      display: block;
+      width: 100%;
+      margin-bottom: 8px;
+      padding: 10px 12px;
+      background: rgba(30, 30, 30, 0.6);
+      color: #e0e0e0;
+      border: 0;
+      border-left: 3px solid #555;
+      border-radius: 4px;
+      text-align: left;
+      font: 700 0.86rem / 1.4 "Roboto Mono", monospace;
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s, color 0.3s;
+    }
+
+    .playlist-item:hover {
+      background: rgba(0, 184, 255, 0.15);
+      border-left-color: var(--blue);
+    }
+
+    .playlist-item[aria-current="true"] {
+      background: rgba(0, 255, 65, 0.12);
+      border-left-color: var(--green);
+      color: var(--green);
+    }
+
+    footer {
+      margin-top: 48px;
+      padding: 28px 18px;
+      color: #555;
+      background: #000;
+      border-top: 1px solid #222;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 850px) {
+      .video-playlist-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        min-height: auto;
+        padding: 2rem 1rem 1.75rem;
+      }
+
+      .container {
+        margin: 32px auto;
+      }
+
+      .profile-section {
+        flex-direction: column;
+        padding: 26px 18px;
+        text-align: center;
+      }
+
+      .personal-verse {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .banner-text {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      nav {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      nav::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    /* ---------- Reduced motion ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      html.js .logo-layer,
+      html.js .header-title-block h1,
+      html.js .miga-mark {
+        opacity: 1 !important;
+        transform: none !important;
+        clip-path: none !important;
+      }
+
+      .sparkle {
+        opacity: 0.6;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <!--
+    The critical logo fix is the intersection with SourceAlpha.
+    Transparent PNG pixels therefore stay transparent after luminance inversion.
+  -->
+  <svg
+    width="0"
+    height="0"
+    aria-hidden="true"
+    focusable="false"
+    style="position: absolute; overflow: hidden"
+  >
+    <defs>
+      <filter
+        id="logo-recolor"
+        x="-20%"
+        y="-20%"
+        width="140%"
+        height="140%"
+        color-interpolation-filters="sRGB"
+      >
+        <feColorMatrix
+          in="SourceGraphic"
+          type="luminanceToAlpha"
+          result="luminanceMask"
+        />
 
-<!-- Hidden SVG defs: powers the logo cutout + recolor filter used by
-     .logo-layer above. Keeping it as inline defs (not a separate
-     file) means it can't 404 and always renders. -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs>
-    <filter id="logo-recolor" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
-      <!-- 1) Convert the source art to an alpha mask based on
-              luminance: bright/parchment pixels -> alpha 0,
-              dark ink/line-art pixels -> alpha 1. This removes the
-              white/cream box regardless of its exact tone. -->
-      <feColorMatrix type="luminanceToAlpha" result="lum"/>
-      <feComponentTransfer in="lum" result="mask">
-        <feFuncA type="table" tableValues="1 0"/>
-      </feComponentTransfer>
+        <feComponentTransfer
+          in="luminanceMask"
+          result="invertedMask"
+        >
+          <feFuncA
+            type="table"
+            tableValues="1 1 1 0.85 0.35 0 0"
+          />
+        </feComponentTransfer>
 
-      <!-- 2) Recolor the masked line-art solid white -->
-      <feFlood flood-color="#f2fbff" result="whiteColor"/>
-      <feComposite in="whiteColor" in2="mask" operator="in" result="whiteArt"/>
+        <feComposite
+          in="invertedMask"
+          in2="SourceAlpha"
+          operator="in"
+          result="logoMask"
+        />
 
-      <!-- 3) Build a soft blue glow behind it, same family as the
-              site's sparkle/accent color -->
-      <feGaussianBlur in="mask" stdDeviation="4" result="blurredMask"/>
-      <feFlood flood-color="#00b8ff" result="blueColor"/>
-      <feComposite in="blueColor" in2="blurredMask" operator="in" result="blueGlow"/>
-      <feGaussianBlur in="blueGlow" stdDeviation="2" result="blueGlowSoft"/>
+        <feFlood
+          flood-color="#f2fbff"
+          flood-opacity="0.96"
+          result="whiteColor"
+        />
 
-      <!-- 4) Stack: glow underneath, crisp white art on top -->
-      <feMerge>
-        <feMergeNode in="blueGlowSoft"/>
-        <feMergeNode in="whiteArt"/>
-      </feMerge>
-    </filter>
-  </defs>
-</svg>
+        <feComposite
+          in="whiteColor"
+          in2="logoMask"
+          operator="in"
+          result="whiteArtwork"
+        />
 
-<div class="project-banner">
-  <div class="banner-text">
-    <span class="banner-badge">Active Project</span>
-    <span class="banner-msg">&gt; IN DEVELOPMENT: Advanced LCE Polymers via Neural Network Algorithms</span>
-    <a href="project-link.html" class="banner-btn">Details</a>
-  </div>
-</div>
+        <feGaussianBlur
+          in="logoMask"
+          stdDeviation="3.5"
+          result="blurredMask"
+        />
 
-<header>
-  <div class="animated-logo-stage">
-    <img src="frame.png"     alt=""             class="logo-layer layer-frame"     width="480" height="480" decoding="async">
-    <img src="signature.png" alt=""             class="logo-layer layer-signature" width="480" height="480" decoding="async">
-    <img src="text.png"      alt="SWID-LISA"    class="logo-layer layer-text"      width="480" height="480" decoding="async">
-    <img src="ls.png"        alt="LS monogram"  class="logo-layer layer-ls"        width="480" height="480" decoding="async">
+        <feFlood
+          flood-color="#00b8ff"
+          flood-opacity="0.8"
+          result="blueColor"
+        />
 
-    <span class="sparkle s1" aria-hidden="true"></span>
-    <span class="sparkle s2" aria-hidden="true"></span>
-    <span class="sparkle s3" aria-hidden="true"></span>
-    <span class="sparkle s4" aria-hidden="true"></span>
-    <span class="sparkle s5" aria-hidden="true"></span>
-  </div>
+        <feComposite
+          in="blueColor"
+          in2="blurredMask"
+          operator="in"
+          result="blueGlow"
+        />
 
-  <div class="header-title-block">
-    <h1>Something Weird is Discovering...!</h1>
-    <div class="miga-mark" aria-label="MIGA">
-      <span class="miga-m">M</span><span class="miga-ig">IG</span><span class="miga-a">A</span>
+        <feMerge>
+          <feMergeNode in="blueGlow" />
+          <feMergeNode in="whiteArtwork" />
+        </feMerge>
+      </filter>
+    </defs>
+  </svg>
+
+  <div class="project-banner">
+    <div class="banner-text">
+      <span class="banner-badge">Active Project</span>
+      <span class="banner-msg">&gt; IN DEVELOPMENT: Advanced LCE Polymers via Neural Network Algorithms</span>
+      <a href="project-link.html" class="banner-btn">Details</a>
     </div>
   </div>
-</header>
 
-<nav aria-label="Main navigation">
-  <a href="index.html">Home</a>
-  <a href="about.html">About</a>
-  <a href="equipment.html">Lab Gear</a>
-  <a href="abaqus.html">Abaqus_Sims</a>
-  <a href="people.html">People</a>
-  <a href="studied.html">Literature_Review</a>
-  <a href="publications.html">Publications</a>
-  <a href="future.html">Future_Plans</a>
-  <a href="contact.html">Connect</a>
-</nav>
+  <header>
+    <div class="animated-logo-stage">
+      <img
+        src="frame.png"
+        alt=""
+        class="logo-layer layer-frame"
+        width="480"
+        height="480"
+        decoding="async"
+      >
+      <img
+        src="signature.png"
+        alt=""
+        class="logo-layer layer-signature"
+        width="480"
+        height="480"
+        decoding="async"
+      >
+      <img
+        src="text.png"
+        alt="SWID-LISA"
+        class="logo-layer layer-text"
+        width="480"
+        height="480"
+        decoding="async"
+      >
+      <img
+        src="ls.png"
+        alt="LS monogram"
+        class="logo-layer layer-ls"
+        width="480"
+        height="480"
+        decoding="async"
+      >
 
-<main class="container">
-  <section class="profile-section">
-    <img src="profile.jpg" alt="Pouria Hejazi Rekavandi" class="profile-pic" width="250" height="250" loading="lazy" decoding="async">
-    <div class="about-text">
-      <p>
-        I am an interdisciplinary engineering researcher specializing in
-        <strong>Mechanical and Aerospace Engineering</strong>, embodying the continuous
-        evolution of a childhood curiosity that has shaped my entire 40-year journey.
-      </p>
-
-      <blockquote class="personal-verse">
-        <p>*** Listen to the whispers of your dreaming soul,</p>
-        <p>*** Speak only truth to keep your spirit whole.</p>
-        <p>*** Fix your steady gaze upon a single star,</p>
-        <p>*** Work with burning fire to reach for what you are.</p>
-        <p>*** And let no passing shadow dim your inner light,</p>
-        <p>*** For nothing can eclipse a purpose shining bright.</p>
-      </blockquote>
-
-      <p class="signature">With sincere dedication<br><br><strong>Pouria 🌻</strong></p>
+      <span class="sparkle s1" aria-hidden="true"></span>
+      <span class="sparkle s2" aria-hidden="true"></span>
+      <span class="sparkle s3" aria-hidden="true"></span>
+      <span class="sparkle s4" aria-hidden="true"></span>
+      <span class="sparkle s5" aria-hidden="true"></span>
     </div>
-  </section>
 
-  <section class="research-interests-section" id="research-interests">
-    <h2 class="section-title">// RESEARCH MODULES</h2>
+    <div class="header-title-block">
+      <h1>Something Weird is Discovering...!</h1>
+      <div class="miga-mark" aria-label="MIGA">
+        <span class="miga-m">M</span><span class="miga-ig">IG</span><span class="miga-a">A</span>
+      </div>
+    </div>
+  </header>
 
-    <div class="accordion-container">
+  <nav aria-label="Main navigation">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="equipment.html">Lab Gear</a>
+    <a href="abaqus.html">Abaqus_Sims</a>
+    <a href="people.html">People</a>
+    <a href="studied.html">Literature_Review</a>
+    <a href="publications.html">Publications</a>
+    <a href="future.html">Future_Plans</a>
+    <a href="contact.html">Connect</a>
+  </nav>
 
-      <div class="accordion-item">
-        <button class="accordion-header" type="button" aria-expanded="false">
-          <span>I. Fatigue and Fracture</span>
-          <span class="icon" aria-hidden="true">&#9660;</span>
-        </button>
-        <div class="accordion-content">
-          <div class="accordion-inner">
-            <p>Overview and educational materials on fatigue failure, crack initiation, and stress intensity analysis.</p>
+  <main class="container">
+    <section class="profile-section">
+      <img
+        src="profile.jpg"
+        alt="Pouria Hejazi Rekavandi"
+        class="profile-pic"
+        width="250"
+        height="250"
+        loading="lazy"
+        decoding="async"
+      >
+
+      <div class="about-text">
+        <p>
+          I am an interdisciplinary engineering researcher specializing in
+          <strong>Mechanical and Aerospace Engineering</strong>, embodying the continuous
+          evolution of a childhood curiosity that has shaped my entire 40-year journey.
+        </p>
+
+        <blockquote class="personal-verse">
+          <p>*** Listen to the whispers of your dreaming soul,</p>
+          <p>*** Speak only truth to keep your spirit whole.</p>
+          <p>*** Fix your steady gaze upon a single star,</p>
+          <p>*** Work with burning fire to reach for what you are.</p>
+          <p>*** And let no passing shadow dim your inner light,</p>
+          <p>*** For nothing can eclipse a purpose shining bright.</p>
+        </blockquote>
+
+        <p class="signature">
+          With sincere dedication<br><br><strong>Pouria 🌻</strong>
+        </p>
+      </div>
+    </section>
+
+    <section class="research-interests-section" id="research-interests">
+      <h2 class="section-title">// RESEARCH MODULES</h2>
+
+      <div class="accordion-container">
+        <div class="accordion-item">
+          <button class="accordion-header" type="button" aria-expanded="false">
+            <span>I. Fatigue and Fracture</span>
+            <span class="icon" aria-hidden="true">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-inner">
+              <p>Overview and educational materials on fatigue failure, crack initiation, and stress intensity analysis.</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="accordion-item">
-        <button class="accordion-header" type="button" aria-expanded="false">
-          <span>II. Neural Biomechanics</span>
-          <span class="icon" aria-hidden="true">&#9660;</span>
-        </button>
-        <div class="accordion-content">
-          <div class="accordion-inner">
-            <p>Research materials focusing on computational neuroscience, brain tissue modeling, and neural mechanics.</p>
+        <div class="accordion-item">
+          <button class="accordion-header" type="button" aria-expanded="false">
+            <span>II. Neural Biomechanics</span>
+            <span class="icon" aria-hidden="true">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-inner">
+              <p>Research materials focusing on computational neuroscience, brain tissue modeling, and neural mechanics.</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="accordion-item">
-        <button class="accordion-header" type="button" aria-expanded="false">
-          <span>III. Energy Absorption</span>
-          <span class="icon" aria-hidden="true">&#9660;</span>
-        </button>
-        <div class="accordion-content">
-          <div class="accordion-inner">
-            <p>Investigation into mechanical energy dissipation, metamaterials, and impact dynamics.</p>
+        <div class="accordion-item">
+          <button class="accordion-header" type="button" aria-expanded="false">
+            <span>III. Energy Absorption</span>
+            <span class="icon" aria-hidden="true">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-inner">
+              <p>Investigation into mechanical energy dissipation, metamaterials, and impact dynamics.</p>
 
-            <div class="research-subcard">
-              <h3>// Research Environment: AntiPrism Structures</h3>
-              <p>Select a tutorial part from the playlist below:</p>
+              <div class="research-subcard">
+                <h3>// Research Environment: AntiPrism Structures</h3>
+                <p>Select a tutorial part from the playlist below:</p>
 
-              <div class="video-playlist-container">
-                <div class="main-video-box">
-                  <div class="current-video-title">AntiPrism Tutorial - Part 1</div>
-                  <video class="main-video-player" controls preload="metadata"
-                         playsinline poster="videos/thumbnail.jpg"
-                         src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4">
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
+                <div class="video-playlist-container">
+                  <div class="main-video-box">
+                    <div class="current-video-title">AntiPrism Tutorial - Part 1</div>
+                    https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4
+                  </div>
 
-                <div class="playlist-box">
-                  <h4>// Video Playlist</h4>
+                  <div class="playlist-box">
+                    <h4>// Video Playlist</h4>
 
-                  <button type="button" class="playlist-item" aria-current="true"
-                          data-src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4"
-                          data-title="AntiPrism Tutorial - Part 1">
-                    01. AntiPrism Tutorial - Part 1
-                  </button>
+                    <button
+                      type="button"
+                      class="playlist-item"
+                      aria-current="true"
+                      data-src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4"
+                      data-title="AntiPrism Tutorial - Part 1"
+                    >
+                      01. AntiPrism Tutorial - Part 1
+                    </button>
 
-                  <button type="button" class="playlist-item" aria-current="false"
-                          data-src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part2.mp4"
-                          data-title="AntiPrism Tutorial - Part 2">
-                    02. AntiPrism Tutorial - Part 2
-                  </button>
+                    <button
+                      type="button"
+                      class="playlist-item"
+                      aria-current="false"
+                      data-src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part2.mp4"
+                      data-title="AntiPrism Tutorial - Part 2"
+                    >
+                      02. AntiPrism Tutorial - Part 2
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="accordion-item">
-        <button class="accordion-header" type="button" aria-expanded="false">
-          <span>IV. Fracture in Cements</span>
-          <span class="icon" aria-hidden="true">&#9660;</span>
-        </button>
-        <div class="accordion-content">
-          <div class="accordion-inner">
-            <p>Studies on cementitious matrix toughness, quasi-brittle fracture, and microstructural analysis.</p>
+        <div class="accordion-item">
+          <button class="accordion-header" type="button" aria-expanded="false">
+            <span>IV. Fracture in Cements</span>
+            <span class="icon" aria-hidden="true">▼</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-inner">
+              <p>Studies on cementitious matrix toughness, quasi-brittle fracture, and microstructural analysis.</p>
+            </div>
           </div>
         </div>
       </div>
+    </section>
+  </main>
 
-    </div>
-  </section>
-</main>
+  <footer>
+    <p>SYSTEM SECURE. © 2026 RKV MATERIALS. ENCRYPTED CONNECTION.</p>
+  </footer>
 
-<footer>
-  <p>SYSTEM SECURE. © 2026 RKV MATERIALS. ENCRYPTED CONNECTION.</p>
-</footer>
+  <script>
+    (function () {
+      "use strict";
 
-<script>
-(function () {
-  'use strict';
-  document.documentElement.classList.add('js');
+      document.documentElement.classList.add("js");
 
-  /* 1) Logo layers: hide any image that fails to load (404 / decode
-        error) instead of leaving a broken-image icon or blank box. */
-  document.querySelectorAll('.logo-layer').forEach(function (img) {
-    var fail = function () { img.classList.add('is-missing'); };
-    if (img.complete && img.naturalWidth === 0) fail();
-    img.addEventListener('error', fail);
-  });
-
-  /* 2) Accordion with measured height */
-  var openPanels = [];
-
-  function setHeight(panel, open) {
-    panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0px';
-  }
-
-  document.querySelectorAll('.accordion-header').forEach(function (header) {
-    var item = header.closest('.accordion-item');
-    var panel = item.querySelector('.accordion-content');
-
-    header.addEventListener('click', function () {
-      var willOpen = !item.classList.contains('active');
-      item.classList.toggle('active', willOpen);
-      header.setAttribute('aria-expanded', String(willOpen));
-      setHeight(panel, willOpen);
-
-      if (willOpen) {
-        if (openPanels.indexOf(panel) === -1) openPanels.push(panel);
-      } else {
-        openPanels = openPanels.filter(function (p) { return p !== panel; });
-      }
-    });
-
-    /* Once the expand transition ends, release the fixed height so
-       inner content (like the video) is never clipped. */
-    panel.addEventListener('transitionend', function (e) {
-      if (e.propertyName === 'max-height' && item.classList.contains('active')) {
-        panel.style.maxHeight = 'none';
-      }
-    });
-  });
-
-  var resizeTimer;
-  window.addEventListener('resize', function () {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function () {
-      openPanels.forEach(function (panel) { panel.style.maxHeight = 'none'; });
-    }, 150);
-  });
-
-  /* 3) Video playlist */
-  document.querySelectorAll('.playlist-box').forEach(function (box) {
-    var wrapper = box.closest('.video-playlist-container');
-    var player = wrapper.querySelector('.main-video-player');
-    var titleEl = wrapper.querySelector('.current-video-title');
-
-    box.querySelectorAll('.playlist-item').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        box.querySelectorAll('.playlist-item').forEach(function (el) {
-          el.setAttribute('aria-current', 'false');
-        });
-        btn.setAttribute('aria-current', 'true');
-
-        titleEl.textContent = btn.dataset.title || '';
-        player.pause();
-        player.removeAttribute('poster');
-        player.src = btn.dataset.src;
-        player.load();
-
-        var p = player.play();
-        if (p && typeof p.catch === 'function') {
-          p.catch(function (err) { console.warn('Autoplay blocked:', err); });
+      /* Hide a logo layer if its file cannot be loaded or decoded. */
+      document.querySelectorAll(".logo-layer").forEach(function (img) {
+        function hideMissingImage() {
+          img.classList.add("is-missing");
         }
+
+        if (img.complete && img.naturalWidth === 0) {
+          hideMissingImage();
+        }
+
+        img.addEventListener("error", hideMissingImage);
       });
-    });
-  });
-})();
-</script>
+
+      /* Accordion with measured opening height. */
+      var openPanels = [];
+
+      function setPanelHeight(panel, open) {
+        panel.style.maxHeight = open ? panel.scrollHeight + "px" : "0px";
+      }
+
+      document.querySelectorAll(".accordion-header").forEach(function (header) {
+        var item = header.closest(".accordion-item");
+        var panel = item.querySelector(".accordion-content");
+
+        header.addEventListener("click", function () {
+          var willOpen = !item.classList.contains("active");
+
+          item.classList.toggle("active", willOpen);
+          header.setAttribute("aria-expanded", String(willOpen));
+          setPanelHeight(panel, willOpen);
+
+          if (willOpen) {
+            if (openPanels.indexOf(panel) === -1) {
+              openPanels.push(panel);
+            }
+          } else {
+            openPanels = openPanels.filter(function (openPanel) {
+              return openPanel !== panel;
+            });
+          }
+        });
+
+        panel.addEventListener("transitionend", function (event) {
+          if (
+            event.propertyName === "max-height" &&
+            item.classList.contains("active")
+          ) {
+            panel.style.maxHeight = "none";
+          }
+        });
+      });
+
+      var resizeTimer;
+
+      window.addEventListener("resize", function () {
+        clearTimeout(resizeTimer);
+
+        resizeTimer = setTimeout(function () {
+          openPanels.forEach(function (panel) {
+            panel.style.maxHeight = "none";
+          });
+        }, 150);
+      });
+
+      /* Video playlist. */
+      document.querySelectorAll(".playlist-box").forEach(function (box) {
+        var wrapper = box.closest(".video-playlist-container");
+        var player = wrapper.querySelector(".main-video-player");
+        var titleElement = wrapper.querySelector(".current-video-title");
+
+        box.querySelectorAll(".playlist-item").forEach(function (button) {
+          button.addEventListener("click", function () {
+            box.querySelectorAll(".playlist-item").forEach(function (item) {
+              item.setAttribute("aria-current", "false");
+            });
+
+            button.setAttribute("aria-current", "true");
+            titleElement.textContent = button.dataset.title || "";
+
+            player.pause();
+            player.removeAttribute("poster");
+            player.src = button.dataset.src;
+            player.load();
+
+            var playRequest = player.play();
+
+            if (playRequest && typeof playRequest.catch === "function") {
+              playRequest.catch(function (error) {
+                console.warn("Playback could not start automatically:", error);
+              });
+            }
+          });
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
