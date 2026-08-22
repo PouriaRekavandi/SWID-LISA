@@ -9,15 +9,15 @@
 <title>SWID-LISA — Mechanical &amp; Aerospace Research Lab</title>
 <meta name="description" content="SWID-LISA research lab: fatigue and fracture, neural biomechanics, energy-absorbing metamaterials, and fracture in cementitious materials. Abaqus simulations, tutorials, and publications.">
 <meta name="author" content="Pouria Hejazi Rekavandi">
-<link rel="canonical" href="https://example.com/">
+<link rel="canonical" href="https://swid-lisa.umbc.edu/">
 
 <!-- Open Graph / social -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="SWID-LISA">
 <meta property="og:title" content="SWID-LISA — Mechanical &amp; Aerospace Research Lab">
 <meta property="og:description" content="Fatigue and fracture, neural biomechanics, energy absorption, and fracture in cements.">
-<meta property="og:image" content="https://example.com/og-cover.png">
-<meta property="og:url" content="https://example.com/">
+<meta property="og:image" content="https://swid-lisa.umbc.edu/og-cover.png">
+<meta property="og:url" content="https://swid-lisa.umbc.edu/">
 <meta name="twitter:card" content="summary_large_image">
 
 <!-- Fonts: preconnect + async-safe load -->
@@ -36,6 +36,7 @@
 <!-- Above-the-fold logo layers -->
 <link rel="preload" as="image" href="frame.png">
 <link rel="preload" as="image" href="text.png">
+<link rel="preload" as="image" href="ls.png">
 
 <style>
 /* ============================================================
@@ -329,12 +330,36 @@ a { color: var(--blue); }
 
 .logo-layer.is-missing { display: none; }
 
-/* ---------- Explicit logo layer stacking ----------
-   Signature sits BEHIND the LS mark. */
+/* ============================================================
+   LOGO LAYER ORDER  —  signature sits BEHIND the LS monogram
+   ============================================================ */
 .layer-frame     { z-index: 1; }
 .layer-signature { z-index: 2; }
 .layer-text      { z-index: 3; }
 .layer-ls        { z-index: 4; }
+
+/* The LS mark renders with a fully opaque flood so it genuinely
+   occludes the signature strokes crossing behind it. */
+.layer-ls {
+  filter: url(#logo-recolor-solid);
+}
+
+/* Knock the signature out wherever ls.png has ink.
+   Two masks: a solid fill minus the LS artwork = "everything except LS". */
+.layer-signature {
+  -webkit-mask-image: linear-gradient(#000, #000), url("ls.png");
+  -webkit-mask-size: 100% 100%, 100% 100%;
+  -webkit-mask-position: center, center;
+  -webkit-mask-repeat: no-repeat, no-repeat;
+  -webkit-mask-composite: xor;
+
+  mask-image: linear-gradient(#000, #000), url("ls.png");
+  mask-size: 100% 100%, 100% 100%;
+  mask-position: center, center;
+  mask-repeat: no-repeat, no-repeat;
+  mask-mode: alpha, alpha;
+  mask-composite: exclude;
+}
 
 html.js .layer-frame {
   opacity: 0;
@@ -955,9 +980,9 @@ html.js .miga-mark {
 <a class="skip-link" href="#main">Skip to main content</a>
 
 <!--
-  Logo recolor filter.
-  The critical step is compositing the inverted luminance mask with SourceAlpha,
-  so transparent PNG pixels stay transparent after inversion.
+  Logo recolor filters.
+  #logo-recolor        — standard translucent glow used by frame / signature / text
+  #logo-recolor-solid  — opaque variant for the LS mark so it occludes the signature
 -->
 <svg width="0" height="0" aria-hidden="true" focusable="false"
      style="position: absolute; overflow: hidden">
@@ -977,6 +1002,31 @@ html.js .miga-mark {
 
       <feGaussianBlur in="logoMask" stdDeviation="3.5" result="blurredMask" />
       <feFlood flood-color="#00b8ff" flood-opacity="0.8" result="blueColor" />
+      <feComposite in="blueColor" in2="blurredMask" operator="in" result="blueGlow" />
+
+      <feMerge>
+        <feMergeNode in="blueGlow" />
+        <feMergeNode in="whiteArtwork" />
+      </feMerge>
+    </filter>
+
+    <filter id="logo-recolor-solid" x="-20%" y="-20%" width="140%" height="140%"
+            color-interpolation-filters="sRGB">
+      <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" result="luminanceMask" />
+
+      <!-- Harder alpha ramp = crisper, denser ink than the translucent variant -->
+      <feComponentTransfer in="luminanceMask" result="invertedMask">
+        <feFuncA type="table" tableValues="1 1 1 1 0.6 0 0" />
+      </feComponentTransfer>
+
+      <feComposite in="invertedMask" in2="SourceAlpha" operator="in" result="logoMask" />
+
+      <!-- Fully opaque flood so nothing behind the LS ink shows through -->
+      <feFlood flood-color="#f2fbff" flood-opacity="1" result="whiteColor" />
+      <feComposite in="whiteColor" in2="logoMask" operator="in" result="whiteArtwork" />
+
+      <feGaussianBlur in="logoMask" stdDeviation="2.5" result="blurredMask" />
+      <feFlood flood-color="#00b8ff" flood-opacity="0.75" result="blueColor" />
       <feComposite in="blueColor" in2="blurredMask" operator="in" result="blueGlow" />
 
       <feMerge>
@@ -1209,7 +1259,7 @@ html.js .miga-mark {
   "@type": "ResearchOrganization",
   "name": "SWID-LISA",
   "description": "Mechanical and aerospace engineering research lab: fatigue and fracture, neural biomechanics, energy absorption, and fracture in cementitious materials.",
-  "url": "https://example.com/",
+  "url": "https://swid-lisa.umbc.edu/",
   "founder": {
     "@type": "Person",
     "name": "Pouria Hejazi Rekavandi",
