@@ -1,0 +1,82 @@
+/* --- استایل بخش مقالات (Publications) --- */
+.publications-section {
+    margin-top: 60px;
+    border-top: 1px dashed #333;
+    padding-top: 40px;
+}
+
+.section-title {
+    color: #fff;
+    border-bottom: 2px solid #00b8ff;
+    display: inline-block;
+    padding-bottom: 5px;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+}
+
+.pub-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.pub-card {
+    background: rgba(20, 20, 20, 0.6);
+    border: 1px solid #333;
+    border-left: 4px solid #00ff41; /* نوار سبز رنگ کنار هر مقاله */
+    padding: 20px 25px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* افکت هنگام رفتن موس روی مقاله */
+.pub-card:hover {
+    transform: translateX(10px); /* حرکت ظریف به سمت راست */
+    border-left-color: #00b8ff; /* تغییر رنگ نوار به آبی */
+    box-shadow: 0 0 15px rgba(0, 184, 255, 0.15);
+    background: rgba(30, 30, 30, 0.8);
+}
+
+.pub-title {
+    color: #00ff41;
+    font-size: 1.2rem;
+    margin: 0 0 10px 0;
+    font-weight: bold;
+}
+
+.pub-authors {
+    color: #e0e0e0;
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+}
+
+.pub-journal {
+    color: #00b8ff;
+    font-size: 0.85rem;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+/* استایل دکمه لینک به مجله */
+.pub-link {
+    display: inline-block;
+    color: #050505;
+    background-color: #00ff41;
+    padding: 8px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.85rem;
+    border-radius: 3px;
+    transition: 0.3s;
+    text-transform: uppercase;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.pub-link:hover {
+    background-color: #00b8ff;
+    color: #fff;
+    box-shadow: 0 0 10px #00b8ff;
+}
