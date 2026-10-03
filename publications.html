@@ -1,1 +1,82 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#05070a"><meta name="color-scheme" content="dark"><meta name="description" content="Verified research publications from SWID-LISA."><meta name="author" content="Pouria Hejazi Rekavandi"><meta name="robots" content="index,follow"><link rel="canonical" href="https://swid-lisa.umbc.edu/publications.html"><link rel="stylesheet" href="assets/style.css"><title>Publications — SWID-LISA</title></head><body><a class="skip" href="#main">Skip to content</a><nav class="nav" aria-label="Primary"><div class="wrap"><a class="brand" href="index.html"><img src="assets/logo.jpg" alt=""><span>SWID-LISA</span></a><button class="menu" aria-expanded="false" aria-controls="links">Menu</button><div class="links" id="links"><a href="index.html">Home</a><a href="research.html">Research</a><a href="students.html">Students</a><a href="publications.html" aria-current="page">Publications</a></div></div></nav><main id="main"><header class="page-hero"><div class="wrap"><div class="eyebrow">Research output</div><h1>Publications</h1><p class="lead">Peer-reviewed articles, conference papers, and technical outputs.</p></div></header><section class="section"><div class="wrap"><div class="notice">No publication records were included in the supplied repository. Add verified citations here rather than placeholder entries.</div><div class="toolbar"><input class="input" type="search" placeholder="Search publications" aria-label="Search publications" disabled></div><div class="card empty"><h2>Publication list forthcoming</h2><p>Provide titles, authors, venue, year, DOI, and links to populate this page.</p></div></div></section></main><footer class="footer"><div class="wrap"><span>SWID-LISA · Mechanical & Aerospace Research</span><span>© <span data-year></span> RKV Materials</span></div></footer><script src="assets/app.js" defer></script></body></html>
+/* --- استایل بخش مقالات (Publications) --- */
+.publications-section {
+    margin-top: 60px;
+    border-top: 1px dashed #333;
+    padding-top: 40px;
+}
+
+.section-title {
+    color: #fff;
+    border-bottom: 2px solid #00b8ff;
+    display: inline-block;
+    padding-bottom: 5px;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+}
+
+.pub-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.pub-card {
+    background: rgba(20, 20, 20, 0.6);
+    border: 1px solid #333;
+    border-left: 4px solid #00ff41; /* نوار سبز رنگ کنار هر مقاله */
+    padding: 20px 25px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* افکت هنگام رفتن موس روی مقاله */
+.pub-card:hover {
+    transform: translateX(10px); /* حرکت ظریف به سمت راست */
+    border-left-color: #00b8ff; /* تغییر رنگ نوار به آبی */
+    box-shadow: 0 0 15px rgba(0, 184, 255, 0.15);
+    background: rgba(30, 30, 30, 0.8);
+}
+
+.pub-title {
+    color: #00ff41;
+    font-size: 1.2rem;
+    margin: 0 0 10px 0;
+    font-weight: bold;
+}
+
+.pub-authors {
+    color: #e0e0e0;
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+}
+
+.pub-journal {
+    color: #00b8ff;
+    font-size: 0.85rem;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+/* استایل دکمه لینک به مجله */
+.pub-link {
+    display: inline-block;
+    color: #050505;
+    background-color: #00ff41;
+    padding: 8px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.85rem;
+    border-radius: 3px;
+    transition: 0.3s;
+    text-transform: uppercase;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.pub-link:hover {
+    background-color: #00b8ff;
+    color: #fff;
+    box-shadow: 0 0 10px #00b8ff;
+}
