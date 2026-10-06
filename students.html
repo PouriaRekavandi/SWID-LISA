@@ -152,26 +152,44 @@
     $('completeCount').textContent=records.filter(r=>r.status==='Completed').length;
   }
 
+  function showToast(msg, isError=false){
+    let t = document.getElementById('toastMsg');
+    if(!t){
+      t = document.createElement('div');
+      t.id = 'toastMsg';
+      t.style.cssText = 'position:fixed;bottom:20px;right:20px;padding:12px 18px;border-radius:6px;z-index:9999;font-size:0.85rem;max-width:360px;box-shadow:0 8px 24px rgba(0,0,0,0.6);transition:opacity 0.3s;';
+      document.body.appendChild(t);
+    }
+    t.style.background = isError ? '#8d3038' : '#00ff41';
+    t.style.color = isError ? '#fff' : '#001407';
+    t.style.border = isError ? '1px solid #ff4d5a' : '1px solid #00ff41';
+    t.textContent = msg;
+    t.style.opacity = '1';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => { t.style.opacity = '0'; }, 3500);
+  }
+
   function clearForm(){ form.reset(); $('recordId').value=''; $('status').value='In Progress'; $('saveBtn').textContent='Save Student'; $('name').focus(); }
   form.addEventListener('submit',e=>{
     e.preventDefault();
     const id=$('recordId').value || (crypto.randomUUID?crypto.randomUUID():Date.now().toString(36));
     const record={id,name:$('name').value.trim(),degree:$('degree').value,studentId:$('studentId').value.trim(),title:$('title').value.trim(),startDate:$('startDate').value,expectedDate:$('expectedDate').value,status:$('status').value,email:$('email').value.trim(),notes:$('notes').value.trim(),updatedAt:new Date().toISOString()};
-    if(record.startDate && record.expectedDate && record.expectedDate < record.startDate){ alert('Expected completion cannot be earlier than the start date.'); return; }
+    if(record.startDate && record.expectedDate && record.expectedDate < record.startDate){ showToast('Expected completion cannot be earlier than the start date.', true); return; }
     const i=records.findIndex(r=>r.id===id); if(i>=0) records[i]=record; else records.unshift(record);
     persist(); clearForm(); render();
+    showToast('Student record saved successfully.');
   });
   $('clearBtn').addEventListener('click',clearForm);
   $('search').addEventListener('input',render);
   $('recordsBody').addEventListener('click',e=>{
     const edit=e.target.dataset.edit, del=e.target.dataset.delete;
     if(edit){ const r=records.find(x=>x.id===edit); if(!r)return; Object.keys(r).forEach(k=>{if($(k))$(k).value=r[k]||''}); $('recordId').value=r.id; $('saveBtn').textContent='Update Student'; window.scrollTo({top:0,behavior:'smooth'}); }
-    if(del && confirm('Delete this student record?')){ records=records.filter(x=>x.id!==del); persist(); render(); }
+    if(del){ records=records.filter(x=>x.id!==del); persist(); render(); showToast('Student record removed.'); }
   });
   function download(name,text,type){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),500); }
   $('jsonBtn').addEventListener('click',()=>download('thesis-students.json',JSON.stringify(records,null,2),'application/json'));
   $('csvBtn').addEventListener('click',()=>{ const cols=['name','degree','studentId','title','startDate','expectedDate','status','email','notes']; const quote=v=>'"'+String(v||'').replace(/"/g,'""')+'"'; download('thesis-students.csv',[cols.join(','),...records.map(r=>cols.map(c=>quote(r[c])).join(','))].join('\n'),'text/csv;charset=utf-8'); });
-  $('importFile').addEventListener('change',async e=>{ try{ const data=JSON.parse(await e.target.files[0].text()); if(!Array.isArray(data))throw Error(); if(confirm('Importing will replace the current local registry. Continue?')){records=data;persist();render();} }catch{alert('The selected file is not a valid registry JSON file.');} e.target.value=''; });
+  $('importFile').addEventListener('change',async e=>{ try{ const data=JSON.parse(await e.target.files[0].text()); if(!Array.isArray(data))throw Error(); records=data;persist();render(); showToast('Registry imported successfully.'); }catch{showToast('The selected file is not a valid registry JSON file.', true);} e.target.value=''; });
   render();
 })();
 </script>
