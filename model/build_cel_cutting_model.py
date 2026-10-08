@@ -66,7 +66,22 @@ def build_cutting_model():
     wp_part.BaseSolidExtrude(sketch=wp_sketch, depth=2.0)
     wp_inst = assm.Instance(name='WP_Ref', part=wp_part, dependent=ON)
 
-    mod.DiscreteField(name='EVF_Initial', defaultValues=(0.0, ), data=(('Domain', 'PA6_VUMAT', (('WP_Ref', 1.0), )), ), description='Initial Workpiece EVF')
+    import mesh
+    # Mesh Eulerian domain
+    domain_part.seedPart(size=0.05, deviationFactor=0.1, minSizeFactor=0.1)
+    elemType_euler = mesh.ElemType(elemCode=EC3D8R, elemLibrary=EXPLICIT)
+    domain_part.setElementType(regions=(domain_part.cells,), elemTypes=(elemType_euler,))
+    domain_part.generateMesh()
+
+    # Mesh Tool
+    tool_part.seedPart(size=0.05, deviationFactor=0.1, minSizeFactor=0.1)
+    elemType_tool = mesh.ElemType(elemCode=C3D8R, elemLibrary=EXPLICIT)
+    tool_part.setElementType(regions=(tool_part.cells,), elemTypes=(elemType_tool,))
+    tool_part.generateMesh()
+
+    assm.regenerate()
+
+    mod.DiscreteField(name='EVF_Initial', defaultValues=(0.0, ), fieldType=SCALAR, location=ELEMENTS, data=(('Domain', 'PA6_VUMAT', (('WP_Ref', 1.0), )), ))
     mod.MaterialAssignment(name='Initial_PA6', region=regionToolset.Region(cells=domain_inst.cells), materialName='PA6_VUMAT', discreteField='EVF_Initial')
     assm.features['WP_Ref'].suppress()
 
