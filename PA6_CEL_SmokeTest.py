@@ -58,7 +58,7 @@ MS_DT_CUT = 1.0e-7   # target stable dt during Cutting (tune for cost)
 MS_DT_REC = 1.0e-6   # target stable dt during Tool-Exit/Recovery:
 
 # -- Mesh (mm) --
-MESH_E = 0.050      # Eulerian -> 200 x 50 x 40 = 400,000 elements
+MESH_E = 0.025      # Eulerian -> 200 x 50 x 40 = 400,000 elements
 MESH_T = 0.005      # tool surface: finer than Eulerian
 MAX_EUL_ELEMS = 600000
 
@@ -382,9 +382,12 @@ if __name__ == '__main__':
         amplitude='Ramp')
     m.boundaryConditions['V-Cut'].deactivate('Tool-Exit')
 
+    m.TabularAmplitude(
+        name='Ramp-Exit', timeSpan=STEP, smooth=SOLVER_DEFAULT,
+        data=((0., 0.), (T_EXIT*0.2, 1.), (T_EXIT, 1.)))
     m.VelocityBC(
         name='V-Exit', createStepName='Tool-Exit', region=RP_asm,
-        v1=0., v2=LIFT_V, v3=0., vr1=0., vr2=0., vr3=0.)
+        v1=0., v2=LIFT_V, v3=0., vr1=0., vr2=0., vr3=0., amplitude='Ramp-Exit')
     m.boundaryConditions['V-Exit'].deactivate('Recovery')
 
     m.VelocityBC(
