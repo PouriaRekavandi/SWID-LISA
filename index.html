@@ -195,7 +195,7 @@ a { color: var(--blue); }
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: contain; pointer-events: none;
-  filter: url(#logo-key);
+  filter: drop-shadow(0 0 14px rgba(0,184,255,.35));
 }
 .logo-img.is-missing { display: none; }
 
@@ -541,22 +541,6 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 2.2s f
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
 
-<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;overflow:hidden">
-  <defs>
-    <!-- Keys out the white paper of logo.jpg: dark ink stays, light paper becomes transparent, then adds a blue glow -->
-    <filter id="logo-key" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
-      <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" result="lum"/>
-      <feComponentTransfer in="lum" result="mask"><feFuncA type="table" tableValues="1 1 1 1 1 .7 0 0"/></feComponentTransfer>
-      <feFlood flood-color="#f2fbff" result="white"/>
-      <feComposite in="white" in2="mask" operator="in" result="art"/>
-      <feGaussianBlur in="mask" stdDeviation="4" result="blur"/>
-      <feFlood flood-color="#00b8ff" flood-opacity=".8" result="blue"/>
-      <feComposite in="blue" in2="blur" operator="in" result="glow"/>
-      <feMerge><feMergeNode in="glow"/><feMergeNode in="art"/></feMerge>
-    </filter>
-  </defs>
-</svg>
-
 <div class="project-banner">
   <div class="banner-text">
     <span class="banner-badge">Active Project</span>
@@ -567,7 +551,7 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 2.2s f
 
 <header class="site-header">
   <div class="animated-logo-stage">
-    <img src="logo.jpg" alt="SWID-SHRK Research Group logo" class="logo-img" width="2080" height="2048" fetchpriority="high" decoding="async">
+    <img src="logo-soft.webp" alt="SWID-SHRK Research Group logo" class="logo-img" width="800" height="787" fetchpriority="high" decoding="async">
     <span class="sparkle s1" aria-hidden="true"></span>
     <span class="sparkle s2" aria-hidden="true"></span>
     <span class="sparkle s3" aria-hidden="true"></span>
