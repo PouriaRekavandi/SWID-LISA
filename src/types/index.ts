@@ -25,6 +25,8 @@ export interface Publication {
   doi?: string;
   bibtex?: string;
   category: string;
+  keywords?: string[];
+  abstract?: string;
 }
 
 export interface VideoTutorial {

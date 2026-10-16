@@ -264,8 +264,9 @@ export const ThesisRegistry: React.FC<ThesisRegistryProps> = ({ onNotify }) => {
       {/* Title */}
       <div>
         <div className="inline-block border-b-2 dark:border-[#00b8ff] border-sky-600 pb-1 mb-4">
-          <h2 className="font-orbitron text-xl sm:text-2xl md:text-3xl font-bold uppercase tracking-wider dark:text-white text-slate-900">
-            // Thesis Student Supervision Registry
+          <h2 className="font-section-title text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-wider dark:text-white text-slate-900 flex items-center">
+            <span className="dark:text-[#00ff41] text-emerald-600 font-mono mr-2 select-none">//</span>
+            <span>Thesis Student Supervision Registry</span>
           </h2>
         </div>
         <p className="dark:text-zinc-400 text-slate-600 font-mono text-sm max-w-3xl leading-relaxed">

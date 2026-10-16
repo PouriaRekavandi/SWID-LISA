@@ -46,7 +46,7 @@ export const ProjectBanner: React.FC = () => {
               Active Laboratory Research Initiative
             </div>
 
-            <h3 className="font-orbitron text-xl sm:text-2xl dark:text-white text-slate-900 font-bold mb-4">
+            <h3 className="font-section-title text-xl sm:text-2xl dark:text-white text-slate-900 font-bold mb-4 uppercase tracking-wide">
               Advanced Liquid Crystal Elastomers (LCE) via Neural-Network Inverse Design
             </h3>
 

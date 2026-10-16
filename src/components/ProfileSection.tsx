@@ -1,5 +1,6 @@
 import React from 'react';
 import { ShieldCheck } from 'lucide-react';
+import profilePhoto from '../assets/profile.jpg';
 
 export const ProfileSection: React.FC = () => {
   return (
@@ -13,7 +14,7 @@ export const ProfileSection: React.FC = () => {
           <div className="relative group/avatar">
             <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full border-4 dark:border-[#00b8ff] border-sky-600 dark:shadow-[0_0_25px_rgba(0,184,255,0.45)] shadow-md dark:bg-gradient-to-b dark:from-[#102538] dark:to-[#050b11] bg-gradient-to-b from-sky-50 to-slate-100 flex items-center justify-center overflow-hidden transition-transform duration-500 group-hover:scale-105">
               <img
-                src="/profile.jpg"
+                src={profilePhoto}
                 alt="Pouria Hejazi Rekavandi"
                 className="w-full h-full object-cover object-center"
                 onError={(e) => {

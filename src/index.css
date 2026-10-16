@@ -93,6 +93,19 @@
   font-family: 'Orbitron', system-ui, sans-serif;
 }
 
+.font-rajdhani {
+  font-family: 'Rajdhani', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.font-space {
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.font-section-title {
+  font-family: 'Rajdhani', 'Space Grotesk', system-ui, sans-serif;
+  letter-spacing: 0.05em;
+}
+
 .font-allura {
   font-family: 'Allura', 'Segoe Script', cursive;
 }

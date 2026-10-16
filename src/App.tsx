@@ -107,8 +107,9 @@ export const App: React.FC = () => {
           <div className="max-w-6xl mx-auto px-4 py-12 space-y-8">
             <div>
               <div className="inline-block border-b-2 border-[#00b8ff] pb-1 mb-4">
-                <h2 className="font-orbitron text-xl sm:text-2xl md:text-3xl font-bold uppercase tracking-wider text-white">
-                  // Abaqus FEA Simulations &amp; Tutorials
+                <h2 className="font-section-title text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-wider text-white flex items-center">
+                  <span className="text-[#00ff41] font-mono mr-2 select-none">//</span>
+                  <span>Abaqus FEA Simulations &amp; Tutorials</span>
                 </h2>
               </div>
               <p className="text-zinc-400 font-mono text-sm max-w-3xl leading-relaxed">

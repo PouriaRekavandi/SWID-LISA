@@ -288,8 +288,9 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
       {/* Section Header */}
       <div>
         <div className="inline-block border-b-2 dark:border-[#00b8ff] border-sky-600 pb-1 mb-4">
-          <h2 className="font-orbitron text-xl sm:text-2xl md:text-3xl font-bold uppercase tracking-wider dark:text-white text-slate-900">
-            // Research Modules &amp; Domains
+          <h2 className="font-section-title text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-wider dark:text-white text-slate-900 flex items-center">
+            <span className="dark:text-[#00ff41] text-emerald-600 font-mono mr-2 select-none">//</span>
+            <span>Research Modules &amp; Domains</span>
           </h2>
         </div>
         <p className="dark:text-zinc-400 text-slate-600 font-mono text-sm max-w-3xl leading-relaxed">
@@ -563,8 +564,9 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
                         {item.id === 'mod-3' && (
                           <div className="p-4 sm:p-5 dark:bg-[#0b1016] bg-white border dark:border-[#00b8ff]/30 border-slate-300 rounded-xl space-y-4 shadow-sm">
                             <div className="flex items-center justify-between flex-wrap gap-2 pb-2 border-b dark:border-[#00b8ff]/20 border-slate-200">
-                              <h4 className="font-orbitron font-bold text-sm sm:text-base dark:text-[#00b8ff] text-sky-700">
-                                // Research Environment: AntiPrism Structures
+                              <h4 className="font-section-title font-bold text-base sm:text-lg dark:text-[#00b8ff] text-sky-700 flex items-center uppercase tracking-wide">
+                                <span className="dark:text-[#00ff41] text-emerald-600 font-mono mr-2 select-none">//</span>
+                                <span>Research Environment: AntiPrism Structures</span>
                               </h4>
                               <span className="text-xs dark:text-zinc-400 text-slate-500 font-mono">
                                 Select a tutorial part from the playlist below
@@ -617,8 +619,9 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
                               </div>
 
                               <div className="dark:bg-[#0f0f0f]/90 bg-slate-50 border dark:border-zinc-800 border-slate-200 rounded-lg p-3 space-y-2.5">
-                                <h5 className="font-orbitron font-bold text-xs uppercase tracking-wider dark:text-[#00ff41] text-emerald-700 pb-2 border-b dark:border-zinc-800 border-slate-200">
-                                  // Video Playlist
+                                <h5 className="font-section-title font-bold text-xs uppercase tracking-wider dark:text-[#00ff41] text-emerald-700 pb-2 border-b dark:border-zinc-800 border-slate-200 flex items-center">
+                                  <span className="text-[#00b8ff] font-mono mr-1.5 select-none">//</span>
+                                  <span>Video Playlist</span>
                                 </h5>
 
                                 <div className="space-y-2">
@@ -679,8 +682,9 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
           {/* Primary Research Focus Cards */}
           {focusAreas.length > 0 && (
             <div className="pt-6 border-t dark:border-zinc-800 border-slate-200">
-              <h3 className="font-orbitron text-lg sm:text-xl font-bold uppercase tracking-wider dark:text-white text-slate-900 mb-6">
-                // Primary Research Focus Areas
+              <h3 className="font-section-title text-xl sm:text-2xl font-bold uppercase tracking-wider dark:text-white text-slate-900 mb-6 flex items-center">
+                <span className="dark:text-[#00ff41] text-emerald-600 font-mono mr-2 select-none">//</span>
+                <span>Primary Research Focus Areas</span>
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

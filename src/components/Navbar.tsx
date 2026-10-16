@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { TabKey } from '../types';
 import { ThemeSwitcher } from './ThemeSwitcher';
 import { Menu, X, Layers, BookOpen, GraduationCap, Wrench, PlayCircle, Mail, Home, Bot } from 'lucide-react';
+import logoTransparent from '../assets/logo_transparent.png';
+import logoFallback from '../assets/logo.jpg';
 
 interface NavbarProps {
   activeTab: TabKey;
@@ -36,11 +38,14 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab }) => {
           onClick={() => handleNavClick('home')}
           className="flex items-center gap-2.5 text-left group cursor-pointer focus:outline-none flex-none"
         >
-          <div className="w-8 h-8 rounded-full border dark:border-[#00b8ff]/80 border-sky-600/80 overflow-hidden dark:bg-black/60 bg-sky-50 flex items-center justify-center p-0.5 shadow-[0_0_10px_rgba(0,184,255,0.4)] group-hover:shadow-[0_0_15px_rgba(0,255,65,0.6)] transition-all flex-none">
+          <div className="w-8 h-8 flex items-center justify-center flex-none transition-transform duration-300 group-hover:scale-110">
             <img
-              src="/logo.jpg"
+              src={logoTransparent}
               alt="SWID-SHRK Logo"
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(0,184,255,0.45)] dark:drop-shadow-[0_0_10px_rgba(0,184,255,0.7)]"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = logoFallback;
+              }}
             />
           </div>
           <div className="flex flex-col">

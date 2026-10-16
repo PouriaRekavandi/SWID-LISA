@@ -2,6 +2,8 @@ import React from 'react';
 import { TabKey } from '../types';
 import { ThemeSwitcher } from './ThemeSwitcher';
 import { ArrowRight, GraduationCap, PlayCircle, Bot, Sparkles } from 'lucide-react';
+import logoTransparent from '../assets/logo_transparent.png';
+import logoFallback from '../assets/logo.jpg';
 
 interface HeroSectionProps {
   onSelectTab: (tab: TabKey) => void;
@@ -26,11 +28,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectTab }) => {
       <div className="relative z-10 flex flex-col items-center mb-6">
         <div className="relative flex items-center justify-center w-[250px] sm:w-[320px] md:w-[380px] aspect-square group transition-all duration-300">
           <img
-            src="/logo_transparent.png"
+            src={logoTransparent}
             alt="SWID-SHRK Research Group Crest Logo"
             className="w-full h-full object-contain select-none animate-logo-fade-in transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_4px_16px_rgba(0,184,255,0.35)] dark:drop-shadow-[0_0_24px_rgba(0,184,255,0.65)] dark:brightness-110"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = '/logo.jpg';
+              (e.target as HTMLImageElement).src = logoFallback;
             }}
           />
 

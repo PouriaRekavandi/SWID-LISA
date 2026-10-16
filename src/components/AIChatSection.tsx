@@ -112,6 +112,12 @@ export const AIChatSection: React.FC<AIChatSectionProps> = ({ onNotify }) => {
       });
 
       if (!res.ok) {
+        if (res.status === 404) {
+          throw new Error(
+            'The Gemini AI backend endpoint (/api/chat) is not available on static hosting (such as GitHub Pages). ' +
+            'GitHub Pages only serves static files. To enable live AI reasoning and search grounding, run locally with `npm run dev` or deploy the backend to Cloud Run, Vercel, or Render.'
+          );
+        }
         const errorData = await res.json().catch(() => ({}));
         throw new Error(errorData.error || `HTTP ${res.status}: Failed to reach Gemini API`);
       }
@@ -130,15 +136,18 @@ export const AIChatSection: React.FC<AIChatSectionProps> = ({ onNotify }) => {
       setMessages((prev) => [...prev, modelMessage]);
     } catch (err: any) {
       console.error('Chat error:', err);
+      const isStaticNotice = err.message && err.message.includes('GitHub Pages');
       const errorMessage: ChatMessage = {
         id: `err-${Date.now()}`,
         role: 'model',
-        content: `**Error communicating with Gemini:**\n${err.message || 'Please check server logs or connectivity.'}`,
+        content: isStaticNotice
+          ? `ℹ️ **Static Hosting Environment Notice**\n\n${err.message}\n\n*All research modules, publications, thesis registry, gear inventory, and Abaqus tutorials are fully interactive on GitHub Pages!*`
+          : `**Error communicating with Gemini:**\n${err.message || 'Please check server logs or connectivity.'}`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        isError: true,
+        isError: !isStaticNotice,
       };
       setMessages((prev) => [...prev, errorMessage]);
-      if (onNotify) onNotify(`Error: ${err.message}`, true);
+      if (onNotify) onNotify(isStaticNotice ? 'Static hosting notice: AI backend requires Node server.' : `Error: ${err.message}`, !isStaticNotice);
     } finally {
       setIsLoading(false);
     }
@@ -179,8 +188,9 @@ export const AIChatSection: React.FC<AIChatSectionProps> = ({ onNotify }) => {
             <Sparkles className="w-3.5 h-3.5" />
             Gemini Multimodal Reasoning &amp; Grounding
           </div>
-          <h2 className="text-2xl sm:text-3xl font-orbitron font-bold dark:text-white text-slate-900 tracking-wide">
-            SWID-SHRK AI Research Assistant
+          <h2 className="text-2xl sm:text-3xl font-section-title font-bold dark:text-white text-slate-900 tracking-wide uppercase flex items-center">
+            <span className="dark:text-[#00ff41] text-emerald-600 font-mono mr-2 select-none">//</span>
+            <span>SWID-SHRK AI Research Assistant</span>
           </h2>
           <p className="text-xs sm:text-sm font-mono dark:text-zinc-400 text-slate-600 mt-1">
             Real-time mechanical &amp; aerospace intelligence, Abaqus FEA guidance, and search-grounded citation queries.
