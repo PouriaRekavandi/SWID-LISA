@@ -10,6 +10,7 @@ import { ThesisRegistry } from './components/ThesisRegistry';
 import { EquipmentSection } from './components/EquipmentSection';
 import { ContactSection } from './components/ContactSection';
 import { AIChatSection } from './components/AIChatSection';
+import { AbaqusGallery } from './components/AbaqusGallery';
 import { Footer } from './components/Footer';
 import { ReadingProgressBar } from './components/ReadingProgressBar';
 import { CheckCircle2, AlertCircle, Bot, Sparkles } from 'lucide-react';
@@ -109,14 +110,14 @@ export const App: React.FC = () => {
               <div className="inline-block border-b-2 border-[#00b8ff] pb-1 mb-4">
                 <h2 className="font-section-title text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-wider text-white flex items-center">
                   <span className="text-[#00ff41] font-mono mr-2 select-none">//</span>
-                  <span>Abaqus FEA Simulations &amp; Tutorials</span>
+                  <span>Abaqus FEA Simulations &amp; Gallery</span>
                 </h2>
               </div>
               <p className="text-zinc-400 font-mono text-sm max-w-3xl leading-relaxed">
-                Computational models, explicit solver scripts, and video walkthroughs on cellular metamaterials, subroutines, and impact mechanics.
+                Showcasing finite element analysis runs, dynamic explicit stress/strain contour fields, mesh formulations, and interactive lightbox telemetry.
               </p>
             </div>
-            <ResearchSection onNotify={showToast} />
+            <AbaqusGallery onNotify={showToast} />
           </div>
         )}
 
