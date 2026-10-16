@@ -5,12 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#050505">
+<meta name="robots" content="index, follow">
 <script>document.documentElement.classList.add("js")</script>
 
 <title>SWID-LISA — Mechanical &amp; Aerospace Research Lab</title>
 <meta name="description" content="SWID-LISA research lab: fatigue and fracture, neural biomechanics, energy-absorbing metamaterials, and fracture in cementitious materials. Abaqus simulations, tutorials, and publications.">
 <meta name="author" content="Pouria Hejazi Rekavandi">
 <link rel="canonical" href="https://swid-lisa.umbc.edu/">
+
+<!-- Embedded SVG Favicon (Eliminates 404 /favicon.ico network overhead) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23050505'/%3E%3Cpath d='M8 24L16 8l8 16' fill='none' stroke='%2300ff41' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='17' r='3' fill='%2300b8ff'/%3E%3C/svg%3E">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="SWID-LISA">
@@ -23,9 +27,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Allura&family=Orbitron:wght@700&family=Roboto+Mono:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel+Decorative:wght@700&family=Orbitron:wght@700&family=Roboto+Mono:wght@400;700&display=swap"
       media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Allura&family=Orbitron:wght@700&family=Roboto+Mono:wght@400;700&display=swap"></noscript>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel+Decorative:wght@700&family=Orbitron:wght@700&family=Roboto+Mono:wght@400;700&display=swap"></noscript>
 
 <style>
 :root {
@@ -36,7 +40,9 @@
   --bg-inset: rgba(10,10,10,.6);
   --line: #333;
   --line-soft: rgba(255,255,255,.08);
-  --text: #e0e0e0; --text-muted: #a8b0b4; --text-dim: #6b7275;
+  --text: #e0e0e0; --text-muted: #a8b0b4;
+  /* Enhanced from #6b7275 to pass WCAG 2.1 AA (Contrast Ratio > 5.2:1 against #050505) */
+  --text-dim: #8c969a;
 
   --fs-xs: .78rem; --fs-sm: .86rem; --fs-base: 1rem;
   --fs-lg: clamp(1.05rem, 2.8vw, 1.25rem);
@@ -71,6 +77,8 @@ body {
   font: var(--fs-base) / 1.65 var(--mono);
   text-rendering: optimizeLegibility;
 }
+
+main:focus { outline: none; }
 
 img, video, svg { max-width: 100%; }
 img, video { height: auto; }
@@ -118,7 +126,6 @@ a { color: var(--blue); }
   background: var(--green); color: #000;
   font-size: var(--fs-xs); font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
 }
-/* Pulse via transform/opacity (compositor-only) instead of animating box-shadow */
 .banner-badge::after {
   content: ""; position: absolute; inset: 0; z-index: -1;
   border-radius: inherit; border: 2px solid var(--green);
@@ -178,7 +185,7 @@ a { color: var(--blue); }
 
 @keyframes cosmic-move { from { transform: scale(1.02); } to { transform: scale(1.16); } }
 
-/* Logo */
+/* Logo Stage */
 .animated-logo-stage {
   position: relative; z-index: 2; isolation: isolate;
   width: var(--stage); height: var(--stage);
@@ -195,12 +202,27 @@ a { color: var(--blue); }
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: contain; pointer-events: none;
-  filter: drop-shadow(0 0 14px rgba(0,184,255,.35));
 }
 .logo-img.is-missing { display: none; }
 
 html.js .logo-img { opacity: 0; animation: logo-reveal 1.6s var(--ease) .3s forwards; }
 @keyframes logo-reveal { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
+html.js .logo-mono { animation: mono-in 2.6s ease 1.8s forwards; }
+@keyframes mono-in { from { opacity: 0; } to { opacity: 1; } }
+
+.logo-title {
+  position: absolute; left: 50%; top: 67.6%; z-index: 3;
+  transform: translate(-50%, -50%);
+  font: 700 calc(var(--stage) * .058) / 1 "Cinzel Decorative", "Cinzel", Georgia, serif;
+  letter-spacing: .09em; white-space: nowrap; pointer-events: none;
+  color: #eaf6ff;
+  background: linear-gradient(180deg, #ffffff 0%, #dff1ff 55%, #9fcdf0 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 5px rgba(0,184,255,.55)) drop-shadow(0 1px 1px rgba(0,0,0,.9));
+}
+html.js .logo-title { opacity: 0; animation: title-in 1.4s ease 3.4s forwards; }
+@keyframes title-in { to { opacity: 1; } }
 
 /* Sparkles */
 .sparkle {
@@ -230,7 +252,7 @@ html.js .logo-img { opacity: 0; animation: logo-reveal 1.6s var(--ease) .3s forw
 }
 
 .header-title-block h1 {
-  max-width: 100%; margin: 0; padding: 0 .2em .1em;
+  max-width: 100%; margin: 0; padding: .1em .2em;
   color: #fff;
   font: 400 var(--fs-display) / 1.25 "Allura", "Segoe Script", cursive;
   overflow-wrap: break-word;
@@ -316,7 +338,7 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 2.2s f
   transition: border-color .3s, box-shadow .3s, transform .3s;
 }
 
-/* Scan line moved with transform (no layout/paint per frame) */
+/* Continuous, seamless scanline movement */
 .profile-section::before {
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(to bottom, transparent calc(100% - 14px), rgba(0,255,65,.25) calc(100% - 3px), var(--green) 100%);
@@ -324,7 +346,7 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 2.2s f
   will-change: transform;
   animation: scanline 4s infinite linear;
 }
-@keyframes scanline { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+@keyframes scanline { from { transform: translateY(-100%); } to { transform: translateY(100%); } }
 
 .profile-section:hover {
   transform: translateY(-2px);
@@ -365,7 +387,7 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 2.2s f
 
 .research-interests-section { margin-top: var(--sp-7); padding-top: var(--sp-6); border-top: 1px dashed var(--line); }
 
-/* ---------- Accordion (CSS-only height animation) ---------- */
+/* ---------- Accordion ---------- */
 .accordion-container { display: flex; flex-direction: column; gap: var(--sp-3); }
 
 .accordion-item {
@@ -393,8 +415,6 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 2.2s f
 .accordion-header .icon { flex: none; color: var(--green); font-size: 1.1rem; transition: transform .3s var(--ease); }
 .accordion-item.active .icon { transform: rotate(180deg); }
 
-/* 0fr -> 1fr animates to the real content height; no JS measuring needed.
-   visibility keeps collapsed controls out of the tab order. */
 .accordion-content {
   display: grid; grid-template-rows: 0fr; visibility: hidden;
   background: var(--bg-inset);
@@ -419,7 +439,7 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 2.2s f
   border-bottom: 1px solid rgba(0,184,255,.2);
 }
 
-/* ---------- Video + playlist ---------- */
+/* ---------- Video + Playlist ---------- */
 .video-playlist-container {
   display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   gap: 18px; margin-top: 18px;
@@ -478,7 +498,7 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 2.2s f
   margin-top: var(--sp-7); padding: 28px 18px;
   background: #000; color: var(--text-dim);
   border-top: 1px solid #222;
-  font-size: 12px; text-align: center;
+  font-size: 13px; text-align: center;
 }
 .site-footer p { margin: 4px 0; }
 
@@ -509,7 +529,7 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 2.2s f
   .site-nav a { scroll-snap-align: center; }
 }
 
-/* ---------- Reduced motion ---------- */
+/* ---------- Reduced Motion Mode ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .001ms !important;
@@ -517,12 +537,11 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 2.2s f
     transition-duration: .001ms !important;
     scroll-behavior: auto !important;
   }
-  html.js .logo-img, html.js .header-title-block h1,
+  html.js .logo-img, html.js .logo-mono, html.js .logo-title, html.js .header-title-block h1,
   html.js .header-tagline, html.js .miga-mark {
     opacity: 1 !important; transform: none !important; clip-path: none !important;
   }
   .sparkle { opacity: .6; }
-  /* A GIF can't be paused by CSS, so drop it and keep the static gradients */
   .site-header::before {
     background:
       radial-gradient(circle at 30% 25%, rgba(255,255,255,.10), transparent 45%),
@@ -551,243 +570,17 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 2.2s f
 
 <header class="site-header">
   <div class="animated-logo-stage">
-    <img src="logo-soft.webp" alt="SWID-SHRK Research Group logo" class="logo-img" width="800" height="787" fetchpriority="high" decoding="async">
-    <span class="sparkle s1" aria-hidden="true"></span>
-    <span class="sparkle s2" aria-hidden="true"></span>
-    <span class="sparkle s3" aria-hidden="true"></span>
-    <span class="sparkle s4" aria-hidden="true"></span>
-    <span class="sparkle s5" aria-hidden="true"></span>
-  </div>
+    <img src="data:image/webp;base64,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9/fzFZVULFX3TA+jPR4z2zNhMoQZvKG9MF6Y1iHHDi34GGbx7se4zMe58DKTl5yNPeMBD3V3Sd8/Sl9Jpeqqrup/NiImQI+2bcskac75vBBZ2cNMFlkgJksbkJYjnyWfYQMMOyBrtACZwzMW/9hVkRkvPEZERkZkV9ffGoyICcCG/58i24l+/6qWcTkzc+Se6xK3G0iCQwgeJDgLhABBl83i7hrcYbEgi7sECUETJIGEuMu9uX7OyBmX7q6q/4uZ7pkz9wCb7JuImAB/7v9/9P//vZgD+L8jEKAW1y0LsG2F/N8NqGMNd7l38zXfMgHnS3e94BgDxH8ToMTJiZgU8RyXYPrdoHpTt8MQqeC/Beg4eQiJIgBiJENbp/yGPZH0/xsA9aEvYWiIshQTD/s7rGD1n47jD60bVEkUV3NNM7Hq79DnvCGqJjjpP79kenJ1n/jImsEYSXSv/L4tE6v4JDDEmLmz/yfPnVq1x/MC4+fg2Z9YK1fpcVcgmUzzq/OUIiQ0ONRegistrations/src/test/java/com/webapi/registrations/RegistrationsApplicationTests.java
+package com.webapi.registrations;
 
-  <div class="header-title-block">
-    <h1>Something Weird is Discovering…!</h1>
-    <p class="header-tagline">Mechanical &amp; aerospace engineering research</p>
-    <p class="miga-mark"><span class="miga-m">M</span><span class="miga-ig">IG</span><span class="miga-a">A</span></p>
-  </div>
-</header>
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-<nav class="site-nav" aria-label="Main navigation">
-  <div class="nav-inner">
-    <a href="index.html" aria-current="page">Home</a>
-    <a href="about.html">About</a>
-    <a href="equipment.html">Lab Gear</a>
-    <a href="abaqus.html">Abaqus_Sims</a>
-    <a href="people.html">People</a>
-    <a href="studied.html">Literature_Review</a>
-    <a href="publications.html">Publications</a>
-    <a href="future.html">Future_Plans</a>
-    <a href="contact.html">Connect</a>
-  </div>
-</nav>
+@SpringBootTest
+class RegistrationsApplicationTests {
 
-<main class="container" id="main">
-  <section class="profile-section" aria-labelledby="profile-heading">
-    <h2 class="sr-only" id="profile-heading">Principal researcher</h2>
+	@Test
+	void contextLoads() {
+	}
 
-    <img src="profile.jpg" alt="Portrait of Pouria Hejazi Rekavandi"
-         class="profile-pic" width="250" height="250" loading="lazy" decoding="async">
-
-    <div class="about-text">
-      <ul class="tag-row">
-        <li>Fatigue &amp; Fracture</li>
-        <li>Biomechanics</li>
-        <li>Metamaterials</li>
-        <li>Abaqus / FEA</li>
-      </ul>
-
-      <p>
-        I am an interdisciplinary engineering researcher specializing in
-        <strong>mechanical and aerospace engineering</strong>, embodying the continuous
-        evolution of a childhood curiosity that has shaped my entire 40-year journey.
-      </p>
-
-      <blockquote class="personal-verse">
-        <p>Listen to the whispers of your dreaming soul,</p>
-        <p>Speak only truth to keep your spirit whole.</p>
-        <p>Fix your steady gaze upon a single star,</p>
-        <p>Work with burning fire to reach for what you are.</p>
-        <p>And let no passing shadow dim your inner light,</p>
-        <p>For nothing can eclipse a purpose shining bright.</p>
-      </blockquote>
-
-      <p class="signature">With sincere dedication<br><strong>Pouria 🌻</strong></p>
-    </div>
-  </section>
-
-  <section class="research-interests-section" id="research-interests" aria-labelledby="research-heading">
-    <h2 class="section-title" id="research-heading">// Research modules</h2>
-
-    <div class="accordion-container">
-      <div class="accordion-item">
-        <h3>
-          <button class="accordion-header" type="button" id="acc-btn-1" aria-expanded="false" aria-controls="acc-panel-1">
-            <span class="label"><span class="num">I</span><span>Fatigue and Fracture</span></span>
-            <span class="icon" aria-hidden="true">▼</span>
-          </button>
-        </h3>
-        <div class="accordion-content" id="acc-panel-1" role="region" aria-labelledby="acc-btn-1">
-          <div class="accordion-inner"><div class="accordion-body">
-            <p>Overview and educational materials on fatigue failure, crack initiation, and stress-intensity analysis.</p>
-          </div></div>
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <h3>
-          <button class="accordion-header" type="button" id="acc-btn-2" aria-expanded="false" aria-controls="acc-panel-2">
-            <span class="label"><span class="num">II</span><span>Neural Biomechanics</span></span>
-            <span class="icon" aria-hidden="true">▼</span>
-          </button>
-        </h3>
-        <div class="accordion-content" id="acc-panel-2" role="region" aria-labelledby="acc-btn-2">
-          <div class="accordion-inner"><div class="accordion-body">
-            <p>Research materials focusing on computational neuroscience, brain-tissue modeling, and neural mechanics.</p>
-          </div></div>
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <h3>
-          <button class="accordion-header" type="button" id="acc-btn-3" aria-expanded="false" aria-controls="acc-panel-3">
-            <span class="label"><span class="num">III</span><span>Energy Absorption</span></span>
-            <span class="icon" aria-hidden="true">▼</span>
-          </button>
-        </h3>
-        <div class="accordion-content" id="acc-panel-3" role="region" aria-labelledby="acc-btn-3">
-          <div class="accordion-inner"><div class="accordion-body">
-            <p>Investigation into mechanical energy dissipation, metamaterials, and impact dynamics.</p>
-
-            <div class="research-subcard">
-              <h4>// Research environment: AntiPrism structures</h4>
-              <p>Select a tutorial part from the playlist below.</p>
-
-              <div class="video-playlist-container">
-                <div class="main-video-box">
-                  <p class="current-video-title" id="antiprism-now-playing" aria-live="polite">AntiPrism Tutorial — Part 1</p>
-                  <video class="main-video-player" controls playsinline preload="none"
-                         aria-describedby="antiprism-now-playing"
-                         src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4">
-                    <p>Your browser cannot play embedded video.
-                      <a href="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4">Download Part 1 (MP4)</a>.</p>
-                  </video>
-                </div>
-
-                <div class="playlist-box">
-                  <h5 id="antiprism-playlist-label">// Video playlist</h5>
-                  <ul class="playlist" aria-labelledby="antiprism-playlist-label">
-                    <li>
-                      <button type="button" class="playlist-item" aria-current="true"
-                              data-src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part1.mp4"
-                              data-title="AntiPrism Tutorial — Part 1">
-                        <span class="idx">01</span><span>AntiPrism Tutorial — Part 1</span>
-                      </button>
-                    </li>
-                    <li>
-                      <button type="button" class="playlist-item" aria-current="false"
-                              data-src="https://github.com/PouriaRekavandi/SWID-LISA/releases/download/Abaqus/antiprism-tutorial-Part2.mp4"
-                              data-title="AntiPrism Tutorial — Part 2">
-                        <span class="idx">02</span><span>AntiPrism Tutorial — Part 2</span>
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div></div>
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <h3>
-          <button class="accordion-header" type="button" id="acc-btn-4" aria-expanded="false" aria-controls="acc-panel-4">
-            <span class="label"><span class="num">IV</span><span>Fracture in Cements</span></span>
-            <span class="icon" aria-hidden="true">▼</span>
-          </button>
-        </h3>
-        <div class="accordion-content" id="acc-panel-4" role="region" aria-labelledby="acc-btn-4">
-          <div class="accordion-inner"><div class="accordion-body">
-            <p>Studies on cementitious-matrix toughness, quasi-brittle fracture, and microstructural analysis.</p>
-          </div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer class="site-footer">
-  <p>System secure. Encrypted connection.</p>
-  <p>© <span id="year">2026</span> RKV Materials · SWID-LISA</p>
-</footer>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ResearchOrganization",
-  "name": "SWID-LISA",
-  "description": "Mechanical and aerospace engineering research lab: fatigue and fracture, neural biomechanics, energy absorption, and fracture in cementitious materials.",
-  "url": "https://swid-lisa.umbc.edu/",
-  "founder": { "@type": "Person", "name": "Pouria Hejazi Rekavandi", "jobTitle": "Researcher" },
-  "knowsAbout": [
-    "Fatigue and fracture mechanics",
-    "Neural biomechanics",
-    "Energy-absorbing metamaterials",
-    "Fracture in cementitious materials",
-    "Abaqus finite element simulation"
-  ]
 }
-</script>
-
-<script>
-(() => {
-  "use strict";
-
-  document.getElementById("year").textContent = new Date().getFullYear();
-
-  /* Hide any logo layer whose file fails to load */
-  document.querySelectorAll(".logo-img").forEach(img => {
-    const hide = () => img.classList.add("is-missing");
-    if (img.complete && img.naturalWidth === 0) hide();
-    img.addEventListener("error", hide);
-  });
-
-  /* Accordion: CSS animates the height, JS only flips state */
-  document.querySelectorAll(".accordion-header").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const open = btn.closest(".accordion-item").classList.toggle("active");
-      btn.setAttribute("aria-expanded", open);
-    });
-  });
-
-  /* Video playlist */
-  document.querySelectorAll(".video-playlist-container").forEach(wrap => {
-    const player = wrap.querySelector(".main-video-player");
-    const title  = wrap.querySelector(".current-video-title");
-    const items  = [...wrap.querySelectorAll(".playlist-item")];
-    if (!player || !items.length) return;
-
-    const select = (btn, autoplay) => {
-      items.forEach(i => i.setAttribute("aria-current", i === btn));
-      if (title) title.textContent = btn.dataset.title || "";
-      player.src = btn.dataset.src || "";   /* setting src already triggers load */
-      if (autoplay) player.play().catch(err => console.warn("Autoplay blocked:", err));
-    };
-
-    items.forEach((btn, i) => {
-      btn.addEventListener("click", () => select(btn, true));
-      btn.addEventListener("keydown", e => {
-        const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
-        if (!step) return;
-        e.preventDefault();
-        items[(i + step + items.length) % items.length].focus();
-      });
-    });
-
-    player.addEventListener("ended", () => {
-      const next = items[items.findIndex(i => i.getAttribute("aria-current") === "true") + 1];
-      if (next) select(next, true);
-    });
-  });
-})();
-</script>
-</body>
-</html>
