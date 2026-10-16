@@ -121,12 +121,12 @@ a { color: var(--blue); }
 /* Pulse via transform/opacity (compositor-only) instead of animating box-shadow */
 .banner-badge::after {
   content: ""; position: absolute; inset: 0; z-index: -1;
-  border-radius: inherit; background: var(--green);
+  border-radius: inherit; border: 2px solid var(--green);
   animation: pulse-badge 2.4s infinite;
 }
 @keyframes pulse-badge {
   from { transform: scale(1);   opacity: .7; }
-  to   { transform: scale(1.7, 2); opacity: 0; }
+  to   { transform: scale(1.35, 1.7); opacity: 0; }
 }
 
 .banner-msg { flex: 1 1 260px; min-width: 0; }
@@ -551,7 +551,7 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 2.2s f
 
 <header class="site-header">
   <div class="animated-logo-stage">
-    <img src="logo.jpg" alt="SWID-SHRK Research Group logo" class="logo-img" width="1024" height="1008" fetchpriority="high" decoding="async">
+    <img src="logo-transparent.webp" alt="SWID-SHRK Research Group logo" class="logo-img" width="1024" height="1008" fetchpriority="high" decoding="async">
     <span class="sparkle s1" aria-hidden="true"></span>
     <span class="sparkle s2" aria-hidden="true"></span>
     <span class="sparkle s3" aria-hidden="true"></span>
