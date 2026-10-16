@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --green: #00ff41;
+    --blue: #00b8ff;
+    --red: #ff3131;
+    --mint: #00e676;
+    --bg: #050505;
+    --line: #333333;
+  }
+
+  html.light {
+    --green: #047857;
+    --blue: #0284c7;
+    --red: #dc2626;
+    --mint: #059669;
+    --bg: #f8fafc;
+    --line: #cbd5e1;
+  }
+
+  body {
+    background-color: var(--bg);
+    font-family: 'Roboto Mono', monospace;
+    overflow-x: hidden;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+}
+
+/* Custom Cosmic Background animations */
+@keyframes cosmic-pulse {
+  0% { transform: scale(1.01); opacity: 0.85; }
+  100% { transform: scale(1.1); opacity: 1; }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.6); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes pulse-badge {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.4, 1.8); opacity: 0; }
+}
+
+@keyframes logoFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.88);
+    filter: drop-shadow(0 0 0px rgba(0, 184, 255, 0));
+  }
+  50% {
+    opacity: 0.7;
+    filter: drop-shadow(0 0 30px rgba(0, 184, 255, 0.6));
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: drop-shadow(0 0 20px rgba(0, 184, 255, 0.45));
+  }
+}
+
+.animate-logo-fade-in {
+  animation: logoFadeIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform, filter;
+}
+
+.animate-cosmic {
+  animation: cosmic-pulse 30s infinite alternate ease-in-out;
+}
+
+.animate-badge-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid #00ff41;
+  animation: pulse-badge 2.4s infinite;
+}
+
+.font-cinzel {
+  font-family: 'Cinzel Decorative', Georgia, serif;
+}
+
+.font-orbitron {
+  font-family: 'Orbitron', system-ui, sans-serif;
+}
+
+.font-allura {
+  font-family: 'Allura', 'Segoe Script', cursive;
+}
+
+/* Glowing utilities */
+.glow-green {
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.7);
+}
+
+.glow-blue {
+  text-shadow: 0 0 10px rgba(0, 184, 255, 0.7);
+}
+
+.box-glow-blue {
+  box-shadow: 0 0 25px rgba(0, 184, 255, 0.25);
+}
+
+.box-glow-green {
+  box-shadow: 0 0 25px rgba(0, 255, 65, 0.25);
+}
