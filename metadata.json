@@ -1,0 +1,8 @@
+{
+  "name": "SWID-SHRK — Mechanical & Aerospace Research Lab",
+  "description": "SWID-SHRK research lab: fatigue and fracture, neural biomechanics, energy-absorbing metamaterials, and fracture in cementitious materials. Abaqus simulations, tutorials, and publications.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
