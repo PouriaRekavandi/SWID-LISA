@@ -191,38 +191,16 @@ a { color: var(--blue); }
   filter: blur(12px);
 }
 
-.logo-layer {
+.logo-img {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: contain; pointer-events: none;
-  filter: url(#logo-recolor);
+  filter: drop-shadow(0 0 10px rgba(0,184,255,.55)) drop-shadow(0 0 28px rgba(0,184,255,.25));
 }
-.logo-layer.is-missing { display: none; }
+.logo-img.is-missing { display: none; }
 
-.layer-frame     { z-index: 1; }
-.layer-signature { z-index: 2; }
-.layer-text      { z-index: 3; }
-.layer-ls        { z-index: 4; filter: url(#logo-recolor-solid); }
-
-/* Knock the signature out wherever ls.png has ink */
-.layer-signature {
-  -webkit-mask: linear-gradient(#000, #000) center / 100% 100% no-repeat,
-                url("ls.png") center / 100% 100% no-repeat;
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000, #000) center / 100% 100% no-repeat,
-        url("ls.png") center / 100% 100% no-repeat;
-  mask-composite: exclude;
-}
-
-html.js .layer-frame     { opacity: 0; animation: frame-reveal 1.2s var(--ease) .2s forwards; }
-html.js .layer-signature { opacity: 0; clip-path: inset(0 100% 0 0); animation: signature-write 1.3s ease 1.3s forwards; }
-html.js .layer-text      { opacity: 0; animation: text-reveal 1s ease 2.4s forwards; }
-html.js .layer-ls        { opacity: 0; animation: ls-reveal 1.2s ease 3.3s forwards; }
-
-@keyframes frame-reveal    { from { opacity: 0; transform: scale(.94); } to { opacity: .95; transform: none; } }
-@keyframes signature-write { from { opacity: 1; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0); } }
-@keyframes text-reveal     { from { opacity: 0; transform: translateY(8px); } to { opacity: .95; transform: none; } }
-@keyframes ls-reveal       { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
+html.js .logo-img { opacity: 0; animation: logo-reveal 1.6s var(--ease) .3s forwards; }
+@keyframes logo-reveal { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
 
 /* Sparkles */
 .sparkle {
@@ -232,11 +210,11 @@ html.js .layer-ls        { opacity: 0; animation: ls-reveal 1.2s ease 3.3s forwa
   box-shadow: 0 0 4px 2px #fff, 0 0 8px 3px rgba(190,240,255,.7), 0 0 14px 5px rgba(0,184,255,.4);
   animation: twinkle var(--d) infinite ease-in-out var(--delay);
 }
-.s1 { top: 16%; left: 49%; --d: 2s;   --delay: 4.2s; }
-.s2 { top: 45%; left: 16%; --d: 3.5s; --delay: 4.4s; }
-.s3 { top: 38%; left: 83%; --d: 2.8s; --delay: 4.3s; }
-.s4 { top: 72%; left: 22%; --d: 4s;   --delay: 4.6s; }
-.s5 { top: 82%; left: 52%; --d: 2.5s; --delay: 4.5s; }
+.s1 { top: 16%; left: 49%; --d: 2s;   --delay: 1.8s; }
+.s2 { top: 45%; left: 16%; --d: 3.5s; --delay: 2s; }
+.s3 { top: 38%; left: 83%; --d: 2.8s; --delay: 1.9s; }
+.s4 { top: 72%; left: 22%; --d: 4s;   --delay: 2.2s; }
+.s5 { top: 82%; left: 52%; --d: 2.5s; --delay: 2.1s; }
 
 @keyframes twinkle {
   0%, 100% { opacity: 0; transform: scale(.5); }
@@ -277,9 +255,9 @@ html.js .layer-ls        { opacity: 0; animation: ls-reveal 1.2s ease 3.3s forwa
 .miga-ig { color: #fff;        text-shadow: 0 0 5px rgba(255,255,255,.65); }
 .miga-a  { color: var(--mint); text-shadow: 0 0 5px rgba(0,230,118,.7); }
 
-html.js .header-title-block h1 { opacity: 0; animation: fade-up 1.4s ease 4.2s forwards; }
-html.js .header-tagline        { opacity: 0; animation: fade-up 1.2s ease 4.5s forwards; }
-html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 4.8s forwards; }
+html.js .header-title-block h1 { opacity: 0; animation: fade-up 1.4s ease 1.6s forwards; }
+html.js .header-tagline        { opacity: 0; animation: fade-up 1.2s ease 1.9s forwards; }
+html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 2.2s forwards; }
 
 @keyframes fade-up { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
@@ -539,7 +517,7 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 4.8s f
     transition-duration: .001ms !important;
     scroll-behavior: auto !important;
   }
-  html.js .logo-layer, html.js .header-title-block h1,
+  html.js .logo-img, html.js .header-title-block h1,
   html.js .header-tagline, html.js .miga-mark {
     opacity: 1 !important; transform: none !important; clip-path: none !important;
   }
@@ -563,35 +541,6 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 4.8s f
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
 
-<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;overflow:hidden">
-  <defs>
-    <!-- Translucent glow: frame / signature / text -->
-    <filter id="logo-recolor" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-      <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" result="lum"/>
-      <feComponentTransfer in="lum" result="inv"><feFuncA type="table" tableValues="1 1 1 .85 .35 0 0"/></feComponentTransfer>
-      <feComposite in="inv" in2="SourceAlpha" operator="in" result="mask"/>
-      <feFlood flood-color="#f2fbff" flood-opacity=".96" result="white"/>
-      <feComposite in="white" in2="mask" operator="in" result="art"/>
-      <feGaussianBlur in="mask" stdDeviation="3.5" result="blur"/>
-      <feFlood flood-color="#00b8ff" flood-opacity=".8" result="blue"/>
-      <feComposite in="blue" in2="blur" operator="in" result="glow"/>
-      <feMerge><feMergeNode in="glow"/><feMergeNode in="art"/></feMerge>
-    </filter>
-    <!-- Opaque variant: LS mark occludes the signature behind it -->
-    <filter id="logo-recolor-solid" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-      <feColorMatrix in="SourceGraphic" type="luminanceToAlpha" result="lum"/>
-      <feComponentTransfer in="lum" result="inv"><feFuncA type="table" tableValues="1 1 1 1 .6 0 0"/></feComponentTransfer>
-      <feComposite in="inv" in2="SourceAlpha" operator="in" result="mask"/>
-      <feFlood flood-color="#f2fbff" flood-opacity="1" result="white"/>
-      <feComposite in="white" in2="mask" operator="in" result="art"/>
-      <feGaussianBlur in="mask" stdDeviation="2.5" result="blur"/>
-      <feFlood flood-color="#00b8ff" flood-opacity=".75" result="blue"/>
-      <feComposite in="blue" in2="blur" operator="in" result="glow"/>
-      <feMerge><feMergeNode in="glow"/><feMergeNode in="art"/></feMerge>
-    </filter>
-  </defs>
-</svg>
-
 <div class="project-banner">
   <div class="banner-text">
     <span class="banner-badge">Active Project</span>
@@ -602,10 +551,7 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 4.8s f
 
 <header class="site-header">
   <div class="animated-logo-stage">
-    <img src="frame.png"     alt="" class="logo-layer layer-frame"     width="480" height="480" fetchpriority="high" decoding="async">
-    <img src="signature.png" alt="" class="logo-layer layer-signature" width="480" height="480" decoding="async">
-    <img src="text.png"      alt="SWID-LISA" class="logo-layer layer-text" width="480" height="480" fetchpriority="high" decoding="async">
-    <img src="ls.png"        alt="" class="logo-layer layer-ls"        width="480" height="480" decoding="async">
+    <img src="logo.jpg" alt="SWID-SHRK Research Group logo" class="logo-img" width="1024" height="1008" fetchpriority="high" decoding="async">
     <span class="sparkle s1" aria-hidden="true"></span>
     <span class="sparkle s2" aria-hidden="true"></span>
     <span class="sparkle s3" aria-hidden="true"></span>
@@ -798,7 +744,7 @@ html.js .miga-mark             { opacity: 0; animation: fade-up 1.2s ease 4.8s f
   document.getElementById("year").textContent = new Date().getFullYear();
 
   /* Hide any logo layer whose file fails to load */
-  document.querySelectorAll(".logo-layer").forEach(img => {
+  document.querySelectorAll(".logo-img").forEach(img => {
     const hide = () => img.classList.add("is-missing");
     if (img.complete && img.naturalWidth === 0) hide();
     img.addEventListener("error", hide);
