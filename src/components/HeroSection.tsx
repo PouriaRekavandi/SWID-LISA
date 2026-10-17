@@ -4,6 +4,7 @@ import { ThemeSwitcher } from './ThemeSwitcher';
 import { DarkMatterSimulation } from './DarkMatterSimulation';
 import { ArrowRight, GraduationCap, PlayCircle, Bot, Sparkles } from 'lucide-react';
 import logoTransparent from '../assets/logo_transparent.png';
+import logoFallback from '../assets/logo.jpg';
 
 interface HeroSectionProps {
   onSelectTab: (tab: TabKey) => void;
@@ -14,10 +15,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectTab }) => {
   const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    // Trigger smooth fade-in after component mounts
+    // Check if browser/Chrome already cached the image
+    if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) {
+      setLogoVisible(true);
+    }
+    // Trigger smooth fade-in
     const timer = setTimeout(() => {
       setLogoVisible(true);
-    }, 150);
+    }, 120);
     return () => clearTimeout(timer);
   }, []);
 
@@ -38,7 +43,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectTab }) => {
             ref={imgRef}
             src={logoTransparent}
             alt="SWID-SHRK Research Group Crest Logo"
+            loading="eager"
+            decoding="async"
             onLoad={() => setLogoVisible(true)}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = logoFallback;
+              setLogoVisible(true);
+            }}
             className={`w-full h-full object-contain select-none transition-all duration-1000 ease-out ${
               logoVisible
                 ? 'opacity-100 scale-100 filter drop-shadow-[0_4px_24px_rgba(0,184,255,0.4)] dark:drop-shadow-[0_0_32px_rgba(0,184,255,0.75)]'
@@ -72,7 +83,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectTab }) => {
 
       {/* Main Titles */}
       <div className="relative z-10 flex flex-col items-center text-center max-w-4xl px-2">
-        <h1 className="font-allura hero-title-cursive text-4xl sm:text-5xl md:text-7xl font-semibold leading-tight tracking-wide mb-3 select-none">
+        <h1 className="font-allura hero-title-cursive text-black dark:text-white text-4xl sm:text-5xl md:text-7xl font-semibold leading-tight tracking-wide mb-3 select-none">
           Something Weird is Discovering…!
         </h1>
         <p className="dark:text-zinc-400 text-slate-600 font-mono text-xs sm:text-sm md:text-base tracking-[0.15em] uppercase mb-4">

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShieldCheck } from 'lucide-react';
 import profilePhoto from '../assets/profile.png';
+import profileFallback from '../assets/profile.jpg';
 
 export const ProfileSection: React.FC = () => {
   const [imageLoaded, setImageLoaded] = useState(true);
@@ -23,8 +24,17 @@ export const ProfileSection: React.FC = () => {
                 <img
                   src={profilePhoto}
                   alt="Pouria Hejazi Rekavandi"
+                  loading="eager"
+                  decoding="async"
                   className="w-full h-full object-cover object-top select-none transition-transform duration-700 group-hover/avatar:scale-110"
-                  onError={() => setImageLoaded(false)}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    if (target.src !== profileFallback) {
+                      target.src = profileFallback;
+                    } else {
+                      setImageLoaded(false);
+                    }
+                  }}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center dark:bg-gradient-to-b dark:from-[#102538] dark:to-[#050b11] bg-gradient-to-b from-sky-50 to-slate-100">

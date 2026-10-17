@@ -366,6 +366,8 @@ export const AbaqusGallery: React.FC<AbaqusGalleryProps> = ({ onNotify }) => {
             <img
               src={sim.customImage}
               alt={sim.title}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover"
             />
             {/* Abaqus FEA Color Map Blend Overlay */}
@@ -1135,7 +1137,7 @@ export const AbaqusGallery: React.FC<AbaqusGalleryProps> = ({ onNotify }) => {
                   title={sim.title}
                 >
                   {sim.customImage ? (
-                    <img src={sim.customImage} alt="" className="w-full h-full object-cover" />
+                    <img src={sim.customImage} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full bg-[#04080e] flex items-center justify-center text-[8px] font-mono font-bold text-[#00b8ff]">
                       SIM 0{i + 1}
