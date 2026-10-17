@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { TabKey } from '../types';
 import { ThemeSwitcher } from './ThemeSwitcher';
 import { DarkMatterSimulation } from './DarkMatterSimulation';
@@ -10,6 +10,17 @@ interface HeroSectionProps {
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectTab }) => {
+  const [logoVisible, setLogoVisible] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    // Trigger smooth fade-in after component mounts
+    const timer = setTimeout(() => {
+      setLogoVisible(true);
+    }, 150);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <header className="relative isolate flex flex-col items-center justify-center min-h-[580px] sm:min-h-[660px] py-16 px-4 overflow-hidden dark:bg-[#030712]/75 bg-gradient-to-b from-slate-100/80 via-white/70 to-slate-100/80 backdrop-blur-[1px] dark:border-b-2 dark:border-[#00ff41] border-b-2 border-sky-600 transition-colors duration-200">
       {/* Interactive Universe Dark Matter Gravitational Cosmic Web Simulation */}
@@ -20,13 +31,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectTab }) => {
         <ThemeSwitcher variant="hero" />
       </div>
 
-      {/* Pure Transparent Logo Crest (No Square Border, No Square Background Card) */}
+      {/* Pure Transparent Logo Crest Reverified from Uploaded Master Asset */}
       <div className="relative z-10 flex flex-col items-center mb-6 pointer-events-none">
         <div className="relative flex items-center justify-center w-[250px] sm:w-[320px] md:w-[380px] aspect-square group transition-all duration-300 pointer-events-auto">
           <img
+            ref={imgRef}
             src={logoTransparent}
             alt="SWID-SHRK Research Group Crest Logo"
-            className="w-full h-full object-contain select-none animate-logo-fade-in transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_4px_20px_rgba(0,184,255,0.3)] dark:drop-shadow-[0_0_28px_rgba(0,184,255,0.7)]"
+            onLoad={() => setLogoVisible(true)}
+            className={`w-full h-full object-contain select-none transition-all duration-1000 ease-out ${
+              logoVisible
+                ? 'opacity-100 scale-100 filter drop-shadow-[0_4px_24px_rgba(0,184,255,0.4)] dark:drop-shadow-[0_0_32px_rgba(0,184,255,0.75)]'
+                : 'opacity-0 scale-90 filter drop-shadow-none'
+            } group-hover:scale-105`}
           />
 
           {/* Twinkling Sparkles on Crest */}
