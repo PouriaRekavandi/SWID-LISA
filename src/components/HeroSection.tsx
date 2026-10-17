@@ -4,7 +4,6 @@ import { ThemeSwitcher } from './ThemeSwitcher';
 import { DarkMatterSimulation } from './DarkMatterSimulation';
 import { ArrowRight, GraduationCap, PlayCircle, Bot, Sparkles } from 'lucide-react';
 import logoTransparent from '../assets/logo_transparent.png';
-import logoFallback from '../assets/logo.jpg';
 
 interface HeroSectionProps {
   onSelectTab: (tab: TabKey) => void;
@@ -27,10 +26,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectTab }) => {
           <img
             src={logoTransparent}
             alt="SWID-SHRK Research Group Crest Logo"
-            className="w-full h-full object-contain select-none animate-logo-fade-in transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_4px_20px_rgba(0,184,255,0.4)] dark:drop-shadow-[0_0_28px_rgba(0,184,255,0.7)] dark:brightness-110"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = logoFallback;
-            }}
+            className="w-full h-full object-contain select-none animate-logo-fade-in transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_4px_20px_rgba(0,184,255,0.3)] dark:drop-shadow-[0_0_28px_rgba(0,184,255,0.7)]"
           />
 
           {/* Twinkling Sparkles on Crest */}
@@ -59,7 +55,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectTab }) => {
 
       {/* Main Titles */}
       <div className="relative z-10 flex flex-col items-center text-center max-w-4xl px-2">
-        <h1 className="font-allura text-4xl sm:text-5xl md:text-7xl dark:text-white text-slate-900 font-normal leading-tight tracking-wide dark:drop-shadow-[0_0_3px_rgba(255,255,255,0.9)] drop-shadow-sm mb-3">
+        <h1 className="font-allura hero-title-cursive text-4xl sm:text-5xl md:text-7xl font-semibold leading-tight tracking-wide mb-3 select-none">
           Something Weird is Discovering…!
         </h1>
         <p className="dark:text-zinc-400 text-slate-600 font-mono text-xs sm:text-sm md:text-base tracking-[0.15em] uppercase mb-4">
