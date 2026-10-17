@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { TabKey } from '../types';
 import { ThemeSwitcher } from './ThemeSwitcher';
-import { DarkMatterSimulation } from './DarkMatterSimulation';
 import { ArrowRight, GraduationCap, PlayCircle, Bot, Sparkles } from 'lucide-react';
 import logoTransparent from '../assets/logo_transparent.png';
 import logoFallback from '../assets/logo.jpg';
@@ -13,11 +12,6 @@ interface HeroSectionProps {
 export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectTab }) => {
   return (
     <header className="relative isolate flex flex-col items-center justify-center min-h-[500px] sm:min-h-[640px] py-12 sm:py-16 px-4 overflow-hidden dark:bg-[#030712]/75 bg-gradient-to-b from-slate-100/80 via-white/70 to-slate-100/80 backdrop-blur-[1px] dark:border-b-2 dark:border-[#00ff41] border-b-2 border-sky-600 transition-colors duration-200">
-      {/* Interactive Universe Dark Matter Gravitational Cosmic Web Simulation (desktop overlay, mobile uses unified global CosmicBackground) */}
-      <div className="hidden sm:block absolute inset-0 pointer-events-none">
-        <DarkMatterSimulation className="opacity-95" />
-      </div>
-
       {/* Persistent Theme Toggle in Header */}
       <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30">
         <ThemeSwitcher variant="hero" />

@@ -283,9 +283,9 @@ export const CosmicBackground: React.FC<CosmicBackgroundProps> = ({ className = 
     const animate = (now: number) => {
       animationFrameId = requestAnimationFrame(animate);
 
-      if (isHidden) return;
+      if (isHidden || width <= 0 || height <= 0) return;
 
-      const dt = Math.min((now - lastTime) / 16.66, 2.5);
+      const dt = Math.min(Math.max(0.1, (now - lastTime) / 16.66 || 1), 2.5);
       lastTime = now;
 
       const colors = getThemeColors();
@@ -354,7 +354,7 @@ export const CosmicBackground: React.FC<CosmicBackgroundProps> = ({ className = 
         if (sw.alpha > 0 && sw.radius < sw.maxRadius) {
           ctx.save();
           ctx.strokeStyle = `${colors.mouseAura}${sw.alpha})`;
-          ctx.lineWidth = 2 * (1 - sw.radius / sw.maxRadius);
+          ctx.lineWidth = Math.max(0.1, 2 * (1 - sw.radius / sw.maxRadius));
           ctx.beginPath();
           ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
           ctx.stroke();
