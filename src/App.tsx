@@ -12,12 +12,27 @@ import { ContactSection } from './components/ContactSection';
 import { AIChatSection } from './components/AIChatSection';
 import { AbaqusGallery } from './components/AbaqusGallery';
 import { Footer } from './components/Footer';
+import { CosmicBackground } from './components/CosmicBackground';
 import { ReadingProgressBar } from './components/ReadingProgressBar';
 import { CheckCircle2, AlertCircle, Bot, Sparkles } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabKey>('home');
   const [toast, setToast] = useState<{ message: string; isError?: boolean } | null>(null);
+
+  // Guarantee that the website always opens from the very top on initial load
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual';
+      }
+      window.scrollTo(0, 0);
+      const timer = setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const showToast = (message: string, isError = false) => {
     setToast({ message, isError });
@@ -32,7 +47,10 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen dark:bg-[#050505] bg-[#f8fafc] dark:text-[#e0e0e0] text-slate-900 flex flex-col font-mono selection:bg-[#00ff41]/20 selection:text-[#00ff41] transition-colors duration-200">
+    <div className="relative min-h-screen dark:bg-[#050505]/95 bg-[#f8fafc]/95 dark:text-[#e0e0e0] text-slate-900 flex flex-col font-mono selection:bg-[#00ff41]/20 selection:text-[#00ff41] transition-colors duration-200">
+      {/* Interactive Global Dark Matter Particle Simulation Canvas Background */}
+      <CosmicBackground />
+
       {/* Viewport Reading Progress Bar */}
       <ReadingProgressBar />
 

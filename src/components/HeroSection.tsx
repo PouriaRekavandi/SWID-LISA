@@ -1,6 +1,7 @@
 import React from 'react';
 import { TabKey } from '../types';
 import { ThemeSwitcher } from './ThemeSwitcher';
+import { DarkMatterSimulation } from './DarkMatterSimulation';
 import { ArrowRight, GraduationCap, PlayCircle, Bot, Sparkles } from 'lucide-react';
 import logoTransparent from '../assets/logo_transparent.png';
 import logoFallback from '../assets/logo.jpg';
@@ -11,26 +12,22 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectTab }) => {
   return (
-    <header className="relative isolate flex flex-col items-center justify-center min-h-[580px] sm:min-h-[660px] py-16 px-4 overflow-hidden dark:bg-black bg-gradient-to-b from-slate-100 via-white to-slate-100 dark:border-b-2 dark:border-[#00ff41] border-b-2 border-sky-600 transition-colors duration-200">
+    <header className="relative isolate flex flex-col items-center justify-center min-h-[580px] sm:min-h-[660px] py-16 px-4 overflow-hidden dark:bg-[#030712]/75 bg-gradient-to-b from-slate-100/80 via-white/70 to-slate-100/80 backdrop-blur-[1px] dark:border-b-2 dark:border-[#00ff41] border-b-2 border-sky-600 transition-colors duration-200">
+      {/* Interactive Universe Dark Matter Gravitational Cosmic Web Simulation */}
+      <DarkMatterSimulation className="opacity-95" />
+
       {/* Persistent Theme Toggle in Header */}
       <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30">
         <ThemeSwitcher variant="hero" />
       </div>
 
-      {/* Background radial effects */}
-      <div className="absolute inset-[-4%] -z-10 pointer-events-none opacity-60">
-        <div className="absolute inset-0 dark:bg-[radial-gradient(circle_at_30%_25%,rgba(255,255,255,0.08),transparent_45%)] bg-[radial-gradient(circle_at_30%_25%,rgba(2,132,199,0.06),transparent_45%)]" />
-        <div className="absolute inset-0 dark:bg-[radial-gradient(circle_at_72%_70%,rgba(0,184,255,0.12),transparent_50%)] bg-[radial-gradient(circle_at_72%_70%,rgba(16,185,129,0.05),transparent_50%)]" />
-        <div className="absolute inset-0 dark:bg-[repeating-linear-gradient(to_bottom,rgba(255,255,255,0.02)_0_1px,transparent_1px_3px)] bg-[repeating-linear-gradient(to_bottom,rgba(0,0,0,0.015)_0_1px,transparent_1px_3px)]" />
-      </div>
-
-      {/* Pure Transparent Logo Crest (No Circle Border, No Background Photo) */}
-      <div className="relative z-10 flex flex-col items-center mb-6">
-        <div className="relative flex items-center justify-center w-[250px] sm:w-[320px] md:w-[380px] aspect-square group transition-all duration-300">
+      {/* Pure Transparent Logo Crest (No Square Border, No Square Background Card) */}
+      <div className="relative z-10 flex flex-col items-center mb-6 pointer-events-none">
+        <div className="relative flex items-center justify-center w-[250px] sm:w-[320px] md:w-[380px] aspect-square group transition-all duration-300 pointer-events-auto">
           <img
             src={logoTransparent}
             alt="SWID-SHRK Research Group Crest Logo"
-            className="w-full h-full object-contain select-none animate-logo-fade-in transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_4px_16px_rgba(0,184,255,0.35)] dark:drop-shadow-[0_0_24px_rgba(0,184,255,0.65)] dark:brightness-110"
+            className="w-full h-full object-contain select-none animate-logo-fade-in transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_4px_20px_rgba(0,184,255,0.4)] dark:drop-shadow-[0_0_28px_rgba(0,184,255,0.7)] dark:brightness-110"
             onError={(e) => {
               (e.target as HTMLImageElement).src = logoFallback;
             }}

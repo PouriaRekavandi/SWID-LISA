@@ -45,14 +45,26 @@ export const AIChatSection: React.FC<AIChatSectionProps> = ({ onNotify }) => {
   );
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const isInitialMount = useRef(true);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
   };
 
   useEffect(() => {
+    // Avoid scrolling on initial page load so the user starts at the top of the site
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
     scrollToBottom();
   }, [messages, isLoading]);
 
@@ -292,7 +304,7 @@ export const AIChatSection: React.FC<AIChatSectionProps> = ({ onNotify }) => {
       {/* Chat Thread */}
       <div className="flex flex-col h-[520px] rounded-xl dark:bg-[#080c10] bg-white border dark:border-zinc-800 border-slate-200 shadow-sm overflow-hidden">
         {/* Scrollable Message List */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+        <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
           {messages.map((m) => {
             const isUser = m.role === 'user';
             return (
