@@ -16,7 +16,10 @@ import {
   Search,
   X,
   Share2,
-  Check
+  Check,
+  BookOpen,
+  Sparkles,
+  Tag
 } from 'lucide-react';
 
 interface ResearchItem {
@@ -109,12 +112,54 @@ const RESEARCH_ITEMS: ResearchItem[] = [
 ];
 
 type SortOption = 'default' | 'name-asc' | 'name-desc' | 'tags-count';
+export type CategoryFilter = 'all' | 'module' | 'focus';
+
+const POPULAR_SEARCH_TOPICS = [
+  'Metamaterials',
+  'AntiPrism',
+  'Viscoelastic',
+  'Bouligand',
+  'Honeycomb',
+  'FEA',
+  'Fracture',
+  'DIC'
+];
+
+const HighlightText: React.FC<{ text: string; query: string }> = ({ text, query }) => {
+  const trimmed = query.trim();
+  if (!trimmed) return <>{text}</>;
+  try {
+    const escaped = trimmed.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escaped})`, 'gi');
+    const parts = text.split(regex);
+    if (parts.length <= 1) return <>{text}</>;
+    return (
+      <>
+        {parts.map((part, i) =>
+          regex.test(part) ? (
+            <mark
+              key={i}
+              className="dark:bg-[#00ff41]/25 dark:text-[#00ff41] bg-amber-200 text-amber-950 px-1 py-0.5 rounded font-bold"
+            >
+              {part}
+            </mark>
+          ) : (
+            part
+          )
+        )}
+      </>
+    );
+  } catch {
+    return <>{text}</>;
+  }
+};
 
 export interface ResearchSectionProps {
   onNotify?: (message: string, isError?: boolean) => void;
 }
 
 export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) => {
+  const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>('all');
   const [selectedTag, setSelectedTag] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('default');
@@ -151,6 +196,28 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
+
+  // Automatically expand matching module accordions when user enters a search query
+  useEffect(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (q.length > 0) {
+      const matchedModuleIds: Record<string, boolean> = {};
+      RESEARCH_ITEMS.filter((i) => i.category === 'module').forEach((item) => {
+        const matches =
+          item.title.toLowerCase().includes(q) ||
+          item.shortTitle.toLowerCase().includes(q) ||
+          item.desc.toLowerCase().includes(q) ||
+          (item.highlight && item.highlight.toLowerCase().includes(q)) ||
+          item.tags.some((t) => t.toLowerCase().includes(q));
+        if (matches) {
+          matchedModuleIds[item.id] = true;
+        }
+      });
+      if (Object.keys(matchedModuleIds).length > 0) {
+        setOpenAccordions((prev) => ({ ...prev, ...matchedModuleIds }));
+      }
+    }
+  }, [searchQuery]);
 
   const toggleAccordion = (id: string) => {
     setOpenAccordions((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -231,6 +298,15 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
 
   const allTags = ['All', 'Biomechanics', 'Metamaterials', 'Fracture', 'FEA', 'Composites'];
 
+  // Category counts
+  const categoryCounts = useMemo(() => {
+    return {
+      all: RESEARCH_ITEMS.length,
+      module: RESEARCH_ITEMS.filter((item) => item.category === 'module').length,
+      focus: RESEARCH_ITEMS.filter((item) => item.category === 'focus').length,
+    };
+  }, []);
+
   // Tag counts
   const tagCounts = useMemo(() => {
     const counts: Record<string, number> = { All: RESEARCH_ITEMS.length };
@@ -243,16 +319,25 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
   // Filtered & Sorted items
   const filteredItems = useMemo(() => {
     let result = RESEARCH_ITEMS.filter((item) => {
+      // Category filter
+      const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
+
+      // Tag filter
       const matchesTag = selectedTag === 'All' || item.tags.includes(selectedTag);
+
+      // Search keyword filter
       const query = searchQuery.trim().toLowerCase();
       const matchesSearch =
         !query ||
         item.title.toLowerCase().includes(query) ||
+        item.shortTitle.toLowerCase().includes(query) ||
         item.desc.toLowerCase().includes(query) ||
         (item.highlight && item.highlight.toLowerCase().includes(query)) ||
+        (item.numeral && `module ${item.numeral}`.toLowerCase().includes(query)) ||
+        (item.numeral && item.numeral.toLowerCase() === query) ||
         item.tags.some((t) => t.toLowerCase().includes(query));
 
-      return matchesTag && matchesSearch;
+      return matchesCategory && matchesTag && matchesSearch;
     });
 
     // Sorting
@@ -270,7 +355,7 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
     });
 
     return result;
-  }, [selectedTag, searchQuery, sortBy]);
+  }, [selectedCategory, selectedTag, searchQuery, sortBy]);
 
   const modules = filteredItems.filter((i) => i.category === 'module');
   const focusAreas = filteredItems.filter((i) => i.category === 'focus');
@@ -281,6 +366,7 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
   };
 
   const resetFilters = () => {
+    setSelectedCategory('all');
     setSelectedTag('All');
     setSearchQuery('');
     setSortBy('default');
@@ -304,143 +390,326 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
       {/* Research Metrics Section with Animated Counting Numbers */}
       <ResearchMetrics />
 
-      {/* Interactive Filter & Sort Toolbar */}
-      <div className="dark:bg-[#11161d] bg-white border dark:border-[#22303c] border-slate-200 rounded-xl p-4 sm:p-5 shadow-sm space-y-4">
-        {/* Top Controls: Search + Sort + Expand */}
-        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-          {/* Keyword Search */}
-          <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <input
-              type="search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Filter topics (e.g. Viscoelastic, Honeycomb, DIC)..."
-              className="w-full pl-10 pr-4 py-2 dark:bg-[#080d14] bg-slate-50 border dark:border-[#2a3b4c] border-slate-300 focus:border-sky-600 dark:focus:border-[#00b8ff] rounded-lg text-xs sm:text-sm dark:text-white text-slate-900 font-mono placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-sky-600 focus:bg-white"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white cursor-pointer"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
+      {/* Interactive Search Bar & Category Filter Toolbar */}
+      <div className="dark:bg-[#11161d] bg-white border dark:border-[#22303c] border-slate-200 rounded-xl p-4 sm:p-6 shadow-sm space-y-5">
+        {/* Row 1: Search Bar with Live Result Feedback */}
+        <div className="space-y-2.5">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 dark:text-[#00b8ff] text-sky-600 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') setSearchQuery('');
+                }}
+                placeholder="Search projects, topics, materials (e.g. Viscoelastic, Bouligand, DIC, AntiPrism)..."
+                aria-label="Search research projects and topics"
+                className="w-full pl-10 pr-24 py-2.5 dark:bg-[#080d14] bg-slate-50 border dark:border-[#2a3b4c] border-slate-300 focus:border-sky-600 dark:focus:border-[#00b8ff] rounded-lg text-xs sm:text-sm dark:text-white text-slate-900 font-mono placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-sky-500/20 dark:focus:ring-[#00b8ff]/20 transition-all"
+              />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+                {searchQuery ? (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    title="Clear search (ESC)"
+                    aria-label="Clear search query"
+                    className="p-1 rounded text-zinc-400 hover:text-red-500 hover:bg-slate-200 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                ) : (
+                  <span className="hidden sm:inline-block text-[10px] font-mono dark:text-zinc-500 text-slate-400 border dark:border-zinc-800 border-slate-200 px-1.5 py-0.5 rounded">
+                    ESC
+                  </span>
+                )}
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full font-bold dark:bg-[#00ff41]/10 bg-emerald-100 dark:text-[#00ff41] text-emerald-800 border dark:border-[#00ff41]/30 border-emerald-300">
+                  {filteredItems.length} found
+                </span>
+              </div>
+            </div>
+
+            {/* Quick Actions: Sort + Expand All */}
+            <div className="flex items-center gap-2 flex-wrap justify-between sm:justify-end flex-none">
+              <div className="flex items-center gap-1.5 dark:bg-[#080d14] bg-slate-50 border dark:border-[#2a3b4c] border-slate-300 px-3 py-2 rounded-lg text-xs font-mono">
+                <ArrowUpDown className="w-3.5 h-3.5 dark:text-[#00b8ff] text-sky-600 flex-none" />
+                <label htmlFor="sort-select" className="text-zinc-400 sr-only">Sort by</label>
+                <select
+                  id="sort-select"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as SortOption)}
+                  className="bg-transparent dark:text-zinc-200 text-slate-700 focus:outline-none cursor-pointer text-xs"
+                >
+                  <option value="default">Default Order</option>
+                  <option value="name-asc">Title (A &rarr; Z)</option>
+                  <option value="name-desc">Title (Z &rarr; A)</option>
+                  <option value="tags-count">Most Related Tags</option>
+                </select>
+              </div>
+
+              {selectedCategory !== 'focus' && (
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={expandAll}
+                    className="px-2.5 py-2 text-[11px] font-mono dark:bg-zinc-800 bg-slate-100 dark:hover:bg-zinc-700 hover:bg-slate-200 dark:text-zinc-300 text-slate-700 rounded transition-colors cursor-pointer"
+                    title="Expand all accordion modules"
+                  >
+                    Expand All
+                  </button>
+                  <button
+                    type="button"
+                    onClick={collapseAll}
+                    className="px-2.5 py-2 text-[11px] font-mono dark:bg-zinc-800 bg-slate-100 dark:hover:bg-zinc-700 hover:bg-slate-200 dark:text-zinc-300 text-slate-700 rounded transition-colors cursor-pointer"
+                    title="Collapse all accordion modules"
+                  >
+                    Collapse All
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
-          <div className="flex items-center gap-2.5 flex-wrap justify-between md:justify-end">
-            {/* Sort Selector */}
-            <div className="flex items-center gap-1.5 dark:bg-[#080d14] bg-slate-50 border dark:border-[#2a3b4c] border-slate-300 px-3 py-1.5 rounded-lg text-xs font-mono">
-              <ArrowUpDown className="w-3.5 h-3.5 dark:text-[#00b8ff] text-sky-600 flex-none" />
-              <label htmlFor="sort-select" className="text-zinc-400 sr-only">Sort by</label>
-              <select
-                id="sort-select"
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as SortOption)}
-                className="bg-transparent dark:text-zinc-200 text-slate-700 focus:outline-none cursor-pointer"
-              >
-                <option value="default">Default Order</option>
-                <option value="name-asc">Title (A &rarr; Z)</option>
-                <option value="name-desc">Title (Z &rarr; A)</option>
-                <option value="tags-count">Most Related Tags</option>
-              </select>
-            </div>
-
-            {/* Expand / Collapse All */}
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={expandAll}
-                className="px-2.5 py-1.5 text-[11px] font-mono dark:bg-zinc-800 bg-slate-100 dark:hover:bg-zinc-700 hover:bg-slate-200 dark:text-zinc-300 text-slate-700 rounded transition-colors cursor-pointer"
-                title="Expand all accordion modules"
-              >
-                Expand All
-              </button>
-              <button
-                type="button"
-                onClick={collapseAll}
-                className="px-2.5 py-1.5 text-[11px] font-mono dark:bg-zinc-800 bg-slate-100 dark:hover:bg-zinc-700 hover:bg-slate-200 dark:text-zinc-300 text-slate-700 rounded transition-colors cursor-pointer"
-                title="Collapse all accordion modules"
-              >
-                Collapse All
-              </button>
-            </div>
+          {/* Quick Search Topic Suggestions */}
+          <div className="flex items-center gap-1.5 flex-wrap text-xs font-mono pt-1">
+            <span className="text-[11px] dark:text-zinc-400 text-slate-500 flex items-center gap-1 mr-1">
+              <Sparkles className="w-3 h-3 dark:text-[#00b8ff] text-sky-600" />
+              Quick topics:
+            </span>
+            {POPULAR_SEARCH_TOPICS.map((topic) => {
+              const isCurrent = searchQuery.trim().toLowerCase() === topic.toLowerCase();
+              return (
+                <button
+                  key={topic}
+                  onClick={() => setSearchQuery(isCurrent ? '' : topic)}
+                  className={`px-2 py-0.5 rounded text-[11px] transition-all cursor-pointer ${
+                    isCurrent
+                      ? 'dark:bg-[#00b8ff] dark:text-black bg-sky-600 text-white font-bold'
+                      : 'dark:bg-[#080d14] bg-slate-100 dark:text-zinc-300 text-slate-700 dark:border dark:border-[#22303c] border border-slate-200 hover:border-sky-500 hover:text-sky-600'
+                  }`}
+                >
+                  {topic}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* Tag Filters Row */}
-        <div className="pt-2 border-t dark:border-zinc-800/80 border-slate-200 flex flex-wrap items-center gap-2">
-          <span className="text-[11px] font-mono uppercase tracking-wider dark:text-zinc-400 text-slate-500 flex items-center gap-1.5 mr-1">
-            <Filter className="w-3.5 h-3.5 dark:text-[#00ff41] text-emerald-600" />
-            Filter by Tag:
-          </span>
+        {/* Row 2: Category Filter Segmented Control */}
+        <div className="pt-3 border-t dark:border-zinc-800/80 border-slate-200 space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider dark:text-zinc-400 text-slate-500">
+              <Layers className="w-3.5 h-3.5 dark:text-[#00ff41] text-emerald-600" />
+              <span>Category Filter:</span>
+            </div>
 
-          {allTags.map((tag) => {
-            const isSelected = selectedTag === tag;
-            const count = tagCounts[tag] ?? 0;
-            return (
+            {/* Segmented Category Buttons */}
+            <div className="inline-flex rounded-lg p-1 dark:bg-[#080d14] bg-slate-100 border dark:border-[#22303c] border-slate-200 self-start sm:self-auto">
               <button
-                key={tag}
-                onClick={() => setSelectedTag(tag)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono transition-all duration-200 cursor-pointer ${
-                  isSelected
-                    ? 'dark:bg-[#00ff41] dark:text-black bg-emerald-700 text-white font-bold shadow-sm'
-                    : 'dark:bg-[#0c1219] bg-slate-100 dark:text-zinc-300 text-slate-700 dark:border-[#22303c] border-slate-200 hover:border-sky-500 hover:text-sky-700'
+                type="button"
+                onClick={() => setSelectedCategory('all')}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-mono transition-all cursor-pointer ${
+                  selectedCategory === 'all'
+                    ? 'dark:bg-[#00ff41] dark:text-black bg-emerald-700 text-white font-bold shadow-xs'
+                    : 'dark:text-zinc-300 text-slate-700 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                <span>{tag}</span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                    isSelected
-                      ? 'dark:bg-black/30 bg-emerald-900/40 text-white'
-                      : 'dark:bg-zinc-800 bg-slate-200 dark:text-zinc-400 text-slate-600'
-                  }`}
-                >
-                  {count}
+                <Layers className="w-3.5 h-3.5" />
+                <span>All Projects</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                  selectedCategory === 'all'
+                    ? 'dark:bg-black/30 bg-emerald-900/40 text-white'
+                    : 'dark:bg-zinc-800 bg-slate-200 dark:text-zinc-400 text-slate-600'
+                }`}>
+                  {categoryCounts.all}
                 </span>
               </button>
-            );
-          })}
 
-          {(selectedTag !== 'All' || searchQuery) && (
+              <button
+                type="button"
+                onClick={() => setSelectedCategory('module')}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-mono transition-all cursor-pointer ${
+                  selectedCategory === 'module'
+                    ? 'dark:bg-[#00ff41] dark:text-black bg-emerald-700 text-white font-bold shadow-xs'
+                    : 'dark:text-zinc-300 text-slate-700 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>Curriculum Modules</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                  selectedCategory === 'module'
+                    ? 'dark:bg-black/30 bg-emerald-900/40 text-white'
+                    : 'dark:bg-zinc-800 bg-slate-200 dark:text-zinc-400 text-slate-600'
+                }`}>
+                  {categoryCounts.module}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSelectedCategory('focus')}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-mono transition-all cursor-pointer ${
+                  selectedCategory === 'focus'
+                    ? 'dark:bg-[#00ff41] dark:text-black bg-emerald-700 text-white font-bold shadow-xs'
+                    : 'dark:text-zinc-300 text-slate-700 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                <Cpu className="w-3.5 h-3.5" />
+                <span>Focus Areas</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                  selectedCategory === 'focus'
+                    ? 'dark:bg-black/30 bg-emerald-900/40 text-white'
+                    : 'dark:bg-zinc-800 bg-slate-200 dark:text-zinc-400 text-slate-600'
+                }`}>
+                  {categoryCounts.focus}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* Row 3: Topic / Tag Filter Chips */}
+          <div className="pt-2 border-t dark:border-zinc-800/60 border-slate-200 flex flex-wrap items-center gap-2">
+            <span className="text-[11px] font-mono uppercase tracking-wider dark:text-zinc-400 text-slate-500 flex items-center gap-1.5 mr-1">
+              <Tag className="w-3.5 h-3.5 dark:text-[#00b8ff] text-sky-600" />
+              Topic / Tag:
+            </span>
+
+            {allTags.map((tag) => {
+              const isSelected = selectedTag === tag;
+              const count = tagCounts[tag] ?? 0;
+              return (
+                <button
+                  key={tag}
+                  onClick={() => setSelectedTag(tag)}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono transition-all duration-200 cursor-pointer ${
+                    isSelected
+                      ? 'dark:bg-[#00b8ff] dark:text-black bg-sky-700 text-white font-bold shadow-xs'
+                      : 'dark:bg-[#0c1219] bg-slate-100 dark:text-zinc-300 text-slate-700 dark:border-[#22303c] border-slate-200 hover:border-sky-500 hover:text-sky-700'
+                  }`}
+                >
+                  <span>{tag}</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                      isSelected
+                        ? 'dark:bg-black/30 bg-sky-900/40 text-white'
+                        : 'dark:bg-zinc-800 bg-slate-200 dark:text-zinc-400 text-slate-600'
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Row 4: Active Filter Badges Bar */}
+        {(selectedCategory !== 'all' || selectedTag !== 'All' || searchQuery.trim()) && (
+          <div className="pt-3 border-t dark:border-zinc-800/80 border-slate-200 flex flex-wrap items-center gap-2 text-xs font-mono">
+            <span className="text-[11px] uppercase tracking-wider dark:text-zinc-400 text-slate-500">
+              Active Filters:
+            </span>
+
+            {selectedCategory !== 'all' && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full dark:bg-[#00ff41]/10 bg-emerald-50 dark:border-[#00ff41]/40 border-emerald-300 border dark:text-[#00ff41] text-emerald-800 text-xs font-bold">
+                <span>Category: {selectedCategory === 'module' ? 'Curriculum Modules' : 'Focus Areas'}</span>
+                <button
+                  onClick={() => setSelectedCategory('all')}
+                  className="hover:text-red-500 cursor-pointer"
+                  title="Remove category filter"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+
+            {selectedTag !== 'All' && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full dark:bg-[#00b8ff]/10 bg-sky-50 dark:border-[#00b8ff]/40 border-sky-300 border dark:text-[#00b8ff] text-sky-800 text-xs font-bold">
+                <span>Topic: #{selectedTag}</span>
+                <button
+                  onClick={() => setSelectedTag('All')}
+                  className="hover:text-red-500 cursor-pointer"
+                  title="Remove topic filter"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+
+            {searchQuery.trim() && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full dark:bg-purple-500/10 bg-purple-50 dark:border-purple-500/40 border-purple-300 border dark:text-purple-300 text-purple-800 text-xs font-bold">
+                <span>Query: &ldquo;{searchQuery.trim()}&rdquo;</span>
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="hover:text-red-500 cursor-pointer"
+                  title="Remove search query"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+
             <button
               onClick={resetFilters}
               className="ml-auto text-xs font-mono dark:text-zinc-400 text-slate-500 hover:text-red-500 flex items-center gap-1 cursor-pointer transition-colors"
             >
               <X className="w-3.5 h-3.5" />
-              Reset Filters
+              Reset All Filters
             </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Active filter count status */}
       <div className="flex items-center justify-between text-xs font-mono dark:text-zinc-400 text-slate-500 px-1">
         <span>
           Showing <strong className="dark:text-[#00ff41] text-emerald-700">{filteredItems.length}</strong> of {RESEARCH_ITEMS.length} research projects
+          {selectedCategory !== 'all' && (
+            <span> in <strong className="dark:text-white text-slate-800">{selectedCategory === 'module' ? 'Curriculum Modules' : 'Focus Areas'}</strong></span>
+          )}
           {selectedTag !== 'All' && <span> under <strong className="dark:text-white text-slate-800">#{selectedTag}</strong></span>}
+          {searchQuery.trim() && <span> matching &ldquo;<strong className="dark:text-[#00b8ff] text-sky-700">{searchQuery.trim()}</strong>&rdquo;</span>}
         </span>
       </div>
 
       {filteredItems.length === 0 ? (
         <div className="p-12 text-center dark:bg-[#10141b] bg-white border border-dashed dark:border-zinc-800 border-slate-300 rounded-xl space-y-3">
           <Filter className="w-8 h-8 text-zinc-500 mx-auto" />
-          <h4 className="font-orbitron font-bold text-white text-base">No Matching Research Modules</h4>
-          <p className="font-mono text-xs text-zinc-400">
-            No research projects matched your current search and tag criteria.
+          <h4 className="font-orbitron font-bold dark:text-white text-slate-900 text-base">No Matching Research Projects</h4>
+          <p className="font-mono text-xs dark:text-zinc-400 text-slate-600 max-w-md mx-auto">
+            No research projects matched your current search &ldquo;{searchQuery}&rdquo; and category/tag criteria.
           </p>
-          <button
-            onClick={resetFilters}
-            className="px-4 py-2 rounded bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-bold cursor-pointer transition-colors"
-          >
-            Clear All Filters
-          </button>
+          <div className="pt-2 flex items-center justify-center gap-2">
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="px-3.5 py-1.5 rounded dark:bg-zinc-800 bg-slate-200 dark:hover:bg-zinc-700 hover:bg-slate-300 dark:text-white text-slate-800 font-mono text-xs font-bold cursor-pointer transition-colors"
+              >
+                Clear Search
+              </button>
+            )}
+            <button
+              onClick={resetFilters}
+              className="px-4 py-1.5 rounded bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-bold cursor-pointer transition-colors"
+            >
+              Clear All Filters
+            </button>
+          </div>
         </div>
       ) : (
         <>
           {/* Research Modules (Accordions) */}
           {modules.length > 0 && (
             <div className="space-y-4">
+              <div className="flex items-center justify-between pb-1">
+                <h3 className="font-section-title text-lg sm:text-xl font-bold uppercase tracking-wider dark:text-white text-slate-900 flex items-center">
+                  <span className="dark:text-[#00ff41] text-emerald-600 font-mono mr-2 select-none">//</span>
+                  <span>Core Curriculum &amp; Research Modules (I &ndash; IV)</span>
+                </h3>
+                <span className="text-xs font-mono dark:text-zinc-400 text-slate-500 hidden sm:inline">
+                  {modules.length} {modules.length === 1 ? 'module' : 'modules'}
+                </span>
+              </div>
               {modules.map((item) => {
                 const isOpen = openAccordions[item.id] ?? false;
                 const isCopied = copiedId === item.id;
@@ -474,7 +743,7 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
                             {item.numeral}
                           </span>
                           <span className="font-bold text-sm sm:text-base dark:text-white text-slate-900 group-hover:text-sky-700 dark:group-hover:text-[#00ff41] transition-colors">
-                            {item.title}
+                            <HighlightText text={item.title} query={searchQuery} />
                           </span>
 
                           {/* Item Tags */}
@@ -532,7 +801,9 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
 
                     {isOpen && (
                       <div className="px-5 pb-6 pt-1 text-sm dark:text-zinc-300 text-slate-700 font-mono leading-relaxed border-t dark:border-zinc-800 border-slate-200 space-y-4">
-                        <p>{item.desc}</p>
+                        <p>
+                          <HighlightText text={item.desc} query={searchQuery} />
+                        </p>
 
                         {/* Module-Specific Content */}
                         {item.id === 'mod-1' && (
@@ -687,11 +958,16 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
 
           {/* Primary Research Focus Cards */}
           {focusAreas.length > 0 && (
-            <div className="pt-6 border-t dark:border-zinc-800 border-slate-200">
-              <h3 className="font-section-title text-xl sm:text-2xl font-bold uppercase tracking-wider dark:text-white text-slate-900 mb-6 flex items-center">
-                <span className="dark:text-[#00ff41] text-emerald-600 font-mono mr-2 select-none">//</span>
-                <span>Primary Research Focus Areas</span>
-              </h3>
+            <div className={modules.length > 0 ? "pt-8 border-t dark:border-zinc-800 border-slate-200" : ""}>
+              <div className="flex items-center justify-between pb-6">
+                <h3 className="font-section-title text-xl sm:text-2xl font-bold uppercase tracking-wider dark:text-white text-slate-900 flex items-center">
+                  <span className="dark:text-[#00ff41] text-emerald-600 font-mono mr-2 select-none">//</span>
+                  <span>Primary Research Focus Areas</span>
+                </h3>
+                <span className="text-xs font-mono dark:text-zinc-400 text-slate-500 hidden sm:inline">
+                  {focusAreas.length} {focusAreas.length === 1 ? 'focus area' : 'focus areas'}
+                </span>
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {focusAreas.map((area) => {
@@ -730,11 +1006,11 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
                         </div>
 
                         <h4 className="font-orbitron font-bold text-sm sm:text-base dark:text-white text-slate-900">
-                          {area.title}
+                          <HighlightText text={area.title} query={searchQuery} />
                         </h4>
 
                         <p className="text-xs sm:text-sm dark:text-zinc-300 text-slate-600 font-mono leading-relaxed">
-                          {area.desc}
+                          <HighlightText text={area.desc} query={searchQuery} />
                         </p>
                       </div>
 
@@ -742,7 +1018,9 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
                         {area.highlight ? (
                           <div className="flex items-center gap-1.5 text-[11px] dark:text-[#00ff41] text-emerald-700 font-semibold line-clamp-1 flex-1">
                             <CheckCircle2 className="w-3.5 h-3.5 flex-none" />
-                            <span className="truncate">{area.highlight}</span>
+                            <span className="truncate">
+                              <HighlightText text={area.highlight} query={searchQuery} />
+                            </span>
                           </div>
                         ) : (
                           <div className="flex-1" />
