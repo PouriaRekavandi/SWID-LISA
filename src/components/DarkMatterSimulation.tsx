@@ -150,23 +150,32 @@ export const DarkMatterSimulation: React.FC<DarkMatterSimulationProps> = ({
 
     window.addEventListener('resize', handleResize);
 
-    // Mouse tracking for gravitational lensing interaction
+    // Mouse tracking for gravitational lensing interaction without blocking clicks or touches
     const handleMouseMove = (e: MouseEvent) => {
-      if (!interactive) return;
+      if (!interactive || !canvas) return;
       const rect = canvas.getBoundingClientRect();
-      mouseRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-        active: true,
-      };
+      if (
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom
+      ) {
+        mouseRef.current = {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top,
+          active: true,
+        };
+      } else {
+        mouseRef.current.active = false;
+      }
     };
 
     const handleMouseLeave = () => {
       mouseRef.current.active = false;
     };
 
-    canvas.addEventListener('mousemove', handleMouseMove);
-    canvas.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('mouseleave', handleMouseLeave);
 
     // Render loop
     let lastTime = performance.now();
@@ -341,8 +350,8 @@ export const DarkMatterSimulation: React.FC<DarkMatterSimulationProps> = ({
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
-      canvas.removeEventListener('mousemove', handleMouseMove);
-      canvas.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, [isPaused, densityMode, interactive]);
 
@@ -350,12 +359,12 @@ export const DarkMatterSimulation: React.FC<DarkMatterSimulationProps> = ({
     <div className={`absolute inset-0 pointer-events-none overflow-hidden ${className}`}>
       <canvas
         ref={canvasRef}
-        className="w-full h-full pointer-events-auto cursor-crosshair opacity-90 transition-opacity duration-700"
+        className="w-full h-full pointer-events-none opacity-90 transition-opacity duration-700"
         title="Interactive Universe Dark Matter Cosmic Web Simulation"
       />
       
       {/* Subtle Simulation Telemetry HUD */}
-      <div className="absolute bottom-3 left-4 z-20 pointer-events-auto flex items-center gap-2 text-[10px] font-mono tracking-wider text-zinc-500 dark:text-zinc-400 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10 select-none">
+      <div className="absolute bottom-3 left-4 z-20 pointer-events-auto hidden sm:flex items-center gap-2 text-[10px] font-mono tracking-wider text-zinc-500 dark:text-zinc-400 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10 select-none">
         <span className="w-2 h-2 rounded-full bg-[#00ff41] animate-ping" />
         <span className="text-[#00b8ff] font-bold">DM-SIM //</span>
         <span>Cosmic Web Filaments</span>

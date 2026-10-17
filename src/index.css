@@ -21,10 +21,19 @@
     --line: #cbd5e1;
   }
 
+  html {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+
   body {
     background-color: var(--bg);
     font-family: 'Roboto Mono', monospace;
     overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    -webkit-overflow-scrolling: touch;
     transition: background-color 0.25s ease, color 0.25s ease;
   }
 }
@@ -107,17 +116,23 @@
 }
 
 .font-allura {
-  font-family: 'Allura', 'Segoe Script', cursive;
+  font-family: 'Allura', 'Snell Roundhand', 'Segoe Script', 'Brush Script MT', 'Apple Chancery', cursive;
 }
 
-/* Explicit high-contrast styling for the cursive hero title */
-.hero-title-cursive {
+/* Explicit high-contrast styling for the cursive hero title across Edge, Chrome, Safari */
+.hero-title-cursive,
+html.light .hero-title-cursive,
+.light .hero-title-cursive {
   color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
   text-shadow: none !important;
 }
 
+html.dark .hero-title-cursive,
+.dark .hero-title-cursive,
 :is(.dark, html.dark) .hero-title-cursive {
   color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(0, 184, 255, 0.5) !important;
 }
 

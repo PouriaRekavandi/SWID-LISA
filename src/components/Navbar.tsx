@@ -42,17 +42,19 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onSelectTab }) => {
             <img
               src={logoTransparent}
               alt="SWID-SHRK Logo"
+              loading="eager"
+              decoding="async"
               className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(0,184,255,0.45)] dark:drop-shadow-[0_0_10px_rgba(0,184,255,0.7)]"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = logoFallback;
               }}
             />
           </div>
-          <div className="flex flex-col">
-            <span className="font-orbitron font-bold text-sm tracking-wider dark:text-white text-slate-900 dark:group-hover:text-[#00ff41] group-hover:text-sky-600 transition-colors">
+          <div className="flex flex-col min-w-0">
+            <span className="font-orbitron font-bold text-xs sm:text-sm tracking-wider dark:text-white text-slate-900 dark:group-hover:text-[#00ff41] group-hover:text-sky-600 transition-colors truncate">
               SWID-SHRK
             </span>
-            <span className="text-[10px] dark:text-zinc-400 text-slate-500 font-mono tracking-widest uppercase">
+            <span className="text-[9px] sm:text-[10px] dark:text-zinc-400 text-slate-500 font-mono tracking-widest uppercase truncate max-w-[140px] xs:max-w-[200px] sm:max-w-none">
               Aerospace &amp; Mechanics Lab
             </span>
           </div>

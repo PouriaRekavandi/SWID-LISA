@@ -151,9 +151,14 @@ export const CosmicBackground: React.FC<CosmicBackgroundProps> = ({ className = 
     const initCosmicWeb = () => {
       const colors = getThemeColors();
       const area = width * height;
-      // Responsive node count based on screen size (60 on mobile, up to 130 on desktop)
-      const nodeCount = Math.floor(Math.min(130, Math.max(50, area / 15000)));
-      const particleCount = Math.floor(Math.min(180, Math.max(70, area / 10000)));
+      const isMobile = width < 768;
+      // High-performance node and particle counts tailored for mobile smartphones and desktop
+      const nodeCount = isMobile
+        ? Math.floor(Math.min(24, Math.max(14, area / 20000)))
+        : Math.floor(Math.min(65, Math.max(30, area / 22000)));
+      const particleCount = isMobile
+        ? Math.floor(Math.min(40, Math.max(22, area / 15000)))
+        : Math.floor(Math.min(95, Math.max(45, area / 14000)));
 
       nodes = [];
       particles = [];
