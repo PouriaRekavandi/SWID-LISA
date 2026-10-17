@@ -11,8 +11,11 @@ export const INITIAL_STUDENTS: StudentRecord[] = [
     expectedDate: '2026-12-15',
     status: 'In Progress',
     email: 'akarimi1@umbc.edu',
-    notes: 'Completed qualifying exams. Developing customized Fortran VUMAT subroutine for high-strain deformation.',
-    updatedAt: new Date().toISOString()
+    notes: 'Completed qualifying exams with distinction. Developing customized Fortran VUMAT subroutine for high-strain dynamic deformation.',
+    updatedAt: new Date().toISOString(),
+    milestoneStage: 'Experimental & FEA Modeling',
+    progressPercent: 65,
+    researchFocus: 'Neural Biomechanics & Viscoelasticity',
   },
   {
     id: 'rec-2',
@@ -24,8 +27,11 @@ export const INITIAL_STUDENTS: StudentRecord[] = [
     expectedDate: '2025-05-20',
     status: 'Submitted',
     email: 'erostami@umbc.edu',
-    notes: 'Dissertation manuscript under committee review. 2 journal papers accepted.',
-    updatedAt: new Date().toISOString()
+    notes: 'Dissertation manuscript submitted to graduate committee. 2 first-author Q1 journal papers accepted (Materials & Design).',
+    updatedAt: new Date().toISOString(),
+    milestoneStage: 'Manuscript & Committee Review',
+    progressPercent: 92,
+    researchFocus: 'Cellular Metamaterials & Crashworthiness',
   },
   {
     id: 'rec-3',
@@ -37,8 +43,11 @@ export const INITIAL_STUDENTS: StudentRecord[] = [
     expectedDate: '2024-11-30',
     status: 'Completed',
     email: 'mvance@umbc.edu',
-    notes: 'Successfully defended with honors. Now at Applied Physics Laboratory.',
-    updatedAt: new Date().toISOString()
+    notes: 'Successfully defended with honors. Co-authored Theoretical & Applied Fracture Mechanics paper. Now Research Engineer at APL.',
+    updatedAt: new Date().toISOString(),
+    milestoneStage: 'Final Dissertation Defense & Archiving',
+    progressPercent: 100,
+    researchFocus: 'Quasi-Brittle Fracture & Full-Field DIC',
   },
   {
     id: 'rec-4',
@@ -50,9 +59,28 @@ export const INITIAL_STUDENTS: StudentRecord[] = [
     expectedDate: '2025-08-30',
     status: 'In Progress',
     email: 'schen@umbc.edu',
-    notes: '3D printing specimens using high-toughness photopolymers.',
-    updatedAt: new Date().toISOString()
-  }
+    notes: '3D printing multi-material test specimens using high-toughness photopolymers. Drop-weight impact testing scheduled.',
+    updatedAt: new Date().toISOString(),
+    milestoneStage: 'Dissertation Proposal Defense',
+    progressPercent: 50,
+    researchFocus: 'Biomimetic Bouligand Armor',
+  },
+  {
+    id: 'rec-5',
+    name: 'Dr. Tariq Mansour',
+    degree: 'Postdoctoral',
+    studentId: 'UMBC-PD-1102',
+    title: 'Physics-Informed Neural Network (PINN) Surrogates for Real-Time Aerospace Fracture Prognosis',
+    startDate: '2024-06-01',
+    expectedDate: '2026-05-31',
+    status: 'In Progress',
+    email: 'tmansour@umbc.edu',
+    notes: 'Leading NSF grant task on accelerated surrogate training for non-proportional multiaxial crack growth.',
+    updatedAt: new Date().toISOString(),
+    milestoneStage: 'Experimental & FEA Modeling',
+    progressPercent: 70,
+    researchFocus: 'AI Physics & Digital Twins',
+  },
 ];
 
 export const PUBLICATIONS: Publication[] = [

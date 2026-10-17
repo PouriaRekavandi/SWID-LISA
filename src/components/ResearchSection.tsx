@@ -1,5 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { ANTIPRISM_VIDEOS } from '../data/initialData';
+import { ResearchMetrics } from './ResearchMetrics';
+import { ResearchMilestoneTimeline } from './ResearchMilestoneTimeline';
+import { GitHubStatsWidget } from './GitHubStatsWidget';
 import {
   ChevronDown,
   Play,
@@ -297,6 +300,9 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
           Fundamental and applied investigations across continuum mechanics, bio-inspired architectures, nonlinear material deformation, and dynamic crashworthiness.
         </p>
       </div>
+
+      {/* Research Metrics Section with Animated Counting Numbers */}
+      <ResearchMetrics />
 
       {/* Interactive Filter & Sort Toolbar */}
       <div className="dark:bg-[#11161d] bg-white border dark:border-[#22303c] border-slate-200 rounded-xl p-4 sm:p-5 shadow-sm space-y-4">
@@ -775,6 +781,12 @@ export const ResearchSection: React.FC<ResearchSectionProps> = ({ onNotify }) =>
           )}
         </>
       )}
+
+      {/* Visual Timeline Component: Key Project Developmental Milestones */}
+      <ResearchMilestoneTimeline />
+
+      {/* GitHub Statistics & Open-Source Repositories Activity Widget */}
+      <GitHubStatsWidget onNotify={onNotify} />
 
       {/* Standalone / Fallback Toast Notification */}
       {toastNotification && (

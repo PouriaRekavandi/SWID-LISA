@@ -13,6 +13,9 @@ export interface StudentRecord {
   email?: string;
   notes?: string;
   updatedAt?: string;
+  milestoneStage?: string;
+  progressPercent?: number;
+  researchFocus?: string;
 }
 
 export interface Publication {

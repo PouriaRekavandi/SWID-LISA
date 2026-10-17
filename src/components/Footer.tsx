@@ -69,6 +69,14 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab }) => {
           >
             Connect
           </button>
+          <a
+            href="https://github.com/PouriaRekavandi/SWID-SHRK"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-sky-700 dark:hover:text-[#00ff41] transition-colors cursor-pointer flex items-center gap-1"
+          >
+            GitHub
+          </a>
         </div>
 
         {/* Social Media Channels Component */}
